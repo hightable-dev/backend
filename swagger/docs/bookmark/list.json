@@ -1,0 +1,347 @@
+{
+    "/bookmark/list": {
+        "tags": [
+            "Bookmark"
+        ],
+        "summary": "Bookmark List",
+        "description": "Use this API to retrieve the bookmark list of the logged-in user.",
+        "operationId": "BookmarkList",
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "table_id": {
+                                "description": "Unique identifier of the table.",
+                                "type": "integer",
+                                "example": 964
+                            }
+                        },
+                        "required": [
+                            "table_id"
+                        ]
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Bookmarks list retrieved successfully.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "description": "Confirmation message.",
+                                    "type": "string",
+                                    "example": "Tables retrieved successfully."
+                                },
+                                "meta": {
+                                    "description": "Metadata for pagination.",
+                                    "type": "object",
+                                    "properties": {
+                                        "page": {
+                                            "description": "Current page number.",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "limit": {
+                                            "description": "Number of items per page.",
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total": {
+                                            "description": "Total number of items.",
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    }
+                                },
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "created_at": {
+                                                "description": "Timestamp when the bookmark was created.",
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-08-09T11:04:47.379Z"
+                                            },
+                                            "updated_at": {
+                                                "description": "Timestamp when the bookmark was last updated.",
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-08-09T11:04:47.379Z"
+                                            },
+                                            "id": {
+                                                "description": "Unique identifier of the bookmark.",
+                                                "type": "string",
+                                                "example": "59"
+                                            },
+                                            "status": {
+                                                "description": "Status of the bookmark.",
+                                                "type": "integer",
+                                                "example": 13
+                                            },
+                                            "creator_profile_id": {
+                                                "description": "Profile ID of the creator of the bookmark.",
+                                                "type": "integer",
+                                                "example": 740
+                                            },
+                                            "table_id": {
+                                                "description": "Unique identifier of the table associated with the bookmark.",
+                                                "type": "integer",
+                                                "example": 964
+                                            },
+                                            "user_id": {
+                                                "description": "Unique identifier of the user who created the bookmark.",
+                                                "type": "integer",
+                                                "example": 730
+                                            },
+                                            "table_details": {
+                                                "type": "object",
+                                                "description": "Details of the associated table.",
+                                                "properties": {
+                                                    "created_at": {
+                                                        "description": "Timestamp when the table was created.",
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-08-09T03:55:26.853Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "description": "Timestamp when the table was last updated.",
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-08-09T05:31:47.850Z"
+                                                    },
+                                                    "id": {
+                                                        "description": "Unique identifier of the table.",
+                                                        "type": "integer",
+                                                        "example": 964
+                                                    },
+                                                    "full_name": {
+                                                        "description": "Full name of the table creator.",
+                                                        "type": "string",
+                                                        "example": "Sathish"
+                                                    },
+                                                    "type": {
+                                                        "description": "Type of the table.",
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "media": {
+                                                        "description": "URL to the table's media.",
+                                                        "type": "string",
+                                                        "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/tables-media-964.png"
+                                                    },
+                                                    "video": {
+                                                        "description": "URL to the table's video.",
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "example": null
+                                                    },
+                                                    "description": {
+                                                        "description": "Description of the table.",
+                                                        "type": "string",
+                                                        "example": "The best way to do work is to love what you do"
+                                                    },
+                                                    "phone": {
+                                                        "description": "Contact phone number.",
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "min_seats": {
+                                                        "description": "Minimum seats available.",
+                                                        "type": "integer",
+                                                        "example": 8
+                                                    },
+                                                    "max_seats": {
+                                                        "description": "Maximum seats available.",
+                                                        "type": "integer",
+                                                        "example": 8
+                                                    },
+                                                    "booked_seats": {
+                                                        "description": "Number of seats already booked.",
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    },
+                                                    "booked": {
+                                                        "description": "Indicates if the table is booked.",
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    },
+                                                    "bookmarks": {
+                                                        "description": "Number of bookmarks for this table.",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "followers": {
+                                                        "description": "Number of followers for this table.",
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    },
+                                                    "title": {
+                                                        "description": "Title of the event.",
+                                                        "type": "string",
+                                                        "example": "Whispering shadows"
+                                                    },
+                                                    "price": {
+                                                        "description": "Price of the table.",
+                                                        "type": "integer",
+                                                        "example": 500
+                                                    },
+                                                    "tags": {
+                                                        "description": "Tags associated with the table.",
+                                                        "type": "string",
+                                                        "example": "Business,Corporate,Regional"
+                                                    },
+                                                    "address": {
+                                                        "description": "Address of the table location.",
+                                                        "type": "string",
+                                                        "example": "Chennai, Tamil Nadu, India"
+                                                    },
+                                                    "city": {
+                                                        "description": "City where the table is located.",
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "created_by": {
+                                                        "description": "ID of the user who created the table.",
+                                                        "type": "integer",
+                                                        "example": 740
+                                                    },
+                                                    "event_date": {
+                                                        "description": "Date and time of the event.",
+                                                        "type": "string",
+                                                        "example": "30-08-2024 17:25"
+                                                    },
+                                                    "reviews": {
+                                                        "description": "Number of reviews for the table.",
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    },
+                                                    "status": {
+                                                        "description": "Status of the table.",
+                                                        "type": "integer",
+                                                        "example": 8
+                                                    },
+                                                    "admin_id": {
+                                                        "description": "Admin ID responsible for the table.",
+                                                        "type": "integer",
+                                                        "example": 0
+                                                    },
+                                                    "user_type": {
+                                                        "description": "Type of user who created the table.",
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "location": {
+                                                        "type": "object",
+                                                        "description": "Location of the event.",
+                                                        "properties": {
+                                                            "lat": {
+                                                                "description": "Latitude of the event location.",
+                                                                "type": "number",
+                                                                "example": 13.0843007
+                                                            },
+                                                            "lng": {
+                                                                "description": "Longitude of the event location.",
+                                                                "type": "number",
+                                                                "example": 80.2704622
+                                                            }
+                                                        }
+                                                    },
+                                                    "event_done_flag": {
+                                                        "description": "Indicates if the event is completed.",
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "category": {
+                                                        "description": "Category of the table.",
+                                                        "type": "string",
+                                                        "example": "general"
+                                                    }
+                                                }
+                                            },
+                                            "creator_details": {
+                                                "type": "object",
+                                                "description": "Details of the creator of the table.",
+                                                "properties": {
+                                                    "created_at": {
+                                                        "description": "Timestamp when the creator's profile was created.",
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-07-01T01:27:00.799Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "description": "Timestamp when the creator's profile was last updated.",
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-07-31T11:37:56.463Z"
+                                                    },
+                                                    "id": {
+                                                        "description": "Unique identifier of the creator's profile.",
+                                                        "type": "integer",
+                                                        "example": 740
+                                                    },
+                                                    "email": {
+                                                        "description": "Email address of the creator.",
+                                                        "type": "string",
+                                                        "example": "developer@twilightitsolution.com"
+                                                    },
+                                                    "profile_code": {
+                                                        "description": "Code associated with the creator's profile.",
+                                                        "type": "string",
+                                                        "example": "AT69"
+                                                    },
+                                                    "display_name": {
+                                                        "description": "Display name of the creator.",
+                                                        "type": "string",
+                                                        "example": "Sathish"
+                                                    },
+                                                    "title": {
+                                                        "description": "Title or role of the creator.",
+                                                        "type": "string",
+                                                        "example": "Mr"
+                                                    },
+                                                    "user_type": {
+                                                        "description": "Type of user who created the profile.",
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "status": {
+                                                        "description": "Status of the creator's profile.",
+                                                        "type": "integer",
+                                                        "example": 13
+                                                    },
+                                                    "organization_id": {
+                                                        "description": "ID of the organization the creator is affiliated with.",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "phone": {
+                                                        "description": "Phone number of the creator.",
+                                                        "type": "string",
+                                                        "example": "+91-6385440771"
+                                                    },
+                                                    "photo": {
+                                                        "description": "URL to the creator's profile photo.",
+                                                        "type": "string",
+                                                        "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/profile/profile-photo-740.png"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

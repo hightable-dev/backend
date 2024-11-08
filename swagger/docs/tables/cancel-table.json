@@ -1,0 +1,339 @@
+{
+    "/tables/cancel-table": {
+        "tags": [
+            "Tables"
+        ],
+        "summary": "Delete Table",
+        "description": "Cancel the table event by updating its status to 'cancelled'.",
+        "operationId": "cancelTable",
+        "requestBody": {
+            "required": true,
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "description": "ID of the table to cancel",
+                                "example": 964
+                            },
+                            "status": {
+                                "type": "integer",
+                                "description": "New status code for the table",
+                                "example": 6
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "status"
+                        ]
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Table status updated successfully and new data created in TablesStatus.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Table status updated successfully and new data created in TablesStatus."
+                                },
+                                "updatedTable": {
+                                    "type": "object",
+                                    "properties": {
+                                        "thumbnail": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "example": null
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-09T03:58:18.211Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-10T08:20:54.952Z"
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 964
+                                        },
+                                        "full_name": {
+                                            "type": "string",
+                                            "example": "Sathish"
+                                        },
+                                        "type": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "media": {
+                                            "type": "string",
+                                            "example": "tables-media-964.jpeg"
+                                        },
+                                        "video": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "example": "media1723205621814-2662442668.mp4"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "The best way to do work is to love what you do"
+                                        },
+                                        "phone": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "min_seats": {
+                                            "type": "integer",
+                                            "example": 8
+                                        },
+                                        "max_seats": {
+                                            "type": "integer",
+                                            "example": 8
+                                        },
+                                        "booked_seats": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "booked": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "bookmarks": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "followers": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Whispering shadows"
+                                        },
+                                        "price": {
+                                            "type": "integer",
+                                            "example": 500
+                                        },
+                                        "tags": {
+                                            "type": "string",
+                                            "example": "Business,Corporate,Regional"
+                                        },
+                                        "address": {
+                                            "type": "string",
+                                            "example": "Chennai, Tamil Nadu, India"
+                                        },
+                                        "city": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "created_by": {
+                                            "type": "integer",
+                                            "example": 740
+                                        },
+                                        "event_date": {
+                                            "type": "string",
+                                            "example": "30-08-2024 17:25"
+                                        },
+                                        "reviews": {
+                                            "type": "integer",
+                                            "example": 3
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 6
+                                        },
+                                        "admin_id": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "user_type": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "location": {
+                                            "type": "object",
+                                            "properties": {
+                                                "lat": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 13.0843007
+                                                },
+                                                "lng": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 80.2704622
+                                                }
+                                            },
+                                            "required": [
+                                                "lat",
+                                                "lng"
+                                            ]
+                                        },
+                                        "event_done_flag": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "category": {
+                                            "type": "integer",
+                                            "example": 22
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "full_name",
+                                        "type",
+                                        "media",
+                                        "description",
+                                        "phone",
+                                        "min_seats",
+                                        "max_seats",
+                                        "booked_seats",
+                                        "booked",
+                                        "bookmarks",
+                                        "followers",
+                                        "title",
+                                        "price",
+                                        "tags",
+                                        "address",
+                                        "city",
+                                        "created_by",
+                                        "event_date",
+                                        "reviews",
+                                        "status",
+                                        "admin_id",
+                                        "user_type",
+                                        "location",
+                                        "event_done_flag",
+                                        "category"
+                                    ]
+                                },
+                                "createdData": {
+                                    "type": "object",
+                                    "properties": {
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-10T08:20:55.011Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-10T08:20:55.011Z"
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 84
+                                        },
+                                        "table_id": {
+                                            "type": "integer",
+                                            "example": 964
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 6
+                                        },
+                                        "admin_id": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "user_type": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "table_creator_id": {
+                                            "type": "integer",
+                                            "example": 740
+                                        },
+                                        "last_checkin_via": {
+                                            "type": "string",
+                                            "example": "web"
+                                        },
+                                        "uu_id": {
+                                            "type": "string",
+                                            "example": "DwkcRZfag"
+                                        }
+                                    },
+                                    "required": [
+                                        "created_at",
+                                        "updated_at",
+                                        "id",
+                                        "table_id",
+                                        "status",
+                                        "admin_id",
+                                        "user_type",
+                                        "table_creator_id",
+                                        "last_checkin_via",
+                                        "uu_id"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "updatedTable",
+                                "createdData"
+                            ]
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Table not found.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string",
+                                    "example": "Table not found."
+                                }
+                            },
+                            "required": [
+                                "error"
+                            ]
+                        }
+                    }
+                }
+            },
+            "401": {
+                "description": "Invalid status code.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string",
+                                    "example": "Invalid status code."
+                                },
+                                "valid_status": {
+                                    "type": "string",
+                                    "example": "6-cancelled"
+                                }
+                            },
+                            "required": [
+                                "error",
+                                "valid_status"
+                            ]
+                        }
+                    }
+                }
+            },
+            "403": {
+                "description": "Forbidden"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

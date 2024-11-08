@@ -1,0 +1,63 @@
+{
+  "/example/endpoint": {
+    "tags": [
+      "Example"
+    ],
+    "summary": "Example endpoint description",
+    "description": "Use this API to example endpoint description.",
+    "operationId": "exampleList",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Success"
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request"
+      },
+      "401": {
+        "description": "Unauthorized"
+      },
+      "403": {
+        "description": "You don't have permission to perform this action"
+      },
+      "500": {
+        "description": "Internal server error"
+      }
+    }
+  }
+}

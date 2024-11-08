@@ -1,0 +1,80 @@
+{
+  "/api/v1/example": {
+    "tags": [
+      "example"
+    ],
+    "summary": "This is an example API",
+    "description": "Use this API to this is an example api.",
+    "operationId": "apiList",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Success"
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "description": "Count of the meta data.",
+                      "type": "number",
+                      "example": 10
+                    }
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "Id of the item.",
+                        "type": "number",
+                        "example": 1
+                      },
+                      "name": {
+                        "description": "Name of the item.",
+                        "type": "string",
+                        "example": "Example"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request"
+      },
+      "401": {
+        "description": "Unauthorized"
+      },
+      "403": {
+        "description": "You don't have permission to perform this action"
+      },
+      "500": {
+        "description": "Internal server error"
+      }
+    }
+  }
+}

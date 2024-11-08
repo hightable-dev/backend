@@ -1,0 +1,138 @@
+{
+    "/interests/users-interests-list": {
+        "tags": [
+            "Interests"
+        ],
+        "summary": "Lists all tables",
+        "description": "Use this API to list all tables and ensure the event has not expired.",
+        "operationId": "interestUserInterestsList",
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "page": {
+                                "description": "Page number to retrieve.",
+                                "type": "string",
+                                "example": "1"
+                            },
+                            "limit": {
+                                "description": "Number of items per page.",
+                                "type": "string",
+                                "example": "1"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            
+                "200": {
+                    "description": "Users interests retrieved successfully.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "description": "Confirmation message indicating that the interests were retrieved successfully.",
+                                        "type": "string",
+                                        "example": "Interests retrieved successfully."
+                                    },
+                                    "meta": {
+                                        "description": "Pagination information for the response.",
+                                        "type": "object",
+                                        "properties": {
+                                            "page": {
+                                                "description": "The current page number.",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "limit": {
+                                                "description": "The number of items per page.",
+                                                "type": "integer",
+                                                "example": 10
+                                            },
+                                            "total": {
+                                                "description": "The total number of items available.",
+                                                "type": "integer",
+                                                "example": 2
+                                            }
+                                        },
+                                        "required": [
+                                            "page",
+                                            "limit",
+                                            "total"
+                                        ]
+                                    },
+                                    "items": {
+                                        "description": "List of interests.",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Unique identifier for the interest.",
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "name": {
+                                                    "description": "Name of the interest.",
+                                                    "type": "string",
+                                                    "example": "comedy"
+                                                },
+                                                "image": {
+                                                    "description": "URL of the image representing the interest.",
+                                                    "type": "string",
+                                                    "format": "uri",
+                                                    "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/interests-image-2.png"
+                                                },
+                                                "width": {
+                                                    "description": "Width of the interest image in pixels.",
+                                                    "type": "integer",
+                                                    "example": 11
+                                                },
+                                                "height": {
+                                                    "description": "Height of the interest image in pixels.",
+                                                    "type": "integer",
+                                                    "example": 11
+                                                }
+                                            },
+                                            "required": [
+                                                "id",
+                                                "name",
+                                                "image",
+                                                "width",
+                                                "height"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "message",
+                                    "meta",
+                                    "items"
+                                ]
+                            }
+                        }
+                    }
+                
+            },
+            
+            "400": {
+                "description": "Bad request"
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "You don't have permission to perform this action"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

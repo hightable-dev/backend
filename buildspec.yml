@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - rm package-lock.json
+      - npm install
+#      - npm install -g node-gyp
+#  build:
+#    commands:
+#      - npx node-gyp build
+#      - npm rebuild bcrypt --build-from-source

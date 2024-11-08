@@ -1,0 +1,203 @@
+{
+    "/standard-table/set-price": {
+        "tags": [
+            "Standard Table"
+        ],
+        "summary": "Set price for standard table",
+        "description": "Update the new price for a standard table.",
+        "operationId": "setPriceForStandardTable",
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "price": {
+                                "type": "integer",
+                                "description": "The new price for the standard table",
+                                "example": 80
+                            }
+                        },
+                        "required": [
+                            "price"
+                        ]
+                    }
+                }
+            },
+            "required": true
+        },
+        "responses": {
+            "200": {
+                "description": "Successful operation (Price updated)",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Data created successfully."
+                                },
+                                "user": {
+                                    "type": "object",
+                                    "properties": {
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-10T05:41:21.221Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-10T05:41:21.221Z"
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 35
+                                        },
+                                        "table_type": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "price": {
+                                            "type": "integer",
+                                            "example": 80
+                                        },
+                                        "admin_id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "admin_type": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "last_checkin_via": {
+                                            "type": "string",
+                                            "example": "web"
+                                        },
+                                        "uu_id": {
+                                            "type": "string",
+                                            "example": "tpyIczTPA"
+                                        }
+                                    },
+                                    "required": [
+                                        "created_at",
+                                        "updated_at",
+                                        "id",
+                                        "table_type",
+                                        "price",
+                                        "admin_id",
+                                        "admin_type",
+                                        "last_checkin_via",
+                                        "uu_id"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "user"
+                            ]
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request. Previous data has the same price and table type.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Previous data has the same price and table type."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "403": [
+                {
+                    "description": "Forbidden Access! :: IP Logged",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "Forbidden Access! :: IP Logged"
+                                    }
+                                },
+                                "required": [
+                                    "message"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "description": "You don't have permission to perform this action.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "example": "You don't have permission to perform this action."
+                                    }
+                                },
+                                "required": [
+                                    "message"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "401": {
+                "description": "Unauthorized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Unauthorized"
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "500": {
+                "description": "Internal server error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Internal server error"
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

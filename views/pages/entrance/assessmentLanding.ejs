@@ -1,0 +1,23 @@
+<div class="assessment-landing-container">
+    <div class="main-title" style="padding: 16px 0;">
+        Find out if God, the Father is drawing you to Christ.
+    </div>
+    <div class="assessment-landing-text">
+        <input type="text" id="id_url" value="<%= URL %>" hidden />
+
+        No one can come to Me (Christ) unless the Father (God) who sent Me draws him or her...
+        John 6:44
+    </div>
+    <div class="assessment-landing-text mt-32">
+        Let’s start with your name. We’ll only share it with <span class="" id="idFirstName"></span>
+    </div>
+    <div class="assessment-input-container">
+        <input type="text" id="first_name" placeholder="First name">
+        <input type="text" id="last_name" placeholder="Last name">
+    </div>
+    <div class="assessment-landing-footer">
+        <a href="javascript:;" class="footer-decline" onclick="location.href = '/assessmentDecline';">Decline</a>
+        <button class="assessment-btn" onclick="addAssessment()">Start assessment</button>
+        <!-- <button disabled class="assessment-btn">Start assessment</button> -->
+    </div>
+</div>

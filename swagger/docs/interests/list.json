@@ -1,0 +1,122 @@
+{
+  "/interests/list": {
+    "tags": [
+      "Interests"
+    ],
+    "summary": "Retrieve a list of tables based on various filters.",
+    "description": "Use this API to retrieve a list of tables based on various filters..",
+    "operationId": "interestsList",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "0": {
+                "description": "0 of the request.",
+                "type": "string"
+              },
+              "1": {
+                "description": "1 of the request.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "0",
+              "1"
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Interests retrieved successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Interests retrieved successfully."
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "description": "Page of the meta data.",
+                      "type": "number",
+                      "example": 1
+                    },
+                    "limit": {
+                      "description": "Limit of the meta data.",
+                      "type": "number",
+                      "example": 10
+                    },
+                    "total": {
+                      "description": "Total of the meta data.",
+                      "type": "number",
+                      "example": 5
+                    }
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "Id of the item.",
+                        "type": "string",
+                        "example": "1"
+                      },
+                      "name": {
+                        "description": "Name of the item.",
+                        "type": "string",
+                        "example": "art"
+                      },
+                      "image": {
+                        "description": "Image of the item.",
+                        "type": "string",
+                        "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/interests-image-1.png"
+                      },
+                      "width": {
+                        "description": "Width of the item.",
+                        "type": "number",
+                        "example": 11
+                      },
+                      "height": {
+                        "description": "Height of the item.",
+                        "type": "number",
+                        "example": 11
+                      },
+                      "status": {
+                        "description": "Status of the item.",
+                        "type": "number",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request"
+      },
+      "401": {
+        "description": "Unauthorized"
+      },
+      "403": {
+        "description": "You don't have permission to perform this action"
+      },
+      "500": {
+        "description": "Internal server error"
+      }
+    }
+  }
+}

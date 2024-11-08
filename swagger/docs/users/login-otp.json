@@ -1,0 +1,95 @@
+{
+  "/users/login-otp": {
+    "tags": [
+      "Users"
+    ],
+    "summary": "Login with otp",
+    "description": "This api sends otp",
+    "operationId": "usersLoginOtp",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "description": "1 Standard, 2 for Premium",
+                "type": "string",
+                "example": "1"
+              },
+              "is_signup": {
+                "description": "Media associated with the event.",
+                "type": "string",
+                "example": "name.jpeg or name.mp4"
+              }
+            },
+            "required": [
+              "phone",
+              "is_signup"
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "OTP sent successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "otp_details": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "description": "Status of the OTP operation.",
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "phone_no": {
+                      "description": "Phone number to which the OTP was sent.",
+                      "type": "integer",
+                      "example": 918310043150
+                    },
+                    "id": {
+                      "description": "Unique identifier for the OTP request.",
+                      "type": "string",
+                      "example": "5231724654176292916"
+                    },
+                    "message": {
+                      "description": "Confirmation message.",
+                      "type": "string",
+                      "example": "OTP sent."
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "phone_no",
+                    "id",
+                    "message"
+                  ]
+                }
+              },
+              "required": [
+                "otp_details"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request"
+      },
+      "401": {
+        "description": "Unauthorized"
+      },
+      "403": {
+        "description": "You don't have permission to perform this action"
+      },
+      "500": {
+        "description": "Internal server error"
+      }
+    }
+  }
+}

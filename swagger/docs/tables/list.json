@@ -1,0 +1,160 @@
+{
+  "/tables/list": {
+    "tags": [
+      "Tables"
+    ],
+    "summary": "Retrieve a list of tables based on various filters.",
+    "description": "Use this API to retrieve a list of tables based on various filters..",
+    "operationId": "tablesList",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "description": "Page of the request.",
+                "type": "integer",
+                "example": 1
+              },
+              "limit": {
+                "description": "Limit of the request.",
+                "type": "integer",
+                "example": 10
+              },
+              "search": {
+                "description": "Search of the request.",
+                "type": "string",
+                "example": "searchTerm"
+              },
+              "from_date": {
+                "description": "From_date of the request.",
+                "type": "string",
+                "example": "2024-01-01T00:00:00Z"
+              },
+              "to_date": {
+                "description": "To_date of the request.",
+                "type": "string",
+                "example": "2024-01-31T23:59:59Z"
+              },
+              "category": {
+                "description": "Category of the request.",
+                "type": "integer",
+                "example": 1
+              },
+              "created_by": {
+                "description": "Created_by of the request.",
+                "type": "integer",
+                "example": 123
+              },
+              "type": {
+                "description": "Type of the request.",
+                "type": "integer",
+                "example": 2
+              }
+            },
+            "required": [
+              "page",
+              "limit",
+              "search",
+              "from_date",
+              "to_date",
+              "category",
+              "created_by",
+              "type"
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Interests retrieved successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Interests retrieved successfully."
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "description": "Page of the meta data.",
+                      "type": "number",
+                      "example": 1
+                    },
+                    "limit": {
+                      "description": "Limit of the meta data.",
+                      "type": "number",
+                      "example": 10
+                    },
+                    "total": {
+                      "description": "Total of the meta data.",
+                      "type": "number",
+                      "example": 5
+                    }
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "Id of the item.",
+                        "type": "string",
+                        "example": "2"
+                      },
+                      "name": {
+                        "description": "Name of the item.",
+                        "type": "string",
+                        "example": "comedy"
+                      },
+                      "image": {
+                        "description": "Image of the item.",
+                        "type": "string",
+                        "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/interests-image-2.png"
+                      },
+                      "width": {
+                        "description": "Width of the item.",
+                        "type": "number",
+                        "example": 11
+                      },
+                      "height": {
+                        "description": "Height of the item.",
+                        "type": "number",
+                        "example": 11
+                      },
+                      "status": {
+                        "description": "Status of the item.",
+                        "type": "number",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request"
+      },
+      "401": {
+        "description": "Unauthorized"
+      },
+      "403": {
+        "description": "You don't have permission to perform this action"
+      },
+      "500": {
+        "description": "Internal server error"
+      }
+    }
+  }
+}

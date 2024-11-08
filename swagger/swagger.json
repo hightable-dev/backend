@@ -1,0 +1,3291 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Swagger Json",
+    "description": "This is a generated swagger json for your sails project",
+    "termsOfService": "http://example.com/terms",
+    "contact": {
+      "name": "Theophilus Omoregbee",
+      "url": "http://github.com/theo4u",
+      "email": "theo4u@ymail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:1337/"
+    }
+  ],
+  "externalDocs": {
+    "url": "https://theoomoregbee.github.io/"
+  },
+  "tags": [
+    {
+      "name": "Followers",
+      "description": "Sails blueprint actions for the **Followers** model"
+    },
+    {
+      "name": "Interests",
+      "description": "Sails blueprint actions for the **Interests** model"
+    },
+    {
+      "name": "Reviews",
+      "description": "Sails blueprint actions for the **Reviews** model"
+    },
+    {
+      "name": "Tables",
+      "description": "Sails blueprint actions for the **Tables** model"
+    },
+    {
+      "name": "Tags",
+      "description": "Sails blueprint actions for the **Tags** model"
+    },
+    {
+      "name": "Users",
+      "description": "Sails blueprint actions for the **Users** model"
+    },
+    {
+      "name": "index"
+    },
+    {
+      "name": "LinkedIn"
+    },
+    {
+      "name": "create"
+    },
+    {
+      "name": "activate"
+    },
+    {
+      "name": "update"
+    },
+    {
+      "name": "photo-upload"
+    },
+    {
+      "name": "view"
+    },
+    {
+      "name": "list"
+    },
+    {
+      "name": "set-price"
+    },
+    {
+      "name": "view-price"
+    },
+    {
+      "name": "book-table"
+    },
+    {
+      "name": "list-admin"
+    },
+    {
+      "name": "booked-list-all"
+    },
+    {
+      "name": "booked-my-tables-user-list"
+    },
+    {
+      "name": "booked-all-my-list"
+    },
+    {
+      "name": "booked-my-tables"
+    },
+    {
+      "name": "capture-payment"
+    },
+    {
+      "name": "refund-payment"
+    },
+    {
+      "name": "accept-booking"
+    },
+    {
+      "name": "destroy-user"
+    },
+    {
+      "name": "profile"
+    },
+    {
+      "name": "view-admin"
+    },
+    {
+      "name": "create-account"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "accesstokens": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/accesstokens-without-required-constraint"
+          },
+          {
+            "required": [
+              "user_id",
+              "client_id"
+            ]
+          }
+        ]
+      },
+      "accesstokens-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **AccessTokens**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "user_id": {},
+          "client_id": {},
+          "token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        }
+      },
+      "bookmarks": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/bookmarks-without-required-constraint"
+          },
+          {
+            "required": [
+              "table_id",
+              "user_id"
+            ]
+          }
+        ]
+      },
+      "bookmarks-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Bookmarks**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator_profile_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "table_id": {
+            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "user_id": {
+            "description": "JSON dictionary representing the **users** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/users"
+              }
+            ]
+          }
+        }
+      },
+      "clients": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/clients-without-required-constraint"
+          },
+          {
+            "required": [
+              "name",
+              "redirect_uri"
+            ]
+          }
+        ]
+      },
+      "clients-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Clients**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "name": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "redirect_uri": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "client_secret": {
+            "type": "string"
+          },
+          "trusted": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "dataservice": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/dataservice-without-required-constraint"
+          }
+        ]
+      },
+      "dataservice-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **DataService**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          }
+        }
+      },
+      "deletedaccount": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/deletedaccount-without-required-constraint"
+          }
+        ]
+      },
+      "deletedaccount-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **DeletedAccount**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "deleted_user_id": {},
+          "email": {
+            "maxLength": 300
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "photo": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "phone": {},
+          "street": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "status_glossary": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "about_me": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "one_signal_push_tokens": {},
+          "tokens": {},
+          "last_active": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_checkin_via": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "facebook_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "facebook_data": {},
+          "linkedin_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedin_data": {},
+          "interests": {},
+          "followers": {
+            "type": "number",
+            "format": "double"
+          },
+          "google_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "google_data": {},
+          "otp_session_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "reviews": {},
+          "linked_account_id": {
+            "type": "string"
+          },
+          "linked_product_id": {
+            "type": "string"
+          },
+          "pronoun": {
+            "type": "string"
+          },
+          "instagram_link": {
+            "type": "string"
+          },
+          "linkedin_link": {
+            "type": "string"
+          },
+          "table_count": {
+            "type": "number",
+            "format": "double"
+          },
+          "age": {
+            "type": "number",
+            "format": "double"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "uu_id": {
+            "type": "string"
+          },
+          "account": {
+            "description": "JSON dictionary representing the **users** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/users"
+              }
+            ]
+          }
+        }
+      },
+      "eventstatus": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/eventstatus-without-required-constraint"
+          }
+        ]
+      },
+      "eventstatus-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **EventStatus**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "table_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "user_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "event_done_flag": {
+            "type": "boolean"
+          }
+        }
+      },
+      "followers": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/followers-without-required-constraint"
+          },
+          {
+            "required": [
+              "creator_profile_id"
+            ]
+          }
+        ]
+      },
+      "followers-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Followers**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "follower_profile_id": {},
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator_profile_id": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          }
+        }
+      },
+      "followersusers": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/followersusers-without-required-constraint"
+          },
+          {
+            "required": [
+              "follower_id",
+              "user_id"
+            ]
+          }
+        ]
+      },
+      "followersusers-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **FollowersUsers**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "follower_id": {
+            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "user_id": {
+            "description": "JSON dictionary representing the **users** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/users"
+              }
+            ]
+          }
+        }
+      },
+      "interests": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/interests-without-required-constraint"
+          },
+          {
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "interests-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Interests**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number",
+            "format": "double",
+            "default": 50,
+            "example": 50
+          },
+          "height": {
+            "type": "number",
+            "format": "double",
+            "default": 50,
+            "example": 50
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "notifications": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/notifications-without-required-constraint"
+          }
+        ]
+      },
+      "notifications-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Notifications**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "read": {
+            "type": "boolean",
+            "default": false
+          },
+          "is_paid": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "template_id": {
+            "type": "string"
+          },
+          "table_id": {
+            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "follow_user": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          },
+          "receiver": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          },
+          "sender": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "pay_order_id": {
+            "type": "string"
+          }
+        }
+      },
+      "payouthost": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/payouthost-without-required-constraint"
+          }
+        ]
+      },
+      "payouthost-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **PayoutHost**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "table_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "users_count": {
+            "type": "number",
+            "format": "double"
+          },
+          "user_attended_count": {
+            "type": "number",
+            "format": "double"
+          },
+          "payout": {
+            "type": "number",
+            "format": "double"
+          },
+          "pending_payment": {
+            "type": "number",
+            "format": "double"
+          },
+          "total_payment": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "profileadmin": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/profileadmin-without-required-constraint"
+          },
+          {
+            "required": [
+              "username"
+            ]
+          }
+        ]
+      },
+      "profileadmin-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **ProfileAdmin**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "username": {},
+          "email": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "photo": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "status_glossary": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "about_me": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "one_signal_push_tokens": {},
+          "tokens": {},
+          "last_active": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_checkin_via": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "otp_session_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "uu_id": {
+            "type": "string"
+          },
+          "account": {
+            "description": "JSON dictionary representing the **users** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/users"
+              }
+            ]
+          }
+        }
+      },
+      "profilemanagers": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/profilemanagers-without-required-constraint"
+          },
+          {
+            "required": [
+              "email"
+            ]
+          }
+        ]
+      },
+      "profilemanagers-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **ProfileManagers**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "uniqueItems": true
+          },
+          "phone": {},
+          "photo": {
+            "type": "string"
+          },
+          "status_glossary": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "account": {
+            "description": "JSON dictionary representing the **users** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/users"
+              }
+            ]
+          },
+          "uu_id": {
+            "type": "string"
+          }
+        }
+      },
+      "profilemembers": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/profilemembers-without-required-constraint"
+          }
+        ]
+      },
+      "profilemembers-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **ProfileMembers**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "email": {
+            "maxLength": 300
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "photo": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "phone": {},
+          "street": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "status_glossary": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "about_me": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "one_signal_push_tokens": {},
+          "tokens": {},
+          "last_active": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_checkin_via": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "facebook_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "facebook_data": {},
+          "linkedin_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedin_data": {},
+          "interests": {},
+          "followers": {
+            "type": "number",
+            "format": "double"
+          },
+          "google_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "google_data": {},
+          "otp_session_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "reviews": {},
+          "linked_account_id": {
+            "type": "string"
+          },
+          "linked_product_id": {
+            "type": "string"
+          },
+          "pronoun": {
+            "type": "string"
+          },
+          "instagram_link": {
+            "type": "string"
+          },
+          "linkedin_link": {
+            "type": "string"
+          },
+          "table_count": {
+            "type": "number",
+            "format": "double"
+          },
+          "age": {
+            "type": "number",
+            "format": "double"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "uu_id": {
+            "type": "string"
+          },
+          "account": {
+            "description": "JSON dictionary representing the **users** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/users"
+              }
+            ]
+          }
+        }
+      },
+      "refreshtokens": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/refreshtokens-without-required-constraint"
+          },
+          {
+            "required": [
+              "user_id",
+              "client_id"
+            ]
+          }
+        ]
+      },
+      "refreshtokens-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **RefreshTokens**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "user_id": {},
+          "client_id": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "reviews": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/reviews-without-required-constraint"
+          },
+          {
+            "required": [
+              "table_id",
+              "creator_profile_id"
+            ]
+          }
+        ]
+      },
+      "reviews-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Reviews**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "reviews": {
+            "type": "number",
+            "format": "double"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "table_id": {
+            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "reviewer_profile_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator_profile_id": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          }
+        }
+      },
+      "savetables": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/savetables-without-required-constraint"
+          },
+          {
+            "required": [
+              "table_id",
+              "user_id"
+            ]
+          }
+        ]
+      },
+      "savetables-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **SaveTables**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "is_saved": {
+            "type": "number",
+            "format": "double"
+          },
+          "table_id": {
+            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "user_id": {
+            "description": "JSON dictionary representing the **users** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/users"
+              }
+            ]
+          }
+        }
+      },
+      "standardtable": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/standardtable-without-required-constraint"
+          }
+        ]
+      },
+      "standardtable-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **StandardTable**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "table_type": {
+            "type": "number",
+            "format": "double"
+          },
+          "price": {
+            "type": "string"
+          },
+          "admin_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "admin_type": {
+            "type": "number",
+            "format": "double"
+          },
+          "last_checkin_via": {
+            "type": "string"
+          },
+          "uu_id": {
+            "type": "string"
+          }
+        }
+      },
+      "subscriptions": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/subscriptions-without-required-constraint"
+          },
+          {
+            "required": [
+              "table_id",
+              "user_id"
+            ]
+          }
+        ]
+      },
+      "subscriptions-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Subscriptions**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "is_subscribe": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "number",
+            "format": "double",
+            "default": 1,
+            "example": 1
+          },
+          "table_id": {
+            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "user_id": {
+            "description": "JSON dictionary representing the **users** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/users"
+              }
+            ]
+          }
+        }
+      },
+      "tablebooking": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/tablebooking-without-required-constraint"
+          },
+          {
+            "required": [
+              "table_id",
+              "user_id"
+            ]
+          }
+        ]
+      },
+      "tablebooking-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **TableBooking**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "table_id": {
+            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "user_id": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "seats": {
+            "type": "number",
+            "format": "double"
+          },
+          "payment_id": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "number",
+            "format": "double"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "expiry_date": {},
+          "payment_details": {},
+          "refund_details": {},
+          "event_done_flag": {
+            "type": "boolean"
+          },
+          "creator_id": {}
+        }
+      },
+      "tablestatus": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/tablestatus-without-required-constraint"
+          }
+        ]
+      },
+      "tablestatus-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **TableStatus**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "table_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "admin_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "user_type": {
+            "type": "number",
+            "format": "double"
+          },
+          "table_creator_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "last_checkin_via": {
+            "type": "string"
+          },
+          "uu_id": {
+            "type": "string"
+          }
+        }
+      },
+      "tables": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/tables-without-required-constraint"
+          },
+          {
+            "required": [
+              "type",
+              "min_seats",
+              "max_seats",
+              "title",
+              "price"
+            ]
+          }
+        ]
+      },
+      "tables-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Tables**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "number",
+            "format": "double"
+          },
+          "media": {
+            "type": "string"
+          },
+          "video": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "min_seats": {
+            "type": "number",
+            "format": "double",
+            "minimum": 1
+          },
+          "max_seats": {
+            "type": "number",
+            "format": "double",
+            "minimum": 1
+          },
+          "booked_seats": {
+            "type": "number",
+            "format": "double"
+          },
+          "booked": {
+            "type": "number",
+            "format": "double"
+          },
+          "bookmarks": {
+            "type": "number",
+            "format": "double"
+          },
+          "followers": {
+            "type": "number",
+            "format": "double"
+          },
+          "title": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "minimum": 0
+          },
+          "tags": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "created_by": {},
+          "event_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reviews": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "admin_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "user_type": {
+            "type": "number",
+            "format": "double"
+          },
+          "location": {},
+          "event_done_flag": {
+            "type": "boolean"
+          },
+          "state": {
+            "type": "string"
+          },
+          "pincode": {
+            "type": "string"
+          },
+          "category": {
+            "description": "JSON dictionary representing the **interests** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/interests"
+              }
+            ]
+          },
+          "user_profile": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          }
+        }
+      },
+      "tags": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/tags-without-required-constraint"
+          }
+        ]
+      },
+      "tags-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Tags**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "tags": {
+            "type": "string"
+          }
+        }
+      },
+      "users": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/users-without-required-constraint"
+          },
+          {
+            "required": [
+              "username"
+            ]
+          }
+        ]
+      },
+      "users-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Users**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "username": {},
+          "email": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "types": {},
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "status_glossary": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "one_signal_push_tokens": {},
+          "tokens": {},
+          "last_active": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_checkin_via": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "facebook_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "facebook_data": {},
+          "linkedin_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedin_data": {},
+          "onesignal_player_ids": {},
+          "google_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "google_data": {},
+          "apple_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "apple_data": {},
+          "otp_session_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "uu_id": {
+            "type": "string"
+          },
+          "profile_admin": {
+            "description": "JSON dictionary representing the **profileadmin** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profileadmin"
+              }
+            ]
+          },
+          "profile_members": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          },
+          "profile_managers": {
+            "description": "JSON dictionary representing the **profilemanagers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemanagers"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "parameters": {
+      "AttributeFilterParam": {
+        "in": "query",
+        "name": "_*_",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "To filter results based on a particular attribute, specify a query parameter with the same name as the attribute defined on your model. For instance, if our `Purchase` model has an `amount` attribute, we could send `GET /purchase?amount=99.99` to return a list of $99.99 purchases."
+      },
+      "WhereQueryParam": {
+        "in": "query",
+        "name": "where",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Instead of filtering based on a specific attribute, you may instead choose to provide a `where` parameter with the WHERE piece of a [Waterline criteria](https://sailsjs.com/documentation/concepts/models-and-orm/query-language), _encoded as a JSON string_. This allows you to take advantage of `contains`, `startsWith`, and other sub-attribute criteria modifiers for more powerful `find()` queries.\n\ne.g. `?where={\"name\":{\"contains\":\"theodore\"}}`"
+      },
+      "LimitQueryParam": {
+        "in": "query",
+        "name": "limit",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        },
+        "description": "The maximum number of records to send back (useful for pagination). Defaults to 30."
+      },
+      "SkipQueryParam": {
+        "in": "query",
+        "name": "skip",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        },
+        "description": "The number of records to skip (useful for pagination)."
+      },
+      "SortQueryParam": {
+        "in": "query",
+        "name": "sort",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The sort order. By default, returned records are sorted by primary key value in ascending order.\n\ne.g. `?sort=lastName%20ASC`"
+      }
+    }
+  },
+  "paths": {
+    "/all-status-codes": {
+      "get": {
+        "summary": "/all-status-codes",
+        "tags": [
+          "index"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/linkedin": {
+      "get": {
+        "summary": "/auth/linkedin",
+        "tags": [
+          "LinkedIn"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/login-otp": {
+      "post": {
+        "summary": "/users/login-otp",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/manager/create": {
+      "post": {
+        "summary": "/manager/create",
+        "tags": [
+          "create"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/manager/activate": {
+      "put": {
+        "summary": "/manager/activate",
+        "tags": [
+          "activate"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/manager/update": {
+      "put": {
+        "summary": "/manager/update",
+        "tags": [
+          "update"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/manager/photo-upload": {
+      "post": {
+        "summary": "/manager/photo-upload",
+        "tags": [
+          "photo-upload"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/manager/view": {
+      "get": {
+        "summary": "/manager/view",
+        "tags": [
+          "view"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/manager/list": {
+      "get": {
+        "summary": "/manager/list",
+        "tags": [
+          "list"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tags/list": {
+      "get": {
+        "summary": "/tags/list",
+        "tags": [
+          "Tags"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/interests/list": {
+      "get": {
+        "summary": "Retrieve a list of tables based on various filters.",
+        "description": "Use this API to retrieve a list of tables based on various filters..",
+        "operationId": "interestsList",
+        "tags": [
+          "Interests"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Interests retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Interests retrieved successfully."
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "page": {
+                          "description": "Page of the meta data.",
+                          "type": "number",
+                          "example": 1
+                        },
+                        "limit": {
+                          "description": "Limit of the meta data.",
+                          "type": "number",
+                          "example": 10
+                        },
+                        "total": {
+                          "description": "Total of the meta data.",
+                          "type": "number",
+                          "example": 5
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "description": "Id of the item.",
+                            "type": "string",
+                            "example": "1"
+                          },
+                          "name": {
+                            "description": "Name of the item.",
+                            "type": "string",
+                            "example": "art"
+                          },
+                          "image": {
+                            "description": "Image of the item.",
+                            "type": "string",
+                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/interests-image-1.png"
+                          },
+                          "width": {
+                            "description": "Width of the item.",
+                            "type": "number",
+                            "example": 11
+                          },
+                          "height": {
+                            "description": "Height of the item.",
+                            "type": "number",
+                            "example": 11
+                          },
+                          "status": {
+                            "description": "Status of the item.",
+                            "type": "number",
+                            "example": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "You don't have permission to perform this action"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "0": {
+                    "description": "0 of the request.",
+                    "type": "string"
+                  },
+                  "1": {
+                    "description": "1 of the request.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/interests/category-available": {
+      "get": {
+        "summary": "/interests/category-available",
+        "tags": [
+          "Interests"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/interests/users-interests-list": {
+      "get": {
+        "summary": "/interests/users-interests-list",
+        "tags": [
+          "Interests"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/interests/image-upload": {
+      "post": {
+        "summary": "/interests/image-upload",
+        "tags": [
+          "Interests"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/standard-table/set-price": {
+      "post": {
+        "summary": "/standard-table/set-price",
+        "tags": [
+          "set-price"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/standard-table/view-price": {
+      "get": {
+        "summary": "/standard-table/view-price",
+        "tags": [
+          "view-price"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/create": {
+      "post": {
+        "summary": "Create Tables",
+        "description": "Create a new **Tables** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the newly created **Tables** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tables"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON dictionary representing the Tables instance to create.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/tables"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tables/create-by-admin": {
+      "post": {
+        "summary": "/tables/create-by-admin",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/table-status": {
+      "post": {
+        "summary": "/tables/table-status",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/cancel-table": {
+      "put": {
+        "summary": "/tables/cancel-table",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/list": {
+      "get": {
+        "summary": "/tables/list",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/list-admin": {
+      "get": {
+        "summary": "/tables/list-admin",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/my-list": {
+      "get": {
+        "summary": "/tables/my-list",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/table-search": {
+      "post": {
+        "summary": "/tables/table-search",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/high-booked": {
+      "get": {
+        "summary": "/tables/high-booked",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/view": {
+      "get": {
+        "summary": "/tables/view",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/view-web": {
+      "get": {
+        "summary": "/tables/view-web",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/media-upload": {
+      "post": {
+        "summary": "/tables/media-upload",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/video-upload": {
+      "post": {
+        "summary": "/tables/video-upload",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/event-status-host": {
+      "put": {
+        "summary": "/tables/event-status-host",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/event-status-user": {
+      "put": {
+        "summary": "/tables/event-status-user",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/book-table": {
+      "post": {
+        "summary": "/table-booking/book-table",
+        "tags": [
+          "book-table"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/list": {
+      "get": {
+        "summary": "/table-booking/list",
+        "tags": [
+          "list"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/list-admin": {
+      "get": {
+        "summary": "/table-booking/list-admin",
+        "tags": [
+          "list-admin"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/booked-list-all": {
+      "get": {
+        "summary": "/table-booking/booked-list-all",
+        "tags": [
+          "booked-list-all"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/booked-my-tables-user-list": {
+      "get": {
+        "summary": "/table-booking/booked-my-tables-user-list",
+        "tags": [
+          "booked-my-tables-user-list"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/booked-all-my-list": {
+      "get": {
+        "summary": "/table-booking/booked-all-my-list",
+        "tags": [
+          "booked-all-my-list"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/booked-my-tables": {
+      "get": {
+        "summary": "/table-booking/booked-my-tables",
+        "tags": [
+          "booked-my-tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/capture-payment": {
+      "post": {
+        "summary": "/table-booking/capture-payment",
+        "tags": [
+          "capture-payment"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/refund-payment": {
+      "post": {
+        "summary": "/table-booking/refund-payment",
+        "tags": [
+          "refund-payment"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/accept-booking": {
+      "get": {
+        "summary": "/table-booking/accept-booking",
+        "tags": [
+          "accept-booking"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/reviews/give-feedback": {
+      "post": {
+        "summary": "/reviews/give-feedback",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/bookmark/create": {
+      "post": {
+        "summary": "/bookmark/create",
+        "tags": [
+          "create"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/bookmark/list": {
+      "get": {
+        "summary": "/bookmark/list",
+        "tags": [
+          "list"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/followers/create": {
+      "post": {
+        "summary": "Create Followers",
+        "description": "Create a new **Followers** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "tags": [
+          "Followers"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the newly created **Followers** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/followers"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON dictionary representing the Followers instance to create.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/followers"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile-members/create": {
+      "post": {
+        "summary": "/profile-members/create",
+        "tags": [
+          "create"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/destroy-user": {
+      "delete": {
+        "summary": "/profile-members/destroy-user",
+        "tags": [
+          "destroy-user"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/list": {
+      "get": {
+        "summary": "/profile-members/list",
+        "tags": [
+          "list"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/profile": {
+      "get": {
+        "summary": "/profile-members/profile",
+        "tags": [
+          "profile"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/view": {
+      "get": {
+        "summary": "/profile-members/view",
+        "tags": [
+          "view"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/view-admin": {
+      "get": {
+        "summary": "/profile-members/view-admin",
+        "tags": [
+          "view-admin"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/activate": {
+      "put": {
+        "summary": "/profile-members/activate",
+        "tags": [
+          "activate"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/update": {
+      "put": {
+        "summary": "/profile-members/update",
+        "tags": [
+          "update"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/photo-upload": {
+      "post": {
+        "summary": "/profile-members/photo-upload",
+        "tags": [
+          "photo-upload"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/notification": {
+      "post": {
+        "summary": "/users/notification",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/notification-status": {
+      "post": {
+        "summary": "/users/notification-status",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/linkedinlogin": {
+      "get": {
+        "summary": "/users/linkedinlogin",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/payout-host/list": {
+      "get": {
+        "summary": "/payout-host/list",
+        "tags": [
+          "list"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/payout-host/view": {
+      "get": {
+        "summary": "/payout-host/view",
+        "tags": [
+          "view"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/razorpay/create-account": {
+      "post": {
+        "summary": "/razorpay/create-account",
+        "tags": [
+          "create-account"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/linkedin/callback": {
+      "get": {
+        "summary": "/auth/linkedin/callback",
+        "tags": [
+          "LinkedIn"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/linkedin/profile": {
+      "post": {
+        "summary": "/auth/linkedin/profile",
+        "tags": [
+          "LinkedIn"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}

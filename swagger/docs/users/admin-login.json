@@ -1,0 +1,121 @@
+{
+    "/oauth/token": {
+        "tags": [
+            "Authentication"
+        ],
+        "summary": "Generate OAuth2 token",
+        "description": "Use this API to obtain an OAuth2 access token using client credentials and user credentials.",
+        "operationId": "getOAuthToken",
+        "requestBody": {
+            "required": true,
+            "content": {
+                "application/x-www-form-urlencoded": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "client_id": {
+                                "description": "Client ID for OAuth2 authentication.",
+                                "type": "string",
+                                "example": "CLIENT002"
+                            },
+                            "client_secret": {
+                                "description": "Client secret for OAuth2 authentication.",
+                                "type": "string",
+                                "example": "5PY02KdOpCX5FO93jSjPa7gKsBvQF"
+                            },
+                            "username": {
+                                "description": "Username for user authentication.",
+                                "type": "string",
+                                "example": "admin@hightable.com"
+                            },
+                            "grant_type": {
+                                "description": "The grant type for the token request.",
+                                "type": "string",
+                                "example": "password"
+                            },
+                            "password": {
+                                "description": "Password for user authentication.",
+                                "type": "string",
+                                "example": "Asdf@123"
+                            }
+                        },
+                        "required": [
+                            "client_id",
+                            "client_secret",
+                            "username",
+                            "grant_type",
+                            "password"
+                        ]
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Token generated successfully",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "access_token": {
+                                    "description": "OAuth2 access token.",
+                                    "type": "string",
+                                    "example": "PCeEQ3HK9QeuP4UUz8eALsVZR1dbcqPayc5zgPJN6fM3cn2duTwDQ532gEtj3ryWHFgbt6MrxanzFChGA5Iq4sK9yPBdag5y77FY1rE8GrO6u5GN4AbTb2FULKlTCs1lQBU9V5k4qSsid3dZlQJ0Afb0hxdjaoyb03y0rytbd6Fb97RnmZDE8Ldw0zHYY40LYrgFoUw0zOGtWhqSbnBuJRfhWAsmdXQpCBDbQUSehqSP3NZ9YkcPIFXUnAoNB3H"
+                                },
+                                "refresh_token": {
+                                    "description": "OAuth2 refresh token.",
+                                    "type": "string",
+                                    "example": "4h2UxWMRyuG0a9a8eTE1xIxJUqW2nescg3AX4B0MKdm90brP6chXtVYOhfse3aPMdNrXXLW8P2e6LC4ZTYt5H4RSZtZ97FD0FPeTrUdi7vcr1j97dF0B34wv7xhd3Sicit8H9BVr1jrHN0Nzhrgv1dDuG9KoVrjujvQvz1qKg2TBJW4TR69KocXMdXjoA5TLV1Ro4igOQ9atWZRTOysgCU56Qlbqhp3Pc6whMf4kC8ATrxMNdqv5Pm2xfgV5Qftg"
+                                },
+                                "expires_in": {
+                                    "description": "The number of seconds until the token expires.",
+                                    "type": "integer",
+                                    "example": 3600
+                                },
+                                "types": {
+                                    "description": "Array of token types.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "example": 0
+                                    }
+                                },
+                                "signup": {
+                                    "description": "Indicates if the user is signed up.",
+                                    "type": "boolean",
+                                    "example": true
+                                },
+                                "token_type": {
+                                    "description": "Type of the token.",
+                                    "type": "string",
+                                    "example": "Bearer"
+                                }
+                            },
+                            "required": [
+                                "access_token",
+                                "refresh_token",
+                                "expires_in",
+                                "types",
+                                "signup",
+                                "token_type"
+                            ]
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Invalid request parameters"
+            },
+            "401": {
+                "description": "Invalid client credentials or user credentials"
+            },
+            "403": {
+                "description": "Forbidden access"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

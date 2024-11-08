@@ -1,0 +1,55 @@
+{
+    "/tables/event-status-user": {
+        "tags": [
+            "Tables"
+        ],
+        "summary": "Status of event attend or not.",
+        "description": "Use this API to know event attended.",
+        "operationId": "tablesEventStatusUser",
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                          
+                            "table_id": {
+                                "description": "Unique identifier of the table.",
+                                "type": "integer",
+                                "example": 964
+                            },
+                            "user_id": {
+                                "description": "Unique identifier of the table.",
+                                "type": "integer",
+                                "example": 785
+                            },
+                            "event_done_flag": {
+                                "description": "Flag indicating if the event is done.",
+                                "type": "boolean",
+                                "example": true 
+                            }
+                        },
+                        "required": ["table_id", "event_done_flag"]
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Payment processed for the event or error message."
+                   },
+            "400": {
+                "description": "Bad request"
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "You don't have permission to perform this action"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

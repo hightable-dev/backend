@@ -1,0 +1,142 @@
+{
+    "/table-booking/accept-booking": {
+        "tags": [
+            "Booking"
+        ],
+        "summary": "Table creator need to accept for the event.",
+        "description": "Use this API to create a new table.",
+        "operationId": "acceptBooking",
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "description": "5 accept, 12 reject",
+                                "type": "string",
+                                "example": "1"
+                            },
+                            "media": {
+                                "description": "Media associated with the event.",
+                                "type": "string",
+                                "example": "name.jpeg or name.mp4"
+                            },
+                            "min_seats": {
+                                "description": "Minimum number of seats.",
+                                "type": "integer",
+                                "example": 4
+                            },
+                            "max_seats": {
+                                "description": "Maximum number of seats.",
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "event_date": {
+                                "description": "Date and time of the event.",
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2024-04-28T00:00:00Z"
+                            },
+                            "title": {
+                                "description": "Title of the event.",
+                                "type": "string",
+                                "example": "Tested from postman"
+                            },
+                            "description": {
+                                "description": "Description of the event.",
+                                "type": "string",
+                                "example": "The only way to do great work is to love what you do."
+                            },
+                            "category": {
+                                "description": "Category of the event.",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "price": {
+                                "description": "Price of the event. Not applicable if Table is standard.",
+                                "type": "integer",
+                                "example": 200
+                            },
+                            "tags": {
+                                "description": "Tags for the event.",
+                                "type": "string",
+                                "example": "Health"
+                            },
+                            "location": {
+                                "description": "Geographic location of the event.",
+                                "type": "object",
+                                "properties": {
+                                    "lat": {
+                                        "description": "Latitude of the event location.",
+                                        "type": "number",
+                                        "example": 70.7128
+                                    },
+                                    "lng": {
+                                        "description": "Longitude of the event location.",
+                                        "type": "number",
+                                        "example": -80.0060
+                                    }
+                                },
+                                "required": ["lat", "lng"]
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "media",
+                            "min_seats",
+                            "max_seats",
+                            "title",
+                            "description",
+                            "category",
+                            "location",
+                            "event_date",
+                            "tags"
+                        ]
+                    }
+                }
+         
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Table created successfully",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "description": "Unique identifier of the created table.",
+                                    "type": "string",
+                                    "example": "abcd1234"
+                                },
+                                "message": {
+                                    "description": "Confirmation message.",
+                                    "type": "string",
+                                    "example": "Table created successfully."
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request"
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "You don't have permission to perform this action"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

@@ -1,0 +1,272 @@
+{
+    "/tables/my-list": {
+        "tags": [
+            "Tables"
+        ],
+        "summary": "Lists of tables created by logged-in user",
+        "description": "Displays a list of tables created by the logged-in user.",
+        "operationId": "tablesMyList",
+        "parameters": [
+            {
+                "name": "page",
+                "in": "query",
+                "description": "Page number for pagination",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": 1
+                }
+            },
+            {
+                "name": "limit",
+                "in": "query",
+                "description": "Number of items per page",
+                "required": false,
+                "schema": {
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Tables retrieved successfully.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Tables retrieved successfully."
+                                },
+                                "meta": {
+                                    "type": "object",
+                                    "properties": {
+                                        "page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 3
+                                        }
+                                    },
+                                    "required": [
+                                        "page",
+                                        "limit",
+                                        "total"
+                                    ]
+                                },
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 968
+                                            },
+                                            "full_name": {
+                                                "type": "string",
+                                                "example": "Dgs"
+                                            },
+                                            "type": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "media": {
+                                                "type": "string",
+                                                "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/tables-media-968.jpg"
+                                            },
+                                            "video": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "example": null
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "expirs aug 11"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": ""
+                                            },
+                                            "min_seats": {
+                                                "type": "integer",
+                                                "example": 4
+                                            },
+                                            "max_seats": {
+                                                "type": "integer",
+                                                "example": 10
+                                            },
+                                            "booked_seats": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "booked": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "bookmarks": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "followers": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Flowser aug 11"
+                                            },
+                                            "price": {
+                                                "type": "integer",
+                                                "example": 35
+                                            },
+                                            "tags": {
+                                                "type": "string",
+                                                "example": "Celebrity"
+                                            },
+                                            "address": {
+                                                "type": "string",
+                                                "example": "Pondicherry, Puducherry, India"
+                                            },
+                                            "city": {
+                                                "type": "string",
+                                                "example": ""
+                                            },
+                                            "created_by": {
+                                                "type": "integer",
+                                                "example": 723
+                                            },
+                                            "event_date": {
+                                                "type": "string",
+                                                "example": "11-08-2024 05:09"
+                                            },
+                                            "reviews": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "status": {
+                                                "type": "integer",
+                                                "example": 3
+                                            },
+                                            "admin_id": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "user_type": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "location": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "lat": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 11.9415915
+                                                    },
+                                                    "lng": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 79.8083133
+                                                    }
+                                                },
+                                                "required": [
+                                                    "lat",
+                                                    "lng"
+                                                ]
+                                            },
+                                            "event_done_flag": {
+                                                "type": "boolean",
+                                                "example": false
+                                            },
+                                            "category": {
+                                                "type": "string",
+                                                "example": "general"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "full_name",
+                                            "type",
+                                            "media",
+                                            "description",
+                                            "phone",
+                                            "min_seats",
+                                            "max_seats",
+                                            "booked_seats",
+                                            "booked",
+                                            "bookmarks",
+                                            "followers",
+                                            "title",
+                                            "price",
+                                            "tags",
+                                            "address",
+                                            "city",
+                                            "created_by",
+                                            "event_date",
+                                            "reviews",
+                                            "status",
+                                            "admin_id",
+                                            "user_type",
+                                            "location",
+                                            "event_done_flag",
+                                            "category"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "meta",
+                                "items"
+                            ]
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request. No tables created.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "No tables created"
+                                },
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "items"
+                            ]
+                        }
+                    }
+                }
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "Forbidden"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

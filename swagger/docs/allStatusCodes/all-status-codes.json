@@ -1,0 +1,204 @@
+{
+    "/all-status-codes": {
+        "tags": [
+            "Status Codes"
+        ],
+        "summary": "Retrieve all status codes and file paths",
+        "description": "Fetches all defined status codes and file paths for various resources.",
+        "operationId": "getAllStatusCodes",
+        "responses": {
+            "200": {
+                "description": "Successful retrieval of all status codes and file paths",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "roles": {
+                                    "type": "object",
+                                    "properties": {
+                                        "admin": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "manager": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "member": {
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    },
+                                    "description": "Role definitions"
+                                },
+                                "tableType": {
+                                    "type": "object",
+                                    "properties": {
+                                        "standard": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "premium": {
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    },
+                                    "description": "Table type definitions"
+                                },
+                                "statusCode": {
+                                    "type": "object",
+                                    "properties": {
+                                        "inactive": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "active": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "description": "Status code definitions"
+                                },
+                                "tableStatusCode": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pending": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "approved": {
+                                            "type": "integer",
+                                            "example": 3
+                                        },
+                                        "reject": {
+                                            "type": "integer",
+                                            "example": 4
+                                        },
+                                        "bookingClosed": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "cancelled": {
+                                            "type": "integer",
+                                            "example": 6
+                                        },
+                                        "eventExpired": {
+                                            "type": "integer",
+                                            "example": 7
+                                        },
+                                        "eventCompleted": {
+                                            "type": "integer",
+                                            "example": 8
+                                        },
+                                        "bookmarkTable": {
+                                            "type": "integer",
+                                            "example": 13
+                                        },
+                                        "follower": {
+                                            "type": "integer",
+                                            "example": 14
+                                        },
+                                        "followerUsers": {
+                                            "type": "integer",
+                                            "example": 15
+                                        }
+                                    },
+                                    "description": "Table status code definitions"
+                                },
+                                "paymentStatusCode": {
+                                    "type": "object",
+                                    "properties": {
+                                        "payPending": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "orederExpired": {
+                                            "type": "integer",
+                                            "example": 6
+                                        },
+                                        "refundRequest": {
+                                            "type": "integer",
+                                            "example": 7
+                                        },
+                                        "refundSuccess": {
+                                            "type": "integer",
+                                            "example": 8
+                                        },
+                                        "paymentSuccess": {
+                                            "type": "integer",
+                                            "example": 9
+                                        },
+                                        "eventAttended": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "bookingConfirmationPendingByCreator": {
+                                            "type": "integer",
+                                            "example": 11
+                                        },
+                                        "bookingRejectByCreator": {
+                                            "type": "integer",
+                                            "example": 12
+                                        }
+                                    },
+                                    "description": "Payment status code definitions"
+                                },
+                                "file_path": {
+                                    "type": "object",
+                                    "properties": {
+                                        "tablesVideo": {
+                                            "type": "string",
+                                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/video/tables/"
+                                        },
+                                        "tablesPhoto": {
+                                            "type": "string",
+                                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/"
+                                        },
+                                        "interestsPhoto": {
+                                            "type": "string",
+                                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/"
+                                        },
+                                        "userPhoto": {
+                                            "type": "string",
+                                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/users/"
+                                        },
+                                        "memberPhoto": {
+                                            "type": "string",
+                                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/members/"
+                                        },
+                                        "managerPhoto": {
+                                            "type": "string",
+                                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/managers/"
+                                        }
+                                    },
+                                    "description": "File path URLs for different resources"
+                                }
+                            },
+                            "required": [
+                                "roles",
+                                "tableType",
+                                "statusCode",
+                                "tableStatusCode",
+                                "paymentStatusCode",
+                                "file_path"
+                            ]
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request"
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "Forbidden"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

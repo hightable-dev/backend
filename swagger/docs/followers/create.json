@@ -1,0 +1,102 @@
+{
+    "/followers/create": {
+        "tags": [
+            "Followers"
+        ],
+        "summary": "Follow or Unfollow a user",
+        "description": "Allows a user to follow or unfollow another user based on their profile IDs. The response details vary based on the follow/unfollow operation.",
+        "operationId": "followerCreate",
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "creator_profile_id": {
+                                "type": "integer",
+                                "description": "ID of the creator profile",
+                                "example": 740
+                            },
+                            "follower_profile_id": {
+                                "type": "integer",
+                                "description": "ID of the follower profile",
+                                "example": 723
+                            }
+                        },
+                        "required": [
+                            "creator_profile_id",
+                            "follower_profile_id"
+                        ]
+                    }
+                }
+            },
+            "required": true
+        },
+        "responses": {
+            "200": {
+                "description": "Successful operation (Follow or Unfollow)",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Followers updated."
+                                },
+                                "details": {
+                                    "type": "object",
+                                    "properties": {
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-10T04:43:02.357Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-10T04:43:02.357Z"
+                                        },
+                                        "id": {
+                                            "type": "string",
+                                            "example": "36"
+                                        },
+                                        "follower_profile_id": {
+                                            "type": "string",
+                                            "example": "723"
+                                        },
+                                        "status": {
+                                            "type": "integer",
+                                            "description": "Status of the follow/unfollow operation. 14 indicates follow, 1 indicates unfollow.",
+                                            "example": 14
+                                        },
+                                        "creator_profile_id": {
+                                            "type": "string",
+                                            "example": "740"
+                                        }
+                                    },
+                                    "required": [
+                                        "follower_profile_id",
+                                        "creator_profile_id"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request"
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "Forbidden"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

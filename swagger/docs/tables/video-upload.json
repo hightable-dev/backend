@@ -1,0 +1,310 @@
+{
+    "/tables/video-upload": {
+        "tags": [
+            "Tables"
+        ],
+        "summary": "Upload media for a table",
+        "description": "Use this API to upload media (image or video) for a specific table.",
+        "operationId": "tablesVideoUpload",
+        "parameters": [
+            {
+                "name": "id",
+                "in": "query",
+                "description": "Unique identifier of the table.",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "example": 79
+                }
+            }
+        ],
+        "requestBody": {
+            "content": {
+                "multipart/form-data": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "Video": {
+                                "description": "The media file to upload.",
+                                "type": "string",
+                                "format": "binary",
+                                "example": ""
+                            }
+                        },
+                        "required": [
+                            "Video"
+                        ]
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Video (Media) uploaded successfully.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "description": "Confirmation message.",
+                                    "type": "string",
+                                    "example": "Media uploaded successfully."
+                                },
+                                "meta": {
+                                    "type": "object",
+                                    "properties": {
+                                        "media": {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "description": "The base URL where the media is stored.",
+                                                    "type": "string",
+                                                    "example": "https://s3.ap-south-1.amazonaws.com/high-table"
+                                                },
+                                                "folder": {
+                                                    "description": "The folder path where the media is stored.",
+                                                    "type": "string",
+                                                    "example": "public/video/tables"
+                                                },
+                                                "example": {
+                                                    "description": "An example URL of the uploaded media.",
+                                                    "type": "string",
+                                                    "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/video/tables/user-209.mp4"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "details": {
+                                    "type": "object",
+                                    "properties": {
+                                        "0": {
+                                            "type": "object",
+                                            "properties": {
+                                                "thumbnail": {
+                                                    "description": "URL of the thumbnail image.",
+                                                    "type": "string",
+                                                    "example": "null"
+                                                },
+                                                "created_at": {
+                                                    "description": "Timestamp when the table was created.",
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-08-09T03:58:18.211Z"
+                                                },
+                                                "updated_at": {
+                                                    "description": "Timestamp when the table was last updated.",
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-08-09T12:13:41.818Z"
+                                                },
+                                                "id": {
+                                                    "description": "Unique identifier of the table.",
+                                                    "type": "integer",
+                                                    "example": 964
+                                                },
+                                                "full_name": {
+                                                    "description": "Full name associated with the table.",
+                                                    "type": "string",
+                                                    "example": "Sathish"
+                                                },
+                                                "type": {
+                                                    "description": "Type of the table.",
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "media": {
+                                                    "description": "File name of the uploaded media.",
+                                                    "type": "string",
+                                                    "example": "tables-media-964.jpeg"
+                                                },
+                                                "video": {
+                                                    "description": "File name of the uploaded video.",
+                                                    "type": "string",
+                                                    "example": "media1723205621814-2662442668.mp4"
+                                                },
+                                                "description": {
+                                                    "description": "Description of the table.",
+                                                    "type": "string",
+                                                    "example": "The best way to do work is to love what you do"
+                                                },
+                                                "phone": {
+                                                    "description": "Phone number associated with the table.",
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "min_seats": {
+                                                    "description": "Minimum number of seats available.",
+                                                    "type": "integer",
+                                                    "example": 8
+                                                },
+                                                "max_seats": {
+                                                    "description": "Maximum number of seats available.",
+                                                    "type": "integer",
+                                                    "example": 8
+                                                },
+                                                "booked_seats": {
+                                                    "description": "Number of seats booked.",
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "booked": {
+                                                    "description": "Booking status.",
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "bookmarks": {
+                                                    "description": "Number of bookmarks.",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "followers": {
+                                                    "description": "Number of followers.",
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "title": {
+                                                    "description": "Title of the table.",
+                                                    "type": "string",
+                                                    "example": "Whispering shadows"
+                                                },
+                                                "price": {
+                                                    "description": "Price of the table.",
+                                                    "type": "integer",
+                                                    "example": 500
+                                                },
+                                                "tags": {
+                                                    "description": "Tags associated with the table.",
+                                                    "type": "string",
+                                                    "example": "Business,Corporate,Regional"
+                                                },
+                                                "address": {
+                                                    "description": "Address of the table.",
+                                                    "type": "string",
+                                                    "example": "Chennai, Tamil Nadu, India"
+                                                },
+                                                "city": {
+                                                    "description": "City of the table.",
+                                                    "type": "string",
+                                                    "example": ""
+                                                },
+                                                "created_by": {
+                                                    "description": "ID of the user who created the table.",
+                                                    "type": "integer",
+                                                    "example": 740
+                                                },
+                                                "event_date": {
+                                                    "description": "Event date related to the table.",
+                                                    "type": "string",
+                                                    "example": "30-08-2024 17:25"
+                                                },
+                                                "reviews": {
+                                                    "description": "Number of reviews.",
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "status": {
+                                                    "description": "Status of the table.",
+                                                    "type": "integer",
+                                                    "example": 8
+                                                },
+                                                "admin_id": {
+                                                    "description": "ID of the admin.",
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "user_type": {
+                                                    "description": "Type of user associated with the table.",
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "location": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "lat": {
+                                                            "description": "Latitude of the table's location.",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 13.0843007
+                                                        },
+                                                        "lng": {
+                                                            "description": "Longitude of the table's location.",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 80.2704622
+                                                        }
+                                                    }
+                                                },
+                                                "event_done_flag": {
+                                                    "description": "Event completion flag.",
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "category": {
+                                                    "description": "Category of the table.",
+                                                    "type": "integer",
+                                                    "example": 22
+                                                }
+                                            },
+                                            "required": [
+                                                "created_at",
+                                                "updated_at",
+                                                "id",
+                                                "full_name",
+                                                "type",
+                                                "media",
+                                                "video",
+                                                "description",
+                                                "min_seats",
+                                                "max_seats",
+                                                "booked_seats",
+                                                "booked",
+                                                "bookmarks",
+                                                "followers",
+                                                "title",
+                                                "price",
+                                                "tags",
+                                                "address",
+                                                "created_by",
+                                                "event_date",
+                                                "reviews",
+                                                "status",
+                                                "user_type",
+                                                "location",
+                                                "event_done_flag",
+                                                "category"
+                                            ]
+                                        },
+                                        "video": {
+                                            "description": "URL of the uploaded video.",
+                                            "type": "string",
+                                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/undefined"
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "meta",
+                                "details"
+                            ]
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request"
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "You don't have permission to perform this action"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

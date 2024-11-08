@@ -1,0 +1,332 @@
+{
+    "/tables/create-by-admin": {
+        "tags": [
+            "Admin"
+        ],
+        "summary": "Create a table for users from Admin side",
+        "description": "Use this API to create a new table for the users.",
+        "operationId": "tablesCreateByAdmin",
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "description": "1 for Standard, 2 for Premium",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "address": {
+                                "description": "Address where the table is located.",
+                                "type": "string",
+                                "example": "Villupuram, Whitefield"
+                            },
+                            "event_date": {
+                                "description": "Date and time of the event in 'DD-MM-YYYY HH:mm' format.",
+                                "type": "string",
+                                "example": "11-08-2024 06:00"
+                            },
+                            "media": {
+                                "description": "Media associated with the table.",
+                                "type": "string",
+                                "example": "tables-media-590"
+                            },
+                            "min_seats": {
+                                "description": "Minimum number of seats available at the table.",
+                                "type": "integer",
+                                "example": 20
+                            },
+                            "max_seats": {
+                                "description": "Maximum number of seats available at the table.",
+                                "type": "integer",
+                                "example": 20
+                            },
+                            "created_for": {
+                                "description": "ID of the user or entity for whom the table is created.",
+                                "type": "integer",
+                                "example": 730
+                            },
+                            "title": {
+                                "description": "Title of the table or event.",
+                                "type": "string",
+                                "example": "For swagger testing"
+                            },
+                            "description": {
+                                "description": "Description of the table or event.",
+                                "type": "string",
+                                "example": "This table created by admin"
+                            },
+                            "category": {
+                                "description": "Category ID of the table.",
+                                "type": "integer",
+                                "example": 4
+                            },
+                            "price": {
+                                "description": "Price of the table. Not applicable if type is Standard (1).",
+                                "type": "integer",
+                                "example": 200
+                            },
+                            "tags": {
+                                "description": "Tags associated with the table.",
+                                "type": "string",
+                                "example": "wooden, modern"
+                            },
+                            "location": {
+                                "description": "Geographic location of the table.",
+                                "type": "object",
+                                "properties": {
+                                    "latitude": {
+                                        "description": "Latitude of the table location.",
+                                        "type": "number",
+                                        "example": 40.7128
+                                    },
+                                    "longitude": {
+                                        "description": "Longitude of the table location.",
+                                        "type": "number",
+                                        "example": -74.0060
+                                    }
+                                },
+                                "required": ["latitude", "longitude"]
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "address",
+                            "event_date",
+                            "media",
+                            "min_seats",
+                            "max_seats",
+                            "created_for",
+                            "title",
+                            "description",
+                            "category",
+                            "location",
+                            "tags"
+                        ]
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "Table created successfully",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "description": "Confirmation message.",
+                                    "type": "string",
+                                    "example": "Table created successfully."
+                                },
+                                "details": {
+                                    "description": "Details of the created table.",
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "description": "Unique identifier of the created table.",
+                                            "type": "integer",
+                                            "example": 966
+                                        },
+                                        "thumbnail": {
+                                            "description": "Thumbnail of the table media, if available.",
+                                            "type": "string",
+                                            "example": null
+                                        },
+                                        "created_at": {
+                                            "description": "Timestamp when the table was created.",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-09T13:41:03.039Z"
+                                        },
+                                        "updated_at": {
+                                            "description": "Timestamp when the table was last updated.",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-08-09T13:41:03.039Z"
+                                        },
+                                        "full_name": {
+                                            "description": "Name of the admin who created the table.",
+                                            "type": "string",
+                                            "example": "Kumar"
+                                        },
+                                        "type": {
+                                            "description": "Type of the table.",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "media": {
+                                            "description": "Media associated with the table.",
+                                            "type": "string",
+                                            "example": "tables-media-590"
+                                        },
+                                        "video": {
+                                            "description": "Video associated with the table, if any.",
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "description": {
+                                            "description": "Description of the table.",
+                                            "type": "string",
+                                            "example": "This table created by admin"
+                                        },
+                                        "phone": {
+                                            "description": "Phone number associated with the table, if any.",
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "min_seats": {
+                                            "description": "Minimum number of seats.",
+                                            "type": "integer",
+                                            "example": 20
+                                        },
+                                        "max_seats": {
+                                            "description": "Maximum number of seats.",
+                                            "type": "integer",
+                                            "example": 20
+                                        },
+                                        "booked_seats": {
+                                            "description": "Number of seats already booked.",
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "booked": {
+                                            "description": "Booking status of the table.",
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "bookmarks": {
+                                            "description": "Number of bookmarks for the table.",
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "followers": {
+                                            "description": "Number of followers for the table.",
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "title": {
+                                            "description": "Title of the table.",
+                                            "type": "string",
+                                            "example": "For swagger testing"
+                                        },
+                                        "price": {
+                                            "description": "Price of the table.",
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "tags": {
+                                            "description": "Tags associated with the table.",
+                                            "type": "string",
+                                            "example": "wooden, modern"
+                                        },
+                                        "address": {
+                                            "description": "Address where the table is located.",
+                                            "type": "string",
+                                            "example": "Villupuram, Whitefield"
+                                        },
+                                        "city": {
+                                            "description": "City where the table is located.",
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "created_by": {
+                                            "description": "ID of the user who created the table.",
+                                            "type": "integer",
+                                            "example": 730
+                                        },
+                                        "event_date": {
+                                            "description": "Date and time of the event.",
+                                            "type": "string",
+                                            "example": "11-08-2024 06:00"
+                                        },
+                                        "reviews": {
+                                            "description": "Number of reviews for the table.",
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "status": {
+                                            "description": "Current status of the table.",
+                                            "type": "integer",
+                                            "example": 3
+                                        },
+                                        "admin_id": {
+                                            "description": "Admin ID associated with the table.",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "user_type": {
+                                            "description": "Type of user who created the table.",
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "location": {
+                                            "description": "Geographic location of the table.",
+                                            "type": "object",
+                                            "properties": {
+                                                "latitude": {
+                                                    "description": "Latitude of the table location.",
+                                                    "type": "number",
+                                                    "example": 40.7128
+                                                },
+                                                "longitude": {
+                                                    "description": "Longitude of the table location.",
+                                                    "type": "number",
+                                                    "example": -74.0060
+                                                }
+                                            },
+                                            "required": ["latitude", "longitude"]
+                                        },
+                                        "event_done_flag": {
+                                            "description": "Flag indicating if the event is done.",
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "category": {
+                                            "description": "Category ID of the table.",
+                                            "type": "integer",
+                                            "example": 4
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "full_name",
+                                        "type",
+                                        "media",
+                                        "description",
+                                        "min_seats",
+                                        "max_seats",
+                                        "title",
+                                        "price",
+                                        "tags",
+                                        "address",
+                                        "created_by",
+                                        "event_date",
+                                        "status",
+                                        "location",
+                                        "event_done_flag",
+                                        "category"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request"
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "You don't have permission to perform this action"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

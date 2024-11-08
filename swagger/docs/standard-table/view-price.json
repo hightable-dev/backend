@@ -1,0 +1,90 @@
+{
+    "/standard-table/view-price": {
+        "tags": [
+            "Standard Table"
+        ],
+        "summary": "View price for standard table",
+        "description": "Retrieve the current price for the standard table.",
+        "operationId": "viewPriceForStandardTable",
+        "responses": {
+            "200": {
+                "description": "Successfully retrieved the standard table price.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Standard table price retrieved successfully."
+                                },
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-08-10T00:11:21.221Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-08-10T00:11:21.221Z"
+                                            },
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 35
+                                            },
+                                            "table_type": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "price": {
+                                                "type": "integer",
+                                                "example": 80
+                                            },
+                                            "admin_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "admin_type": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "last_checkin_via": {
+                                                "type": "string",
+                                                "example": "web"
+                                            },
+                                            "uu_id": {
+                                                "type": "string",
+                                                "example": "tpyIczTPA"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "items"
+                            ]
+                        }
+                    }
+                }
+            },
+            "400": {
+                "description": "Bad request"
+            },
+            "401": {
+                "description": "Unauthorized"
+            },
+            "403": {
+                "description": "Forbidden"
+            },
+            "500": {
+                "description": "Internal server error"
+            }
+        }
+    }
+}

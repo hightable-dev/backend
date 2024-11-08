@@ -1,0 +1,775 @@
+<div id="questionarie-wizard">
+    <div class="assessment-landing-container questionnaire-container">
+        <div class="form_wizard" id="myWizard">
+            <input type="text" id="id_url" value="<%= URL %>" hidden />
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1" aria-valuemin="1"
+                    aria-valuemax="12" style="width: 8%;">
+                </div>
+            </div>
+            <div class="navbar hidden">
+                <div class="navbar-inner">
+                    <ul class="nav nav-pills nav-wizard">
+                        <li class="active">
+                            <a href="#step1" data-toggle="tab" data-step="1">1.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step2" data-toggle="tab" data-step="2">2.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step3" data-toggle="tab" data-step="3">3.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step4" data-toggle="tab" data-step="4">4.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step5" data-toggle="tab" data-step="5">5.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step6" data-toggle="tab" data-step="6">6.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step7" data-toggle="tab" data-step="7">7.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step8" data-toggle="tab" data-step="8">8.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step9" data-toggle="tab" data-step="9">9.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step10" data-toggle="tab" data-step="10">10.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step11" data-toggle="tab" data-step="11">11.</a>
+                        </li>
+                        <li class="disabled">
+                            <div class="nav-wedge"></div>
+                            <a href="#step12" data-toggle="tab" data-step="12">12.</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="step1">
+                    <div class="questionnaire-question-container">
+                        <div class="questionnaire-question-text" id="question_1">
+                            Select the option that applies to you.
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="answer" name="radio" value="I don't believe in Jesus">
+                                <span class="label">I don't believe in Jesus</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="answer" name="radio" value="I believe in God but not in Christ">
+                                <span class="label">I believe in God but not in Christ</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="answer" name="radio" value="I want to recommit my to life Jesus">
+                                <span class="label">I want to recommit my to life Jesus</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="answer" name="radio" value="I want to be discipled to grow in Jesus">
+                                <span class="label">I want to be discipled to grow in Jesus</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="answer" name="radio" value="Other">
+                                <span class="label">Other</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <div></div>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step2" >
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_2">
+                            Lately, some of my behavior and or actions don't feel right to me.
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step3">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_3">
+                            Lately, I feel like I need to submit myself to God's authority
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step4">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_4">
+                            Lately, I feel like I need to offer proper reverence for God
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step5">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_5">
+                            Lately, I feel like I need to do right by God always.
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step6">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_6">
+                            Lately, I feel like I need to do right by the people around me always
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step7">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_7">
+                            Lately, I find some of my self-indulgence or the pleasures in my life insignificant
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step8">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_8">
+                            Lately, I feel like I need to believe and or trust Christ.
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step9">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_9">
+                            I want to fully commit to Christ.
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step10">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_10">
+                            I want to learn about what it means to do right by God.
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step11">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_11">
+                            I want to learn about what it means to follow Christ
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <!-- <button class="btn btn-primary btn-lg  next" type="submit">Next</button> -->
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="step12">
+                    <div class="questionnaire-question-container question-with-instruction">
+                        <div class="questionnaire-question-text" id="question_12">
+                            I want to learn about what it means to obey Christ.
+                        </div>
+                        <div class="full-width">
+                            <div class="radio-instruction-text">0 - Strongly disagree</div>
+                            <div class="radio-instruction-text">10 - Strongly agree</div>
+                        </div>
+                        <div class="question-radio-set">
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="0">
+                                <span class="label">0</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="1">
+                                <span class="label">1</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="2">
+                                <span class="label">2</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="3">
+                                <span class="label">3</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="4">
+                                <span class="label">4</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="5">
+                                <span class="label">5</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="6">
+                                <span class="label">6</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="7">
+                                <span class="label">7</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="8">
+                                <span class="label">8</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="9">
+                                <span class="label">9</span>
+                            </div>
+                            <div class="question-radio">
+                                <input type="radio" class="scale" name="radio" value="10">
+                                <span class="label">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assessment-landing-footer">
+                        <button class="footer-decline back" type="button">Back </button>
+                        <button class="btn btn-primary btn-lg  next" onclick="wizardSubmit()"
+                            type="submit">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
