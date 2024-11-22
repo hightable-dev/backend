@@ -1,4 +1,3 @@
-const moment = require('moment');
 
 module.exports = async function findOne(request, response) {
   try {

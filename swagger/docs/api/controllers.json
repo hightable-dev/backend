@@ -1,0 +1,405 @@
+{
+  "/api/controllers/tables/view.js": {
+    "tags": [
+      "Api"
+    ],
+    "summary": "Retrieve data of Api - controllers",
+    "description": "Use this API to retrieve data of api - controllers.",
+    "operationId": "api/controllers/tables/view.js",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Id of the request.",
+                "type": "integer",
+                "example": 1,
+                "minimum": 1
+              }
+            },
+            "required": [
+              "0"
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Table viewed successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Table viewed successfully."
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "table_photo": {
+                      "description": "Table_photo of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/hd/",
+                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/standardResolution/"
+                      }
+                    },
+                    "table_video": {
+                      "description": "Table_video of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/video/tables/"
+                    },
+                    "profile_photo": {
+                      "description": "Profile_photo of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/members/"
+                    },
+                    "category_photo": {
+                      "description": "Category_photo of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/"
+                    }
+                  }
+                },
+                "details": {
+                  "type": "object",
+                  "properties": {
+                    "created_at": {
+                      "description": "Created_at of the details.",
+                      "type": "object",
+                      "example": "2024-09-09T23:59:10.037Z"
+                    },
+                    "updated_at": {
+                      "description": "Updated_at of the details.",
+                      "type": "object",
+                      "example": "2024-09-11T08:57:24.829Z"
+                    },
+                    "id": {
+                      "description": "Id of the details.",
+                      "type": "string",
+                      "example": "28"
+                    },
+                    "full_name": {
+                      "description": "Full_name of the details.",
+                      "type": "string",
+                      "example": "Sathish "
+                    },
+                    "type": {
+                      "description": "Type of the details.",
+                      "type": "number",
+                      "example": 1
+                    },
+                    "media": {
+                      "description": "Media of the details.",
+                      "type": "string",
+                      "example": "image-28_1.webp"
+                    },
+                    "video": {
+                      "description": "Video of the details.",
+                      "type": "object",
+                      "example": null
+                    },
+                    "description": {
+                      "description": "Description of the details.",
+                      "type": "string",
+                      "example": "Testing "
+                    },
+                    "phone": {
+                      "description": "Phone of the details.",
+                      "type": "string",
+                      "example": ""
+                    },
+                    "min_seats": {
+                      "description": "Min_seats of the details.",
+                      "type": "number",
+                      "example": 4
+                    },
+                    "max_seats": {
+                      "description": "Max_seats of the details.",
+                      "type": "number",
+                      "example": 4
+                    },
+                    "booked_seats": {
+                      "description": "Booked_seats of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "booked": {
+                      "description": "Booked of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "bookmarks": {
+                      "description": "Bookmarks of the details.",
+                      "type": "number",
+                      "example": 1
+                    },
+                    "followers": {
+                      "description": "Followers of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "title": {
+                      "description": "Title of the details.",
+                      "type": "string",
+                      "example": "Stellar drifters "
+                    },
+                    "price": {
+                      "description": "Price of the details.",
+                      "type": "number",
+                      "example": 60
+                    },
+                    "tags": {
+                      "description": "Tags of the details.",
+                      "type": "string",
+                      "example": "Corporate"
+                    },
+                    "address": {
+                      "description": "Address of the details.",
+                      "type": "string",
+                      "example": "Puducherry, India"
+                    },
+                    "city": {
+                      "description": "City of the details.",
+                      "type": "string",
+                      "example": "Puducherry"
+                    },
+                    "created_by": {
+                      "description": "Created_by of the details.",
+                      "type": "number",
+                      "example": 825
+                    },
+                    "event_date": {
+                      "description": "Event_date of the details.",
+                      "type": "string",
+                      "example": "09-10-2024 05:55"
+                    },
+                    "reviews": {
+                      "description": "Reviews of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "status": {
+                      "description": "Status of the details.",
+                      "type": "number",
+                      "example": 3
+                    },
+                    "admin_id": {
+                      "description": "Admin_id of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "user_type": {
+                      "description": "User_type of the details.",
+                      "type": "number",
+                      "example": 2
+                    },
+                    "location": {
+                      "description": "Location of the details.",
+                      "type": "object",
+                      "example": {
+                        "lat": 11.9415915,
+                        "lng": 79.8083133
+                      }
+                    },
+                    "event_done_flag": {
+                      "description": "Event_done_flag of the details.",
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "state": {
+                      "description": "State of the details.",
+                      "type": "string",
+                      "example": "Puducherry"
+                    },
+                    "pincode": {
+                      "description": "Pincode of the details.",
+                      "type": "string",
+                      "example": "605009"
+                    },
+                    "category": {
+                      "description": "Category of the details.",
+                      "type": "object",
+                      "example": {
+                        "created_at": "2024-02-13T06:04:28.727Z",
+                        "updated_at": "2024-03-27T11:09:14.270Z",
+                        "id": "2",
+                        "name": "comedy",
+                        "image": "interests-image-2.png",
+                        "width": 11,
+                        "height": 11,
+                        "status": 1
+                      }
+                    },
+                    "creator_details": {
+                      "description": "Creator_details of the details.",
+                      "type": "object",
+                      "example": {
+                        "created_at": "2024-08-20T03:35:56.039Z",
+                        "updated_at": "2024-09-10T02:04:27.188Z",
+                        "id": 825,
+                        "email": "sathishram0106@gmail.com",
+                        "first_name": "Sathish",
+                        "last_name": "",
+                        "description": "",
+                        "photo": "members-photo-825.png",
+                        "phone": null,
+                        "street": "",
+                        "address": "",
+                        "city": "",
+                        "state": "",
+                        "postal_code": "",
+                        "status": 1,
+                        "status_glossary": "",
+                        "about_me": "Hello ",
+                        "one_signal_push_tokens": null,
+                        "tokens": null,
+                        "last_active": "2024-08-20T09:05:56.039Z",
+                        "last_checkin_via": "google",
+                        "facebook_id": null,
+                        "facebook_data": null,
+                        "linkedin_id": null,
+                        "linkedin_data": null,
+                        "interests": [
+                          2,
+                          3,
+                          4
+                        ],
+                        "followers": 0,
+                        "google_id": "104133140040300913856",
+                        "google_data": {
+                          "google_id": "104133140040300913856",
+                          "first_name": "Sathish",
+                          "email": "sathishram0106@gmail.com"
+                        },
+                        "otp_session_id": null,
+                        "reviews": null,
+                        "reviews_count": 0,
+                        "linked_account_id": "",
+                        "linked_product_id": "",
+                        "pronoun": "",
+                        "instagram_link": "https://insta.com",
+                        "linkedin_link": "https://linkedin.com",
+                        "table_count": 1,
+                        "age": 22,
+                        "gender": "Male",
+                        "uu_id": "KU8slxBpH",
+                        "account": 1171
+                      }
+                    },
+                    "is_bookmark": {
+                      "description": "Is_bookmark of the details.",
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "is_follower": {
+                      "description": "Is_follower of the details.",
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "is_review": {
+                      "description": "Is_review of the details.",
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

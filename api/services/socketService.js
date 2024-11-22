@@ -1,4 +1,6 @@
+
 exports.send = function (ids, event_name, data) {
+
   var io = sails.io;
   io.on('connection', (socket) => {
     socket.on('initializeData', (data) => {

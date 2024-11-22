@@ -40,6 +40,7 @@ module.exports = function login(request, response) {
                 input_data.account = user.id;
                 input_data.phone = encrypted_phone;
 
+
                 // Create profile member
                 const profileMember = await ProfileMembers.create(input_data).fetch();
 
@@ -60,7 +61,11 @@ module.exports = function login(request, response) {
                     };
 
                     _response_object = responseBody;
-                    return response.status(200).json(_response_object);
+
+                    response.status(200).json(_response_object);
+                     await UseDataService.profilePercentile(profileMember);
+
+                    return;
 
                 } else {
                     console.error('Error creating profile member');
@@ -96,6 +101,12 @@ module.exports = function login(request, response) {
 
     // Verify user mobile no after create user
     const verifyOTPAndCreateUser = async (phone, otp_verify, filtered_post_data) => {
+
+        if (typeof phone !== 'string') {
+            _response_object.otp_details = " phone must be a string";
+            return response.status(400).json(_response_object);
+        }
+
         try {
             if (!otp_verify) {
                 /**
@@ -113,18 +124,22 @@ module.exports = function login(request, response) {
                     });
                 });
 
-                if (data.status === "success"  ) {
-                    _response_object['otp_details'] = data;
+                if (data.status === "success") {
+                    _response_object.otp_details = data;
                     return response.status(200).json(_response_object);
 
                 } else {
-                    _response_object['otp_details'] = data;
+                    _response_object.otp_details= data;
                     return response.status(400).json(_response_object);
 
                 }
             }
             // Verify OTP if OTP is provided
             const data = await new Promise((resolve, reject) => {
+                if (typeof otp_verify !== 'string') {
+                    _response_object.otp_details = " phone must be a string";
+                    return response.status(400).json(_response_object);
+                }
                 loginService.verifyOTP(phone, otp_verify, (err, data) => {
                     if (err) {
                         reject(err);
@@ -138,7 +153,7 @@ module.exports = function login(request, response) {
                 await createUsers(filtered_post_data);
             }
             else {
-                _response_object['otp_details'] = data;
+                _response_object.otp_details = data;
                 return response.status(400).json(_response_object);
             }
             // }
@@ -150,15 +165,17 @@ module.exports = function login(request, response) {
 
     validateModel.validate(null, input_attributes, filtered_post_data, async function (valid, errors) {
         if (valid) {
-            await loginService.findUser(filtered_post_data.phone, 'phone', async function (err, user) {
+            await loginService.findUser(filtered_post_data.phone, 'phone', function (err, user) {
+                if(err){
+                    console.error("some err:",err)
+                }
                 const { is_signup } = filtered_post_data;
                 if (is_signup) {
                     if (user) {
                         _response_object.errors = "Account already found";
-                        _response_object.count = 1;
-                        return response.status(500).json(_response_object);
-
-                    } 
+                        _response_object.is_user_exist = true;
+                        return response.status(400).json(_response_object);
+                    }
                     else {
                         verifyOTPAndCreateUser(phoneNumber, filtered_post_data.otp_verify, filtered_post_data);
 
@@ -169,9 +186,9 @@ module.exports = function login(request, response) {
                         verifyOTPAndCreateUser(phoneNumber, filtered_post_data.otp_verify, filtered_post_data);
 
                     } else {
-                        _response_object.errors = "Account already found";
-                        _response_object.count = 1;
-                        return response.status(500).json(_response_object);
+                        _response_object.errors = "No account found";
+                        _response_object.is_user_exist = false;
+                        return response.status(400).json(_response_object);
 
                     }
                 }

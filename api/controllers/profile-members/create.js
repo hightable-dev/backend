@@ -13,7 +13,7 @@ module.exports = function create(request, response) {
 
     const post_request_data = request.body;
     var _response_object = {};
-    var filtered_post_data = _.pick(post_request_data, ['first_name','username','interests','pronoun','instagram_link','linkedin_link',,'age','gender']);
+    var filtered_post_data = _.pick(post_request_data, ['first_name','username','interests','pronoun','instagram_link','linkedin_link','x_link','age','gender']);
     // const filtered_post_keys = Object.keys(filtered_post_data);
     var input_attributes = [
         { name: 'first_name', required: true },
@@ -22,6 +22,7 @@ module.exports = function create(request, response) {
         { name: 'pronoun' },
         { name: 'instagram_link' },
         { name: 'linkedin_link' },
+        { name: 'x_link' },
         { name: 'age' },
         { name: 'gender' },
 
@@ -46,7 +47,7 @@ module.exports = function create(request, response) {
         });
     }
 
-    validateModel.validate(ProfileMembers, input_attributes, filtered_post_data, async function (valid, errors) {
+    validateModel.validate(ProfileMembers, input_attributes, filtered_post_data, function (valid, errors) {
         if (valid) {
             createUsers(filtered_post_data);
         } else {

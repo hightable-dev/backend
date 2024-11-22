@@ -3,61 +3,80 @@
  */
 
 
-const moment = require('moment');
-const common = require('../../services/common');
 const DataService = require('../../services/DataService');
 
 module.exports = function list(request, response) {
-  const { tablesVideo, tablesPhoto } = file_path;
 
   const request_query = request.allParams();
-  let { page, limit, search, date, to, category ,id:creatorId } = request_query;
+  let { page, limit, id: creatorId } = request_query;
 
   const input_attributes = [
     { name: 'page', number: true, min: 1 },
     { name: 'limit', number: true, min: 1 }
   ];
+  let responseObject = {};
 
 
   const sendResponse = (items, total) => {
     const pageNum = parseInt(page) || 1;
     const limitNum = parseInt(limit) || 10;
 
-    _response_object = {
+    responseObject = {
       message: 'Request form list retrieved successfully.',
       meta: {
         count: items.length,
         total: total,
         page: pageNum,
         limit: limitNum,
+        ...sails.config.custom.s3_bucket_options,
       },
       items: _.cloneDeep(items),
     };
 
-    return response.ok(_response_object);
+    response.ok(responseObject);
+
+    process.nextTick(() => {
+      const relativePath = SwaggerGenService.getRelativePath(__filename);
+      UseDataService.processSwaggerGeneration({ relativePath, inputAttributes: input_attributes, responseObject });
+
+    });
+
+    return
   };
 
 
-  function buildCriteria(category, search, from_date, to_date) {
+  function buildCriteria(category) {
     let criteria = {};
 
-    criteria.status = { '!=': [0,6] }; // Filter out status 0 if status array is empty or undefined
+    if (creatorId) {
+      /****To view list of table created by host for other users****/
+      criteria.status = { '!=': UseDataService.listingTableStatusNotEqual };
+      // Filter out status 0 if status array is empty or undefined
+    } else {
+      /****To view list of table created self****/
+      criteria.status = { '!=': [0] };
+    }
+
     if (category) {
       criteria.category = category;
     }
-    criteria.created_by = creatorId ? creatorId : parseInt(ProfileMemberId(request)) ;
+    criteria.created_by = creatorId ? creatorId : parseInt(ProfileMemberId(request));
     return criteria;
   }
 
 
-  async function tablePhoto(item) {
+  function tablePhoto(item) {
     try {
-      item.media = item.media ? tablesPhoto + item.media : null;
-      item.video = item.video ? tablesVideo + item.video : null;
-
-      if (!item.media && !item.video) {
-        item.media = tablesPhoto + 'tables-media-1.png';
-      }
+      const mediaData = DataService.processMediaData({
+        media: item.media,
+        video: item.video,
+        size: {
+          photo: DataService.resolution.standardResolution.name,
+          video: ''
+        }
+      });
+      item.media = mediaData.media || null;
+      item.video = mediaData.video || null;
 
     } catch (error) {
       console.error("Error processing item media:", error);
@@ -81,25 +100,26 @@ module.exports = function list(request, response) {
           .limit(limit)
           .populate('category');
 
-          await Promise.all(items.map(async (item) => {
-            item.event_date = DataService.formatDate.ddmmyyyy_hhmm(item.event_date)
-            await tablePhoto(item);
-            
-          }));
-          
+        await Promise.all(items.map(async (item) => {
+          item.event_date = UseDataService.dateHelper(item.event_date, 'YYYY-MM-DD HH:mm', 'DD-MM-YYYY HH:mm');
+          await tablePhoto(item);
+
+        }));
+
         const totalItems = await Tables.count({ where: criteria });
+
         sendResponse(items, totalItems);
-      } catch(error) {
+      } catch (error) {
         console.error('Error retrieving service requests:', error);
         return response.serverError('Server Error');
       }
 
     } else {
-      const _response_object = {
+      responseObject = {
         errors: errors,
         count: errors.length
       };
-      return response.badRequest(_response_object);
+      return response.badRequest(responseObject);
     }
   });
 };

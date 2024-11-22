@@ -17,12 +17,12 @@
  * @api private
  */
 
-var async = require("async");
+// var async = require("async");
 //AWS bucket options
 var bucket = sails.config.conf.aws.bucket_name;
 
 // Resize photo and converting them to streams. Then upload it to s3
-exports.S3 = async function(photo, file_path, filename, sizes, callback, additional_param={}) {
+exports.S3 = function(photo, file_path, filename, sizes, callback, additional_param={}) {
     var fs = require('fs');
     var AWS = require('aws-sdk');
 
@@ -36,7 +36,7 @@ exports.S3 = async function(photo, file_path, filename, sizes, callback, additio
     var s3 = new AWS.S3(aws_options);
     const sharp = require('sharp');
     additional_param = _.isObject({additional_param})?additional_param:{};
-    fs.readFile(photo.fd, async function(err, data){
+    fs.readFile(photo.fd, function(err, data){
         sizes.forEach(async function (size, key) {
             if(size === 'Original'){
                 var upload_params = {
@@ -46,7 +46,7 @@ exports.S3 = async function(photo, file_path, filename, sizes, callback, additio
                     Body: data,
                     ...additional_param
                 };
-                await s3.putObject(upload_params, async function(err, upload_data){
+                s3.putObject(upload_params, function(err, upload_data){
                     if(err){
                         //error
                         return callback(err);
@@ -57,7 +57,7 @@ exports.S3 = async function(photo, file_path, filename, sizes, callback, additio
                     }
                 });
             }else{
-                await sharp(data).resize(size).toBuffer().then(async resized_data => {
+                await sharp(data).resize(size).toBuffer().then(resized_data => {
                     var upload_params = {
                         Bucket: bucket,
                         Key: file_path + '/' + size + '/' + filename,
@@ -65,7 +65,8 @@ exports.S3 = async function(photo, file_path, filename, sizes, callback, additio
                         Body: resized_data,
                         ...additional_param
                     };
-                    await s3.putObject(upload_params, async function(err, upload_data){
+                    // await removed
+                     s3.putObject(upload_params, function(err, upload_data){
                         if(err){
                             //error
                             return callback(err);
@@ -75,7 +76,7 @@ exports.S3 = async function(photo, file_path, filename, sizes, callback, additio
                             return callback(err,false);
                         }
                     });
-                }).catch(async err => {
+                }).catch(err => {
                     //error
                     return callback(err);
                 });
@@ -86,8 +87,7 @@ exports.S3 = async function(photo, file_path, filename, sizes, callback, additio
     });
 };
 
-
-exports.S3file = async function(file, file_path, filename,sizes,callback,res) {
+exports.S3file = function(file, file_path, filename,sizes,callback,res) {
     var fs = require('fs');
     var AWS = require('aws-sdk');
     var endpoint = new AWS.Endpoint(sails.config.conf.aws.endpoint);
@@ -98,15 +98,15 @@ exports.S3file = async function(file, file_path, filename,sizes,callback,res) {
         secretAccessKey: sails.config.conf.aws.secret_access_key
     };
     var s3 = new AWS.S3(aws_options);
-    const sharp = require('sharp');
-    fs.readFile(file.fd, async function(err, data){
+    // const sharp = require('sharp');
+    fs.readFile(file.fd, function(err, data){
         var upload_params = {
             Bucket: bucket,
             Key: file_path + '/' + filename,
             ACL: 'public-read',
             Body: data
         };
-        await s3.putObject(upload_params, async function(err, upload_data){
+        s3.putObject(upload_params, function(err, upload_data){
             if(err){
                 //error
                 return callback;
@@ -116,9 +116,11 @@ exports.S3file = async function(file, file_path, filename,sizes,callback,res) {
         });
     });
 };
+
+
 //Delete files from s3
 exports.deleteFromS3 = async function(photo_keys, callback) {
-    var fs = require('fs');
+    // var fs = require('fs');
     var AWS = require('aws-sdk');
     var endpoint = new AWS.Endpoint(sails.config.conf.aws.endpoint);
     var aws_options = {

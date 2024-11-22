@@ -8,35 +8,46 @@ const DataService = require("../../services/DataService");
 
 
 module.exports = async function update(request, response) {
-
-const {standard, premiumn } = tableType;
-const {pending, approved, reject, bookingClosed } = tableStatusCode;
+    const { standard, premiumn, pending, approved, payPending, paymentSuccess, bookingConfirmationPendingByCreator } = UseDataService;
 
     try {
-        const { id, type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location ,status} = request.body;
-        const updateData = { type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status };
+        const { id, type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions } = request.body;
+
+        const updateData = { type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions };
         let _response_object = {};
 
         // Validate input attributes
         const input_attributes = [
             { name: 'id', number: true, min: 1 },
-            { name: 'type', number: true},
+            { name: 'type', number: true },
             { name: 'media' },
             { name: 'title' },
             { name: 'description' },
             { name: 'min_seats' },
             { name: 'max_seats' },
-            { name: 'category',number: true },
+            { name: 'category', number: true },
             { name: 'phone' },
             { name: 'price' },
             { name: 'tags' },
             { name: 'address' },
-            { name: 'status', number: true},
+            { name: 'status', number: true },
             { name: 'city' },
             { name: 'event_date' },
+            { name: 'district' },
             { name: 'location' },
             { name: 'pincode' },
+            { name: 'event_done_flag' },
+            { name: 'table_expense', number: true },
+            { name: "inclusion" },
+            { name: "exclusions" },
         ];
+
+        if (UserType(request) === roles.member) {
+            const checkIsOwnerTable = await Tables.findOne({ id, created_by: ProfileMemberId(request) })
+            if (!checkIsOwnerTable) {
+                return response.status(500).json({ error: "You don't have access to edit the table." });
+            }
+        }
 
         // Fetch the latest price for standard tables
         const lastEntry = await StandardTable.find().limit(1).sort([{ created_at: 'DESC' }]);
@@ -49,47 +60,84 @@ const {pending, approved, reject, bookingClosed } = tableStatusCode;
             updateData.status = pending;
         }
         if (updateData.location) {
-            console.log(updateData.location)
-
             await DataService.locationUtils.extractLocationDetails(
                 {
                     x: updateData.location.lat,
                     y: updateData.location.lng
                 }
             )
-                .then(({ state, city, pincode }) => {
+                .then(({ state, city, pincode, formattedAddress, district }) => {
                     updateData.state = state;
                     updateData.city = city;
                     updateData.pincode = pincode;
+                    updateData.district = district;
+                    updateData.format_geo_address = formattedAddress;
                 });
-            // await DataService.locationUtils.extractLocationDetails(
-            //     {
-            //         x: updateData.location.lat,
-            //         y: updateData.location.lng
-            //     }
-            // )
-            // .then(({ state, city, pincode }) => {
-            //     updateData.state = state;
-            //     updateData.city = city;
-            //     updateData.pincode = pincode;
-            // });
         }
 
+
+        const sendResponse = (message, details) => {
+            _response_object.message = message;
+            _response_object.details = details; // Include details in the response
+
+            response.ok(_response_object);
+            return;
+
+        }
         // Initialize validateModel function
         validateModel.validate(Tables, input_attributes, request.body, async function (valid, errors) {
             if (valid) {
                 try {
-                    // Update data of the Tables
-                    const updatedTable = await Tables.updateOne({ id }).set(updateData);
+                    const msg = await UseDataService.messages({ tableId: id, userId: ProfileMemberId(request) }, updateData);
+                    const bookingList = await UseDataService.bookingDataForCreator({
+                        tableId: id,
+                        userId: ProfileMemberId(request),
+                        status: [payPending, paymentSuccess, bookingConfirmationPendingByCreator]
+                    });
 
+                    updateData.event_date = UseDataService.dateHelper(
+                        updateData.event_date,
+                        "DD-MM-YYYY HH:mm:ss",
+                        "YYYY-MM-DD HH:mm:ss"
+                    );
+
+                    const updatedTable = await Tables.updateOne({ id }).set(updateData);
                     // If the table is not found, return an appropriate response
+
                     if (!updatedTable) {
                         return response.status(404).json({ error: 'Table not found' });
                     }
 
                     // Build and send response with updated details
-                    _response_object.message = 'Table data has been updated successfully.';
-                    return response.ok({ message: 'Table data updated successfully', details: updatedTable });
+                    // _response_object.message = 'Table data has been updated successfully.';
+                    sendResponse('Table data updated successfully', { updatedTable, bookingList });
+
+                    if (UserType(request) === roles.member) {
+                        const msg = await UseDataService.messages({ tableId: id, userId: ProfileMemberId(request) }, updateData);
+
+                        bookingList.forEach(async (item) => {
+                            await UseDataService.sendNotification({
+                                notification: {
+                                    senderId: ProfileMemberId(request),
+                                    type: "tableChanges",
+                                    message: msg?.updateOnTableMsg,
+                                    receiverId: item.user_id,
+                                    followUser: null,
+                                    tableId: id,
+                                    payOrderId: "",
+                                    isPaid: true,
+                                    templateId: "tableChanges",
+                                    roomName: "TableChanges_",
+                                    creatorId: item.creator_id,
+                                    status: 1, // approved
+                                },
+                                pushMessage: {
+                                    title: "High Table",
+                                },
+                            });
+                        });
+                    }
+
                 } catch (error) {
                     console.error('Error updating table data:', error);
                     return response.status(500).json({ error: 'Error updating table data' });
@@ -103,4 +151,7 @@ const {pending, approved, reject, bookingClosed } = tableStatusCode;
         response.status(500).json({ error: "Error occurred while updating Tables data" });
     }
 };
+
+
+
 

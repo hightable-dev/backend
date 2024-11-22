@@ -9,20 +9,18 @@ const common = require('../../services/common');
 
 module.exports = function list(request, response) {
 
-  const { pending, expired, paymentSuccess} = paymentStatusCode;
-
+  const { paymentSuccess } = UseDataService;
 
   const request_query = request.allParams();
-  const { page, limit, search, date, to, category, table_id } = request_query;
-  const filterData = ['order_id', 'payment_id', 'expiry_date', 'category', 'amount', 'created_by', "payment_details", "created_at", "updated_at"]; 
-  const searchColumns = ['full_name', 'address', 'title']; 
+  const { page, limit, search, date, to, category, id: table_id } = request_query;
+  const filterData = ['order_id', 'payment_id', 'expiry_date', 'category', 'amount', 'created_by', "payment_details", "created_at", "updated_at"];
+  const searchColumns = ['full_name', 'address', 'title'];
   const dateFormatRegex = /^\d{2}-\d{2}-\d{4}$/;
   const filterCondition = [{ status: [paymentSuccess] }];
   const input_attributes = [
     { name: 'page', number: true, min: 1 },
     { name: 'limit', number: true, min: 1 }
   ];
-
   if (category) {
     filterCondition.push({ category: category });
   }
@@ -38,7 +36,8 @@ module.exports = function list(request, response) {
     return response.badRequest({ error: "Invalid 'to' date format. Please provide the date in DD-MM-YYYY format." });
   }
 
-  validateModel.validate(null, input_attributes, { page, limit }, async function (valid, errors) {
+
+  validateModel.validate(null, input_attributes, { page, limit }, function (valid, errors) {
     if (valid) {
       const pageNumber = parseInt(page) || 1;
       const limitNumber = parseInt(limit) || 10;
@@ -47,7 +46,6 @@ module.exports = function list(request, response) {
         .sort([{ created_at: 'DESC' }])
         .exec(async (err, tables) => {
           if (err) {
-            console.error("Error occurred while fetching tables:", err);
             return response.serverError({ error: "Error occurred while fetching tables" });
           }
 
@@ -95,33 +93,33 @@ module.exports = function list(request, response) {
 
           for (const item of filteredItems) {
             try {
-                const user = await ProfileMembers.findOne({ id: parseInt(item.user_id) });
-        
-                if (user) {
+              const user = await ProfileMembers.findOne({ id: parseInt(item.user_id) });
 
-                  if (user.phone) {
-                    await phoneEncryptor.decrypt(user.phone, function (decrypted_text) {
-                      user.phone = decrypted_text;
-                    });
-                  }
+              if (user) {
 
-                  
-                    // Extract only email and first_name from user_details
-                    const userDetails = {
-                        phone: user.phone,
-                        full_name: user.first_name + ' ' + user.last_name,
-                        photo: user.photo ? sails.config.custom.filePath.members + user.photo : null
-                    };
-        
-                    item.user_details = userDetails;
-                } else {
-                    item.user_details = "No user found";
+                if (user.phone) {
+                  await phoneEncryptor.decrypt(user.phone, function (decrypted_text) {
+                    user.phone = decrypted_text;
+                  });
                 }
+
+
+                // Extract only email and first_name from user_details
+                const userDetails = {
+                  phone: user.phone,
+                  full_name: user.first_name + ' ' + user.last_name,
+                  photo: user.photo ? sails.config.custom.s3_bucket_options.profile_photo + user.photo : null
+                };
+
+                item.user_details = userDetails;
+              } else {
+                item.user_details = "No user found";
+              }
             } catch (error) {
-                console.error("Error finding user details:", error);
+              console.error("Error finding user details:", error);
             }
-        }
-        
+          }
+
 
           const paginateItems = common.paginateData(filteredItems, pageNumber, limitNumber);
 

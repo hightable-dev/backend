@@ -4,7 +4,6 @@
 
 /* global _, ProfileManagers /sails */
 
-const moment = require('moment');
 
 module.exports = async function findOne(request, response) {
   try {

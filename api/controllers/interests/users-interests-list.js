@@ -4,9 +4,8 @@
 
 /* global _, ProfileManagers /sails */
 
-const moment = require('moment');
 
-module.exports = async function list(request, response) {
+module.exports = function list(request, response) {
 
   const profileId = request.user.profile_members;
   try {

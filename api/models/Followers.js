@@ -11,7 +11,6 @@ module.exports = {
       model: 'profilemembers',
       columnName: 'creator_profile_id', 
       required: true,
-      // min: 1
     },
 
 

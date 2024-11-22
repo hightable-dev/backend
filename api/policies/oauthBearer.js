@@ -17,10 +17,11 @@
 
 var passport = require('passport');
 
-module.exports = async function (req, res, next) {
+module.exports = function (req, res, next) {
     passport.authenticate(
         'bearer',
-        function (err, user, info) {
+        // function (err, user, info) {
+        function (err, user) {
             if (err) {
                 return res.status(401).json({ message: 'Unauthorized! Invalid credentials!' });
             } else if (!user) {

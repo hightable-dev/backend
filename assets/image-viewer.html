@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+
+        input {
+            margin: 10px;
+            padding: 5px;
+            width: 80%;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .quality-buttons {
+            margin: 20px;
+        }
+
+        .info {
+            margin-top: 20px;
+        }
+
+        /* New styles for custom image resizing */
+        .custom-image-container {
+            margin-top: 20px;
+        }
+
+        .custom-image {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .size-input {
+            width: 60px;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Image Viewer</h1>
+
+    <h2>Enter Image ID</h2>
+    <input type="text" id="imageIdInput" placeholder="Enter Image ID (e.g., 1252_1)" value="100_1">
+    <button onclick="updateImageUrls()">Update Image</button>
+
+    <h2>Example Image</h2>
+    <img id="imageViewer" src="" alt="Dynamic Image">
+
+    <div class="info">
+        <p id="imageUrl"></p>
+        <p id="imageSize"></p>
+    </div>
+
+    <div class="quality-buttons" id="qualityButtons">
+        <!-- Buttons will be generated here -->
+    </div>
+
+    <!-- New section for resizing the image -->
+    <div class="custom-image-container">
+        <h2>Resize Image</h2>
+        <label for="imageWidth">Width:</label>
+        <input type="number" id="imageWidth" class="size-input" placeholder="150" value="150"> px
+        <label for="imageHeight">Height:</label>
+        <input type="number" id="imageHeight" class="size-input" placeholder="200" value="200"> px
+        <button onclick="resizeImage()">Apply Size</button>
+        <div>
+            <img id="customImage" src="" alt="Resized Image" class="custom-image">
+        </div>
+    </div>
+
+    <script>
+
+        const imageResolutions = [
+            { name: 'VerySmall', folder: 'verySmall' },
+            { name: 'Small', folder: 'small' },
+            { name: 'QVGA', folder: 'qvga' },
+            { name: 'Small to medium', folder: 'standardResolution' },
+            { name: 'Low resolution', folder: 'lowResolution' },
+            { name: 'Standard resolution', folder: 'standardResolution' },
+            { name: 'qHD', folder: 'qhd' },
+            { name: 'HD', folder: 'hd' },
+            { name: 'HD Plus', folder: 'hdPlus' },
+            { name: 'Full HD', folder: 'fullHd' }
+        ];
+
+        const imageViewer = document.getElementById('imageViewer');
+        const qualityButtonsContainer = document.getElementById('qualityButtons');
+        const imageIdInput = document.getElementById('imageIdInput');
+        const imageUrlElement = document.getElementById('imageUrl');
+        const imageSizeElement = document.getElementById('imageSize');
+
+        const customImage = document.getElementById('customImage');
+        const imageWidthInput = document.getElementById('imageWidth');
+        const imageHeightInput = document.getElementById('imageHeight');
+
+        function updateImageUrls() {
+            const imageId = imageIdInput.value;
+            if (!imageId) {
+                alert("Please enter an image ID.");
+                return;
+            }
+
+            // Clear existing buttons
+            qualityButtonsContainer.innerHTML = '';
+
+            // Clear existing URL and size
+            imageUrlElement.textContent = '';
+            imageSizeElement.textContent = '';
+
+            // Create buttons based on resolutions
+            imageResolutions.forEach(resolution => {
+                const imageUrl = `https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/${resolution.folder}/image-${imageId}.webp`;
+
+                // Create quality buttons
+                const buttonElement = document.createElement('button');
+                buttonElement.textContent = resolution.name;
+                buttonElement.onclick = () => changeQuality(imageUrl);
+                qualityButtonsContainer.appendChild(buttonElement);
+            });
+
+            // Load the first image as the default
+            const firstImageUrl = `https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/small/image-${imageId}.webp`;
+            changeQuality(firstImageUrl);
+        }
+
+        function changeQuality(url) {
+            imageViewer.src = url;
+            customImage.src = url;  // Set customImage as well
+            imageUrlElement.textContent = `Image URL: ${url}`;
+
+            // Fetch image size
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const sizeInMB = (blob.size / (1024 * 1024)).toFixed(2);
+                    imageSizeElement.textContent = `Image Size: ${sizeInMB} MB`;
+                })
+                .catch(error => {
+                    imageSizeElement.textContent = 'Image Size: Error fetching size';
+                    console.error('Error fetching image size:', error);
+                });
+        }
+
+        function resizeImage() {
+            const width = imageWidthInput.value || 150;
+            const height = imageHeightInput.value || 200;
+
+            customImage.style.width = `${width}px`;
+            customImage.style.height = `${height}px`;
+        }
+
+    </script>
+</body>
+
+</html>

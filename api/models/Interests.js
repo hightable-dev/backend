@@ -16,6 +16,7 @@ module.exports = {
     width: { type: 'number', defaultsTo: 50 },
     height: { type: 'number', defaultsTo: 50},
     status: { type: 'number'},
+    orderby: { type: 'number' },
   },
 
   attributesMeta: {

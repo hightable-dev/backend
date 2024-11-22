@@ -57,7 +57,9 @@ module.exports.datastores = {
     adapter: 'sails-postgresql',
     url: process.env.db_connection_string,
     ssl: {
+      // sslmode: 'require',
       rejectUnauthorized: false
-  }
+    }
   },
 };
+// Refer for ssl object:::http://stackoverflow.com/a/66913689/14159178

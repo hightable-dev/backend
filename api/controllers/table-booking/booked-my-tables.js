@@ -12,7 +12,7 @@ const common = require('../../services/common');
 module.exports = function list(request, response) {
 
   const request_query = request.allParams();
-  const { pending, expired, paymentSuccess} = paymentStatusCode;
+  const { paymentSuccess} = UseDataService;
 
   const { page, limit, search, date, to, category,table_id } = request_query;
   const filterData = ['order_id','payment_id','expiry_date','category','amount','created_by',"payment_details", "created_at", "updated_at"]; // Specify fields to filter
@@ -42,7 +42,7 @@ module.exports = function list(request, response) {
     return response.badRequest({ error: "Invalid 'to' date format. Please provide the date in DD-MM-YYYY format." });
   }
 
-  validateModel.validate(null, input_attributes, { page, limit }, async function (valid, errors) {
+  validateModel.validate(null, input_attributes, { page, limit }, function (valid, errors) {
     if (valid) {
       const pageNumber = parseInt(page) || 1;
       const limitNumber = parseInt(limit) || 10;
@@ -50,7 +50,7 @@ module.exports = function list(request, response) {
       // Fetch all tables without any filtering
       TableBooking.find()
         .sort([{ created_at: 'DESC' }])
-        .exec(async (err, tables) => {
+        .exec((err, tables) => {
           if (err) {
             console.error("Error occurred while fetching tables:", err);
             return response.serverError({ error: "Error occurred while fetching tables" });

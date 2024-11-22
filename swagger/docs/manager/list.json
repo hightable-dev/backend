@@ -1,11 +1,11 @@
 {
   "/manager/list": {
     "tags": [
-      "Interests"
+      "Manager"
     ],
-    "summary": "Retrieve a list of tables based on various filters.",
-    "description": "Use this API to retrieve a list of tables based on various filters..",
-    "operationId": "managerList",
+    "summary": "Retrieve a manager list.",
+    "description": "Use this API to retrieve a manager list..",
+    "operationId": "manager/list",
     "requestBody": {
       "content": {
         "application/json": {
@@ -15,53 +15,19 @@
               "page": {
                 "description": "Page of the request.",
                 "type": "integer",
-                "example": 1
+                "example": 1,
+                "minimum": 1
               },
               "limit": {
                 "description": "Limit of the request.",
                 "type": "integer",
-                "example": 10
-              },
-              "search": {
-                "description": "Search of the request.",
-                "type": "string",
-                "example": "searchTerm"
-              },
-              "from_date": {
-                "description": "From_date of the request.",
-                "type": "string",
-                "example": "2024-01-01T00:00:00Z"
-              },
-              "to_date": {
-                "description": "To_date of the request.",
-                "type": "string",
-                "example": "2024-01-31T23:59:59Z"
-              },
-              "category": {
-                "description": "Category of the request.",
-                "type": "integer",
-                "example": 1
-              },
-              "created_by": {
-                "description": "Created_by of the request.",
-                "type": "integer",
-                "example": 123
-              },
-              "type": {
-                "description": "Type of the request.",
-                "type": "integer",
-                "example": 2
+                "example": 1,
+                "minimum": 1
               }
             },
             "required": [
-              "page",
-              "limit",
-              "search",
-              "from_date",
-              "to_date",
-              "category",
-              "created_by",
-              "type"
+              "0",
+              "1"
             ]
           }
         }
@@ -86,12 +52,12 @@
                     "count": {
                       "description": "Count of the meta data.",
                       "type": "number",
-                      "example": 1
+                      "example": 2
                     },
                     "total": {
                       "description": "Total of the meta data.",
                       "type": "number",
-                      "example": 1
+                      "example": 2
                     },
                     "page": {
                       "description": "Page of the meta data.",
@@ -101,7 +67,7 @@
                     "limit": {
                       "description": "Limit of the meta data.",
                       "type": "number",
-                      "example": 10
+                      "example": 3
                     }
                   }
                 },
@@ -113,37 +79,37 @@
                       "created_at": {
                         "description": "Created_at of the item.",
                         "type": "object",
-                        "example": "2024-08-19T00:37:26.147Z"
+                        "example": "2024-09-28T03:51:09.295Z"
                       },
                       "updated_at": {
                         "description": "Updated_at of the item.",
                         "type": "object",
-                        "example": "2024-08-19T08:49:35.541Z"
+                        "example": "2024-09-28T03:51:09.295Z"
                       },
                       "id": {
                         "description": "Id of the item.",
                         "type": "number",
-                        "example": 104
+                        "example": 108
                       },
                       "first_name": {
                         "description": "First_name of the item.",
                         "type": "string",
-                        "example": "kani"
+                        "example": "man3 john"
                       },
                       "last_name": {
                         "description": "Last_name of the item.",
                         "type": "string",
-                        "example": "E"
+                        "example": ""
                       },
                       "email": {
                         "description": "Email of the item.",
                         "type": "string",
-                        "example": "managerhightable@gmail.com"
+                        "example": "admin@hightable.ai"
                       },
                       "phone": {
                         "description": "Phone of the item.",
                         "type": "string",
-                        "example": "9976142838"
+                        "example": "123"
                       },
                       "photo": {
                         "description": "Photo of the item.",
@@ -163,12 +129,12 @@
                       "uu_id": {
                         "description": "Uu_id of the item.",
                         "type": "string",
-                        "example": "Lz8j_8ds2"
+                        "example": "HPAzQV1PuS"
                       },
                       "account": {
                         "description": "Account of the item.",
                         "type": "number",
-                        "example": 1152
+                        "example": 1470
                       }
                     }
                   }
@@ -179,16 +145,89 @@
         }
       },
       "400": {
-        "description": "Bad request"
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
       },
       "401": {
-        "description": "Unauthorized"
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
       },
       "403": {
-        "description": "You don't have permission to perform this action"
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
       },
       "500": {
-        "description": "Internal server error"
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

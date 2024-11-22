@@ -18,12 +18,14 @@
 const axios = require('axios');
 const https = require('https');
 const crypto = require('crypto');
+let error_obj = new Error();
 
 exports.findUser = async function (username, login_type, callback) {
   try {
+
     let encrypted_phone
 
-    if (login_type == 'phone') {
+    if (login_type === 'phone') {
       if (!_.isNaN(Number(username))) {
 
         await phoneEncryptor.encrypt(username, function (encrypted_text) {
@@ -50,11 +52,11 @@ exports.findUser = async function (username, login_type, callback) {
     `;
 
     let queryData = [encrypted_phone];
+
     // Executing query
     var user_model = sails.sendNativeQuery(query.toString(), queryData);
-    user_model.exec(async function (err, user) {
+    user_model.exec(function (err, user) {
       if (err) {
-        var error_obj = new Error();
         error_obj.status = 404;
         if (err.message) {
           error_obj.message = err.message;
@@ -66,14 +68,15 @@ exports.findUser = async function (username, login_type, callback) {
 
         return callback(err, user['rows'][0]);
       } else {
-        var error_obj = new Error();
-        error_obj.status = 404;
-        error_obj.message = 'No user found.';
+        error_obj= {
+          status : 404,
+          message : 'No user found.',
+          is_user_exist : false
+        }
         return callback(error_obj);
       }
     });
   } catch (err) {
-    var error_obj = new Error();
     if (err.message) {
       error_obj.message = err.message;
     } else {
@@ -142,9 +145,8 @@ exports.findUserByToken = function (access_token, callback) {
     query += " WHERE " + AccessTokens.tableAlias + "." + AccessTokens.schema.token.columnName + "='" + access_token + "'";
     //Executing query
     var token_model = sails.sendNativeQuery(query);
-    token_model.exec(async function (err, user) {
+    token_model.exec( function (err, user) {
       if (err) {
-        var error_obj = new Error();
         if (err.message) {
           error_obj.message = err.message;
         } else {
@@ -154,13 +156,14 @@ exports.findUserByToken = function (access_token, callback) {
       } else if (user && user.rowCount > 0) {
         return callback(err, user['rows'][0]);
       } else {
-        var error_obj = new Error();
-        error_obj.message = 'No user found with given token.';
-        return callback(error_obj);
+        error_obj = {
+          message : 'No user found with given token.',
+          is_user_exist : false
+        }
+        return callback(error_obj); 
       }
     });
   } catch (err) {
-    var error_obj = new Error();
     if (err.message) {
       error_obj.message = err.message;
     } else {
@@ -172,11 +175,12 @@ exports.findUserByToken = function (access_token, callback) {
 
 
 exports.sendOTP = async function (phone, callback) {
-  const demoUser = "9876543211" ;
+  const demoUser = "9999912345" ;
+  const demoUser1 = "9876543211" ;
   const demoUser2 = "9876543212" ;
   const demoUser3 = "9876543213" ;
   // Check if the phone number is not equal to demoUser or demoUser2
-  if (phone !== demoUser && phone !== demoUser2 && phone !== demoUser3) {
+  if (phone !== demoUser  && phone !== demoUser1 && phone !== demoUser2 && phone !== demoUser3) {
     try {
       const config = {
         method: 'post',
@@ -225,12 +229,13 @@ exports.sendOTP = async function (phone, callback) {
 
 
 exports.verifyOTP = async function (phone, otp, callback) {
-  const demoUser = "9876543211";
+  const demoUser = "9999912345" ;
+  const demoUser1 = "9876543211";
   const demoUser2 = "9876543212";
   const demoUser3 = "9876543213";
   const demoUserOtp = "7799";
 
-  if ((phone === demoUser || phone === demoUser2 || phone === demoUser3) && otp === demoUserOtp) {
+  if ((phone === demoUser ||phone === demoUser1 || phone === demoUser2 || phone === demoUser3) && otp === demoUserOtp) {
     jsonObject = {
       status: 'success',
       phone_no: phone,

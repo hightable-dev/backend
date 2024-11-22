@@ -23,9 +23,9 @@ passport.deserializeUser(function (id, done) {
  * Anytime a request is made to authorize an application, we must ensure that
  * a user is logged in before asking them to approve the request.
  */
-passport.use(new LocalStrategy(function (username, password, request_data, done) {
+passport.use(new LocalStrategy( function (username, password, done) {
     process.nextTick(async function() {
-        await loginService.findUser(username,'email', async function(err, user){
+        await loginService.findUser(username,'email', function(err, user){
             if (err) {
                 return done(err);
             }
@@ -61,7 +61,7 @@ passport.use(new BasicStrategy(
     async function (username, password, request_data, done) {
         if(request_data.login_type === 'otp' && !request_data.otp_session_id){
             return done(null, false, {message: 'otp_session_id is required.'});
-        }
+        };
         await loginService.findUser(username,'phone', async function(err, user){
             if (err) {
                 return done(err);
@@ -69,9 +69,9 @@ passport.use(new BasicStrategy(
             if(!user) {
                 return done(null, false, {message: 'Invalid username and password combination.'});
             }else{
-                bcrypt.compare(password, user.password).then(function(password_check) {
+               await bcrypt.compare(password, user.password).then(function(password_check) {
                     if(!password_check){
-                       return done({message: 'Invalid username or password combination.75'}, false, {message: 'Invalid username or password combination'});
+                       return done({message: 'Invalid username or password combination'}, false, {message: 'Invalid username or password combination'});
                     };
                     if(!user.verified){
                         return done({ message: 'Please verify your email.' }, false, { message: 'Please verify your email.' });
@@ -94,7 +94,7 @@ passport.use(new ClientPasswordStrategy(
             if(!client) {
                 return done(null, false, {message: 'Unauthorized'});
             }
-            if(client.client_secret != client_secret) {
+            if(client.client_secret !== client_secret) {
                 return done({message: 'Unauthorized'}, false, {message: 'Unauthorized'});
             }
             return done(null, client);
@@ -142,27 +142,27 @@ passport.use(new BearerStrategy(
 
 
 
-const FacebookStrategy = require("passport-facebook").Strategy;
+// const FacebookStrategy = require("passport-facebook").Strategy;
 
-const FACEBOOK_CLIENT_ID = "2140255969645709";
-const FACEBOOK_CLIENT_SECRET = "499d952882d3bcf1dd39da4b15175699";
+// const FACEBOOK_CLIENT_ID = "";
+// const FACEBOOK_CLIENT_SECRET = "";
 
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: FACEBOOK_CLIENT_ID,
-      clientSecret: FACEBOOK_CLIENT_SECRET,
-      callbackURL: "/login/facebook/callback",
-      profileFields: ["emails", "displayName", "name", "picture"],
+// passport.use(
+//   new FacebookStrategy(
+//     {
+//       clientID: FACEBOOK_CLIENT_ID,
+//       clientSecret: FACEBOOK_CLIENT_SECRET,
+//       callbackURL: "/login/facebook/callback",
+//       profileFields: ["emails", "displayName", "name", "picture"],
       
-    },
-    (accessToken, refreshToken, profile, done) => {
+//     },
+//     (accessToken, refreshToken, profile, done) => {
         
 
-      return done(null, profile);
-    }
-  )
-);
+//       return done(null, profile);
+//     }
+//   )
+// );
 
 
 
@@ -267,8 +267,8 @@ passport.use(
 
 
 /* =============================================================== */ 
-const LINKEDIN_CLIENT_ID = '867jqkqnusaena';
-const LINKEDIN_CLIENT_SECRET = 'yJUoiCwa5qxaNvST';
+const LINKEDIN_CLIENT_ID = process.env.LINKEDIN_CLIENT_SECRET;
+const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_ID;
 
 passport.use(new LinkedInStrategy({
     clientID: LINKEDIN_CLIENT_ID,

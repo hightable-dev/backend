@@ -32,7 +32,7 @@ module.exports = function list(request, response) {
     return response.badRequest({ error: "Invalid 'to' date format. Please provide the date in DD-MM-YYYY format." });
   }
 
-  validateModel.validate(null, input_attributes, { page, limit }, async function (valid, errors) {
+  validateModel.validate(null, input_attributes, { page, limit }, function (valid, errors) {
     if (valid) {
       const pageNumber = parseInt(page) || 1;
       const limitNumber = parseInt(limit) || 10;
@@ -115,17 +115,15 @@ module.exports = function list(request, response) {
               // Find the user in the Users model based on the created_by attribute
               const user = await ProfileMembers.findOne({ id: parseInt(item.created_by) });
               // Assuming user.photo is the attribute that holds the user's photo
-              if (user && user.photo) {
+              if (user?.photo) {
                 // Assign the user's photo to the creator_photo property of the current item
                 item.creator_photo = sails.config.custom.filePath.users + user.photo;
-              } else {
-                console.log(`User ${item.created_by} does not have a photo.`);
-              }
+              } 
 
 
               const cateory = await Interests.findOne({ id: parseInt(item.category) });
               // Assuming user.photo is the attribute that holds the user's photo
-              if (cateory && cateory.name) {
+              if (cateory?.name) {
                   // Assign the user's photo to the creator_photo property of the current item
                   item.category = cateory.name;
               } else {

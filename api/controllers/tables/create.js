@@ -1,4 +1,3 @@
-
 /**
  *
  * @author mohan <mohan@studioq.co.in>
@@ -9,206 +8,262 @@
 
 /* global _, Tables, moment, errorBuilder, validateModel */
 
-const moment = require('moment');
-const DataService = require('../../services/DataService');
-
 module.exports = async function create(request, response) {
-    const logged_in_user = request.user;
-    const { standard, premium } = tableType;
-    const { pending, approved, rejected, bookingClosed, deletedAccountTables } = tableStatusCode;
-    const { inactive } = sails.config.custom.statusCode;
 
-    const post_request_data = request.body;
-    var _response_object = {};
-    var filtered_post_data = _.pick(post_request_data, ['type', 'media', 'min_seats', 'max_seats', 'title', 'category', 'address', 'city', 'description', 'event_date', 'price', 'tags', 'created_by', 'status', 'location', 'phone', 'user_type', 'event_done_flag', 'city', 'state', 'pincode', 'user_profile']);
-    var input_attributes = [
-        { name: 'type', required: true, number: true },
-        { name: 'media' },
-        { name: 'description' },
-        { name: 'title' },
-        { name: 'min_seats' },
-        { name: 'max_seats' },
-        { name: 'category', required: true },
-        { name: 'phone' },
-        { name: 'price' },
-        { name: 'tags' },
-        { name: 'created_by', number: true },
-        { name: 'address', required: true },
-        { name: 'city' },
-        { name: 'event_date', required: true },
-        { name: 'status' },
-        { name: 'location', required: true },
-        { name: 'user_type' },
-        { name: 'event_done_flag' },
-        { name: 'city' },
-        { name: 'state' },
-        { name: 'pincode' },
-        { name: 'user_profile' },
-    ];
+  const {
+    standard,
+    premium,
+    pending,
+    approved,
+  } = UseDataService;
 
-    // filtered_post_data.created_by = parseInt(profileId);
-    filtered_post_data.created_by = ProfileMemberId(request);
-    filtered_post_data.user_profile = ProfileMemberId(request);
-    filtered_post_data.user_type = request.user.types;
-    filtered_post_data.event_done_flag = false;
-    if (filtered_post_data.location) {
-        await DataService.locationUtils.extractLocationDetails(
-            {
-                x: filtered_post_data.location.lat,
-                y: filtered_post_data.location.lng
-            }
-        )
-            .then(({ state, city, pincode }) => {
-                filtered_post_data.state = state;
-                filtered_post_data.city = city;
-                filtered_post_data.pincode = pincode;
-            });
-    }
+  // byHost: 1,
+  // split: 2
+  const post_request_data = request.body;
+  let _response_object = {};
+  let filtered_post_data = _.pick(post_request_data, [
+    "type",
+    "media",
+    "min_seats",
+    "max_seats",
+    "title",
+    "category",
+    "address",
+    "description",
+    "event_date",
+    "price",
+    "tags",
+    "created_by",
+    "status",
+    "location",
+    "phone",
+    "user_type",
+    "event_done_flag",
+    "city",
+    "state",
+    "pincode",
+    "district",
+    "user_profile",
+    "video",
+    "format_geo_address",
+    "created_for",
+    "table_expense",
+    "exclusions",
+    "inclusion"
+  ]);
+  let input_attributes = [
+    { name: "type", required: true, number: true },
+    { name: "media" },
+    { name: "video" },
+    { name: "description", required: true },
+    { name: "title", required: true },
+    { name: "min_seats" },
+    { name: "max_seats" },
+    { name: "category", required: true },
+    { name: "phone" },
+    { name: "tags" },
+    { name: "address", required: true },
+    { name: "city" },
+    { name: "event_date", required: true },
+    { name: "status" },
+    { name: "location", required: true },
+    { name: "user_type" },
+    { name: "event_done_flag" },
+    { name: "state" },
+    { name: "pincode" },
+    { name: "district" },
+    { name: "user_profile" },
+    { name: "format_geo_address" },
+    { name: "table_expense", required: true },
+    { name: "created_for" },
+    { name: "price" },
+    { name: "inclusion" },
+    { name: "exclusions" },
+  ];
 
-    let adminProfileId;
-    if (UserType(request) === roles.admin) {
-        adminProfileId = ProfileAdminId(request);
-    }
-    if (UserType(request) === roles.manager) {
-        adminProfileId = ProfileManagerId(request);
-    }
-    if (UserType(request) === roles.member) {
-        adminProfileId = 0; // self created
-    }
-    filtered_post_data.admin_id = adminProfileId;
-    filtered_post_data.user_type = UserType(request);
+  if (filtered_post_data.type === premium) {
+    input_attributes.push({ name: "price", required: true });
+  }
 
-    const sendResponse = (message, details) => {
-        _response_object.message = message;
-        _response_object.details = details; // Include details in the response
-        return response.ok(_response_object);
-    };
+  // let adminProfileId;
+  // let profileMeberid;
+  let profileMebmber;
 
-    const createTables = (post_data) => {
-        Tables.create(post_data, async function (err, createdTable) {
-            if (createdTable) {
-                const users = await Followers.find({ creator_profile_id: createdTable?.created_by });
-
-                if (users.length > 0) {
-                    for (const data of users) {
-                        const user = await Users.findOne({ profile_members: data?.follower_profile_id });
-                        await notificationService({
-                            senderId: logged_in_user?.profile_members,
-                            type: 'TableCreate',
-                            message: `New table found .`,
-                            receiverId: user?.profile_members,
-                            followUser: null,
-                            tableId: createdTable?.id,
-                            payOrderId: '',
-                            isPaid: false,
-                            templateId: 'createTable',
-                            roomName: 'TableCreate_',
-                            creatorId: null,
-                            status: 1,
-                            pushMsgTitle: `${logged_in_user?.first_name} created ${createdTable?.title} table`,    // Title, Name ...
-                            pushMessage: `New table found from '${logged_in_user?.first_name}'.`
-                        });
-                    }
-                }
-
-                const countRecordsCriteria = {
-                    created_by: ProfileMemberId(request),
-                    status: { '!=': [inactive] }
-                };
-
-                const totalTablesCount = await DataService.countRecord({
-                    criteria: countRecordsCriteria,
-                    modelName: 'Tables'
-                });
-
-                const updateRecordCriteria = {
-                    id: ProfileMemberId(request),
-
-                };
-                const updateRecordData = {
-                    table_count: totalTablesCount,
-
-                };
-
-                const updatedData = await DataService.updateRecord({
-                    matchCriteria: updateRecordCriteria,
-                    values: updateRecordData,
-                    modelName: 'ProfileMembers'
-                });
-
-                console.log('totalTablesCount', totalTablesCount, updatedData)
-
-
-
-
-
-                sendResponse("Table created successfully.", createdTable);
-            } else {
-                await errorBuilder.build(err, function (error_obj) {
-                    _response_object.errors = error_obj;
-                    _response_object.count = error_obj.length;
-                    return response.status(500).json(_response_object);
-                });
-            }
+  switch (UserType(request)) {
+    case roles.admin:
+      if (!filtered_post_data.created_for) {
+        return response.status(400).json({
+          error: "created_for is required",
         });
-    }
+      }
 
-    // Retrieve the user details from the ProfileMembers. table
-    ProfileMembers.findOne({ id: ProfileMemberId(request) }).exec(async (err, user) => {
-        if (err) {
-            return response.status(500).json({ error: 'Error occurred while fetching user details' });
-        }
+      profileMebmber = await UseDataService.tableCreateByAdmin(request, filtered_post_data, input_attributes);
+      break;
+    case roles.manager:
+      profileMebmber = await UseDataService.tableCreateByManager(request, filtered_post_data, input_attributes);
+      break;
+    case roles.member:
+      profileMebmber = await UseDataService.tableCreateByMember(request, filtered_post_data);
+      break;
+    default:
+      return response.status(403).json({ error: "Invalid user role" });
+  }
 
-        if (!user) {
-            return response.status(404).json({ error: 'User not found' });
-        }
+  if (!profileMebmber) {
+    return response.status(404).json({ error: "User not found" });
+  } else {
+    const full_name = `${profileMebmber.first_name} ${profileMebmber.last_name}`;
+    filtered_post_data.full_name = full_name;
+  }
 
-        // Concatenate first and last names to form the full name
-        const full_name = `${user.first_name} ${user.last_name}`;
+  const geoData = await UseDataService.locationUtils
+    .extractLocationDetails({
+      x: filtered_post_data.location.lat,
+      y: filtered_post_data.location.lng,
+    })
 
-        // Update the full_name field in the filtered_post_data object
-        filtered_post_data.full_name = full_name;
+  console.log('GEO DATA 123', { geoData })
 
-        // Parse the event_date string using Moment.js
-        // const eventDate = moment(filtered_post_data.event_date, 'DD/MM/YYYY hh:mm');
+  if (filtered_post_data.location) {
+    await UseDataService.locationUtils
+      .extractLocationDetails({
+        x: filtered_post_data.location.lat,
+        y: filtered_post_data.location.lng,
+      })
+      .then(({ state, city, pincode, formattedAddress, district }) => {
+        filtered_post_data.state = state;
+        filtered_post_data.city = city;
+        filtered_post_data.pincode = pincode;
+        filtered_post_data.format_geo_address = formattedAddress;
+        filtered_post_data.district = district;
+      });
+  }
 
-        // Check if the date is valid
-        // if (eventDate.isValid()) {
-            // Format the date as desired
-            // const formattedDate = eventDate.format('DD-MM-YYYY HH:mm:ss');
+  // filtered_post_data.admin_id = adminProfileId;
 
-            // Set the formatted date in the filtered_post_data object
-            filtered_post_data.event_date = DataService.formatDate.ddmmyyyy_hhmmss(filtered_post_data.event_date);
-            console.log(' filtered_post_data.event_date', filtered_post_data.event_date)
+  const sendResponse = async (message, details) => {
+    _response_object.message = message;
+    _response_object.details = details; // Include details in the response
 
-            // Validate and create the table
-            validateModel.validate(Tables, input_attributes, filtered_post_data, async function (valid, errors) {
-                if (filtered_post_data.category) {
-                    filtered_post_data.category = parseInt(filtered_post_data.category);
-                }
+    response.ok(_response_object);
 
-                const lastEntry = await StandardTable.find().limit(1).sort([{ created_at: 'DESC' }]);
-                const standardTableLatestPrice = lastEntry[0].price;
-                if (filtered_post_data.type === standard) {
-                    filtered_post_data.status = approved;
-                    filtered_post_data.price = standardTableLatestPrice; // Set price to 99 for standard type
-                }
-                if (filtered_post_data.type === premium) {
-                    filtered_post_data.status = pending;
-                }
+    /******* Update Table count after table created *******/
+    await UseDataService.countTablesHosted(ProfileMemberId(request))
 
-
-                if (valid) {
-                    createTables(filtered_post_data);
-                    await Tables.updateTablesCount(ProfileMemberId(request));
-                } else {
-                    _response_object.errors = errors;
-                    _response_object.count = errors.length;
-                    return response.status(400).json(_response_object);
-                }
-            });
-        // } else {
-        //     return response.status(400).json({ error: 'Invalid date format' });
-        // }
+    process.nextTick(() => {
+      const relativePath = SwaggerGenService.getRelativePath(__filename);
+      const capitalizeFirstLetter = (str) => {
+        if (typeof str !== "string" || str.length === 0) return str;
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      };
+      SwaggerGenService.generateJsonFile({
+        key: `/${relativePath}`,
+        Tags: capitalizeFirstLetter(relativePath.split("/")[0]),
+        Description: `Create a table ${capitalizeFirstLetter(
+          relativePath.split("/")[0]
+        )} - ${relativePath.split("/")[1]}`,
+        body: {},
+        required_data: input_attributes,
+        response: _response_object,
+      });
     });
+
+    return;
+  };
+
+  const createTables = async (post_data) => {
+    post_data.event_date = UseDataService.dateHelper(
+      post_data.event_date,
+      "DD-MM-YYYY HH:mm",
+      "YYYY-MM-DD HH:mm"
+    );
+
+    await Tables.create(post_data, async function (err, createdTable) {
+      if (createdTable) {
+        const followers = await Followers.find({
+          creator_profile_id: createdTable?.created_by,
+        });
+
+        if (followers.length > 0) {
+          for (const data of followers) {
+            const user = await Users.findOne({
+              profile_members: data?.follower_profile_id,
+            });
+
+            const msg = await UseDataService.messages({ tableId: createdTable?.id, userId: data.user_id });
+
+            if (createdTable?.status === approved) {
+              await UseDataService.sendNotification({
+                notification: {
+                  senderId: ProfileMemberId(request),
+                  type: "TableCreate",
+                  message: msg?.tableCreateMsg,
+                  receiverId: user?.profile_members,
+                  followUser: null,
+                  tableId: createdTable?.id,
+                  payOrderId: "",
+                  isPaid: false,
+                  templateId: "createTable",
+                  roomName: "TableCreate_",
+                  creatorId: null,
+                  status: 1, // approved
+                },
+                pushMessage: {
+                  title: "High Table",
+                  // message: msg?.tableCreateMsg,
+                  payOrderId: '',
+                  tableId: createdTable?.id,
+                },
+              });
+            }
+
+
+
+          }
+        }
+
+        sendResponse("Table created successfully.", createdTable);
+      } else {
+        await errorBuilder.build(err, function (error_obj) {
+          _response_object.errors = error_obj;
+          _response_object.count = error_obj.length;
+          return response.status(500).json(_response_object);
+        });
+      }
+    });
+  };
+
+  validateModel.validate(
+    Tables,
+    input_attributes,
+    filtered_post_data,
+    async function (valid, errors) {
+      filtered_post_data.user_type = UserType(request);
+
+      if (filtered_post_data.category) {
+        filtered_post_data.category = parseInt(filtered_post_data.category);
+      }
+      console.log("type usertype 242", typeof(UserType(request)), UserType(request))
+      const lastEntry = await StandardTable.find()
+        .limit(1)
+        .sort([{ created_at: "DESC" }]);
+      const standardTableLatestPrice = lastEntry[0].price;
+      if (filtered_post_data.type === standard) {
+        filtered_post_data.status = approved;
+        filtered_post_data.price = standardTableLatestPrice; // Set price to 99 for standard type
+      }
+      if (filtered_post_data.type === premium) {
+        filtered_post_data.status = pending;
+      }
+
+      if (valid) {
+        createTables(filtered_post_data);
+
+      } else {
+        _response_object.errors = errors;
+        _response_object.count = errors.length;
+        return response.status(400).json(_response_object);
+      }
+    }
+  );
 };

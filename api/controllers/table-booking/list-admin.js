@@ -6,7 +6,7 @@
 /* global _, ProfileManagers /sails */
 // For commit only
 module.exports = async function listAdmin(request, response) {
-  const {tablesPhoto } = file_path;
+  const { tablesPhoto } = file_path;
   let _response_object;
 
   // const requestBody = request.body || {}; // Initialize requestBody to an empty object if request.body is undefined
@@ -15,7 +15,7 @@ module.exports = async function listAdmin(request, response) {
   const request_query = request.allParams();
 
   const { page, limit, search, table_id, status } = request_query;
-  const { pending, expired, paymentSuccess } = paymentStatusCode;
+  const { pending, expired } = UseDataService;
 
   const filterData = ["payment_details", "created_at", "updated_at"]; // Specify fields to filter
   const searchColumns = ['order_id', 'payment_id']; // Specify columns to search in
@@ -42,7 +42,7 @@ module.exports = async function listAdmin(request, response) {
     filterCondition.push({ status: [parseInt(status)] });
   }
 
-  validateModel.validate(null, input_attributes, { page, limit }, async function (valid, errors) {
+  validateModel.validate(null, input_attributes, { page, limit }, function (valid, errors) {
     if (valid) {
       const pageNumber = parseInt(page) || 1;
       const limitNumber = parseInt(limit) || 10;
@@ -89,7 +89,7 @@ module.exports = async function listAdmin(request, response) {
                 const userDetails = await ProfileMembers.findOne({ id: tableDetails.created_by });
                 if (userDetails) {
 
-                  // userDetails.photo = sails.config.custom.filePath.members +  userDetails.photo;
+                  // userDetails.photo = sails.config.custom.s3_bucket_options.profile_photo +  userDetails.photo;
 
                   item.user_details = userDetails;
                 } else {
@@ -99,7 +99,7 @@ module.exports = async function listAdmin(request, response) {
 
                 const creator_details = await ProfileMembers.findOne({ id: parseInt(tableDetails.created_by) });
                 if (creator_details.photo) {
-                  creator_details.photo = sails.config.custom.filePath.members + creator_details.photo;
+                  creator_details.photo = sails.config.custom.s3_bucket_options.profile_photo + creator_details.photo;
                 }
                 item.creator_details = creator_details;
 
@@ -118,7 +118,7 @@ module.exports = async function listAdmin(request, response) {
               const userDetails = await ProfileMembers.findOne({ id: item.user_id });
               if (userDetails) {
 
-                userDetails.photo = sails.config.custom.filePath.members + userDetails.photo;
+                userDetails.photo = sails.config.custom.s3_bucket_options.profile_photo + userDetails.photo;
 
                 item.user_details = userDetails;
               } else {
@@ -169,10 +169,10 @@ module.exports = async function listAdmin(request, response) {
                 item.user_details = {
                   full_name: user.first_name + ' ' + user.last_name, // Ensure there's a space between first and last names
                   phone: user.phone,
-                  // photo: sails.config.custom.filePath.members + user.photo,
+                  // photo: sails.config.custom.s3_bucket_options.profile_photo + user.photo,
                 };
               } else {
-                console.log(`User ${item.user_id} not found.`);
+                console.error(`User ${item.user_id} not found.`);
               }
 
             } catch (error) {

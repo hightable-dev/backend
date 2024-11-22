@@ -4,11 +4,10 @@
 
 /* global _, ProfileManagers /sails */
 
-const moment = require('moment');
 
-module.exports = async function list(request, response) {
+module.exports = function list(request, response) {
   try {
-    var _response_object = {};
+    var responseObject = {};
 
     const request_query = request.allParams();
     const filtered_query_data = _.pick(request_query, ['page', 'limit']);
@@ -27,24 +26,21 @@ module.exports = async function list(request, response) {
         // Fetch interests with pagination
         const interests = await Interests.find().skip(skip).limit(limit);
 
-        // Format interests data
-        const formattedInterests = interests.map(interest => ({ id: interest.id, name: interest.name }));
-
         // Send response
-        _response_object.message = 'Interests retrieved successfully.';
-        _response_object.meta = {
+        responseObject.message = 'Interests retrieved successfully.';
+        responseObject.meta = {
           page: page,
           limit: limit,
           total: interests.length
         };
 
-        _response_object.items = interests;
+        responseObject.items = interests;
 
-        return response.ok(_response_object);
+        return response.ok(responseObject);
       } else {
-        _response_object.errors = errors;
-        _response_object.count = errors.length;
-        return response.status(400).json(_response_object);
+        responseObject.errors = errors;
+        responseObject.count = errors.length;
+        return response.status(400).json(responseObject);
       }
     });
   } catch (error) {

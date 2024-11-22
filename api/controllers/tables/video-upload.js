@@ -1,211 +1,196 @@
-const { name } = require("ejs");
 const fs = require("fs");
+const path = require("path");
+const DataService = require("../../services/DataService");
+// const fileUploadService = require("../../services/fileUpload2"); // Adjust path as necessary
+
+// Define global constants and file handling logic
+const fileConfig = {
+    media: {
+        filePath: Tables.attributesMeta.media.s3_folder,
+        prefix: 'image',
+        allowedTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+        options: DataService.resolutionNames,
+        column: 'media',
+        sizeLimit: 10 * 1024 * 1024, // 10 MB
+    },
+
+    video: {
+        filePath: Tables.attributesMeta.media.s3_folder_video,
+        prefix: 'video',
+        allowedTypes: ['video/mp4', 'video/mkv'],
+        options: DataService.resolutionNames,
+        column: 'video',
+        sizeLimit: 20 * 1024 * 1024 // 20 MB
+        
+    }
+};
 
 module.exports = async function updateFile(request, response) {
-  try {
-    const post_request_data = request.body;
-    // const logged_in_user = request.user;
-    let filtered_post_data = {};
-    // filtered_post_data = logged_in_user;
-    let request_query = request.allParams();
+    const postKey = 'media';
 
-    let requestdata = _.pick(request_query, ['id']);
-    let insert_data = {};
+    try {
+        const { allParams, _fileparser } = request;
+        let { id: tableId, type } = allParams();
 
-    let _response_object = {};
-
-    let input_attributes = [
-      { name: 'id', required: true}
-
-    ];
-    console.log("77777777777",request_query)
-
-    // Function to send a successful response
-    const sendResponse = (details) => {
-      _response_object.message = "media uploaded successfully";
-      var meta = {};
-      meta["media"] = {
-        path:
-          "https://s3." +
-          sails.config.conf.aws.region +
-          ".amazonaws.com/" +
-          sails.config.conf.aws.bucket_name,
-        folder: Tables.attributesMeta.media.s3_folder_video,
-      };
-      meta["media"].example =
-        meta["media"].path +
-        "/" +
-        meta["media"].folder +
-        "/" +
-        "/user-209.mp4";
-      _response_object["meta"] = meta;
-      _response_object["details"] = _.cloneDeep(details);
-        details.video =  sails.config.custom.filePath.tablesMedia +  details.video;
-      _response_object.details = { ...details };
-      return response.ok(_response_object);
-    };
-
-    // Function to handle file upload
-    const uploadFiles = async (media, callback) => {
-      try {
-        const path = require("path");
-        const filename =
-          "media" +
-          Number(new Date()) +
-          "-" +
-          Math.floor(Math.random() * 9999999999 + 1) +
-          path.extname(media.filename);
-        const file_path = Tables.attributesMeta.media.s3_folder_video;
-
-        insert_data.media = filename;
-
-        await fileUpload.S3file(
-          media,
-          file_path,
-          filename,
-          [256, 512],
-          async function (err, done) {
-            if (err) {
-              err.field = "media";
-              throw err; // Throw the error to be caught later
-            } else {
-              console.log("ndfjgnhujfnuj", done);
-              if (done) {
-                return callback(filename);
-              }
-            }
-          }
-        );
-      } catch (err) {
-        throw err; // Throw the error to be caught later
-      }
-    };
-    // Function to add a record
-    const addRecord = async (post_data) => {
-      console.log("qeryqyewruqew",post_data)
-      try {
-        const updatedRecordDetails = await Tables.update(
-          { id: requestdata?.id },
-          { video: post_data.media }
-        );
-
-        sendResponse(updatedRecordDetails);
-      } catch (err) {
-        err.field = 'media';
-        throw err; // Throw the error to be caught later
-      }
-    };
-
-    // Add the filename to the table row.
-    validateModel.validate(
-      Tables,
-      input_attributes,
-      requestdata,
-      async function (valid, errors) {
-        if (valid) {
-          if (
-            request._fileparser &&
-            request._fileparser.upstreams &&
-            request._fileparser.upstreams.length > 0
-          ) {
-            try {
-              const uploaded_files = await new Promise((resolve, reject) => {
-                request.file("media").upload(
-                  {
-                    maxBytes: 500000000,
-                  },
-                  (err, files) => {
-                    if (err) {
-                      err.field = "media";
-                      reject(err);
-                    }
-                    resolve(files);
-                  }
-                );
-              });
-
-              if (uploaded_files.length > 0) {
-                // media uploaded
-                for (const uploaded_file of uploaded_files) {
-                  var allowed_file_types = [
-                    "media/mp4",
-                    "media/m4v",
-                    "media/m4v",
-                    "video/mp4",
-                    "video/quicktime"
-                  ];
-                  console.log("DHADJFHAJDSF",uploaded_file?.type)
-                  if (allowed_file_types.indexOf(uploaded_file?.type) === -1) {
-                    fs.unlink(uploaded_file.fd, function (err) {});
-                    _response_object.errors = [
-                      {
-                        field: "media",
-                        rules: [
-                          {
-                            rule: "required",
-                            message:
-                              "media should be only of type mp4, m4v, or m4v.",
-                          },
-                        ],
-                      },
-                    ];
-                    _response_object.count = 1;
-                    return response.status(400).json(_response_object);
-                  } else {
-                    // Uploading media
-
-                    await uploadFiles(uploaded_file, async function (filename) {
-                    });
-                  }
-                }
-                await addRecord(insert_data);
-
-              } else {
-                _response_object.errors = [
-                  {
-                    field: "media",
-                    rules: [
-                      {
-                        rule: "required",
-                        message: "media cannot be empty.",
-                      },
-                    ],
-                  },
-                ];
-                _response_object.count = 1;
-                return response.status(400).json(_response_object);
-              }
-            } catch (err) {
-              err.field = "media";
-              throw err; // Throw the error to be caught later
-            }
-          } else {
-            _response_object.errors = [
-              {
-                field: "media",
-                rules: [
-                  {
-                    rule: "required",
-                    message: "media cannot be empty.",
-                  },
-                ],
-              },
-            ];
-            _response_object.count = 1;
-            return response.status(400).json(_response_object);
-          }
-        } else {
-          _response_object.errors = errors;
-          _response_object.count = errors.length;
-          return response.status(400).json(_response_object);
+        const checkIsOwnerTable = await Tables.findOne({id :tableId, created_by:ProfileMemberId(request) })
+        if(!checkIsOwnerTable){
+            return response.status(500).json({ error: "You don't have access to the table for update." });
         }
-      }
-    );
-  } catch (err) {
-    // Handle the error here
-    console.error(err);
-    if (!response.headersSent) {
-      response.status(500).json({ error: 'Internal Server Error' });
+
+        const parseTableId = parseInt(tableId);
+        type = 'video';
+
+        let insertData = {};
+        if (type === 'media') {
+            insertData = { media: [] };
+        } else if (type === 'video') {
+            insertData = { video: [] };
+        } else {
+            throw { field: 'type', message: `Unsupported type: ${type}` };
+        }
+
+        let responseObject = {};
+
+        const getFileTypeConfig = (fileType) => {
+            if (!fileConfig[fileType]) {
+                throw { field: 'fileType', message: `Unsupported file type configuration: ${fileType}` };
+            }
+            return fileConfig[fileType];
+        };
+
+        const formatFileTypes = (types) => {
+            return types.map(type => type.split('/')[1]).join(', ');
+        };
+
+        const uploadFiles = async (file, fileType) => {
+            try {
+                const settings = getFileTypeConfig(fileType);
+
+                if (!settings.allowedTypes.includes(file.type)) {
+                    fs.unlink(file.fd, () => { });
+                    throw {
+                        field: settings.column,
+                        message: `File type mismatch: Expected ${fileType}, but got ${file.type}. Accepted file types are: ${formatFileTypes(settings.allowedTypes)}`
+                    };
+                }
+
+                if (file.size > settings.sizeLimit) {
+                    fs.unlink(file.fd, () => { });
+                    throw { field: settings.column, message: `File size exceeds limit for ${fileType}. Max limit is ${(settings.sizeLimit / (1024 * 1024)).toFixed(2)} MB` };
+                }
+
+                if (!insertData[settings.column]) {
+                    insertData[settings.column] = [];
+                }
+
+                const existingFilesCount = insertData[settings.column].filter(m => m.startsWith(`${settings.prefix}-${parseTableId}`)).length;
+
+                // Determine the correct file extension
+                const fileExtension = fileType === 'video' ? '.mp4' : '.webp';
+
+                const filename = `${settings.prefix}-${parseTableId}_${existingFilesCount + 1}${fileExtension}`;
+                insertData[settings.column].push(filename);
+
+                // Construct the file path correctly
+                const filePath = path.join(settings.filePath, filename);
+
+                await fileUploadService.S3file(file, settings.filePath, filename, settings.options, (err, done) => {
+                    if (err) {
+                        console.error(`Error uploading ${filename}:`, err);
+                        throw err;
+                    } else if (done) {
+                        return filename;
+                    }
+                });
+            } catch (err) {
+                console.error('Upload error:', err);
+                throw err;
+            }
+        };
+
+        const addRecord = async (postData) => {
+            try {
+                const updatedRecordDetails = await Tables.update({ id: parseTableId }, postData);
+                sendResponse(updatedRecordDetails);
+            } catch (err) {
+                console.error('Error updating record:', err);
+                throw err;
+            }
+        };
+
+        const validateUploadedFiles = async () => {
+            try {
+                if (!_fileparser || !_fileparser.upstreams || _fileparser.upstreams.length === 0) {
+                    throw { field: `${postKey}`, message: "No files uploaded" };
+                }
+
+                const uploadedFiles = await new Promise((resolve, reject) => {
+                    request.file(`${postKey}`).upload({ maxBytes: 500000000 }, (err, files) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        resolve(files);
+                    });
+                });
+
+                if (uploadedFiles.length === 0) {
+                    throw { field: `${postKey}`, message: "No files uploaded" };
+                }
+
+                for (const uploadedFile of uploadedFiles) {
+                    const fileType = getFileType(uploadedFile.type);
+                    if (fileType !== type) {
+                        const acceptedTypes = formatFileTypes(fileConfig[type]?.allowedTypes || []);
+                        throw { field: `${postKey}`, message: `File type mismatch: Expected ${type}, but got ${fileType}. Accepted file types are: ${acceptedTypes}` };
+                    }
+                    await uploadFiles(uploadedFile, fileType);
+                }
+
+                await addRecord(insertData);
+            } catch (err) {
+                console.error(err);
+                if (!response.headersSent) {
+                    response.status(400).json({
+                        param_type: type,
+                        accepted_fields: Object.keys(insertData),
+                        field: err.field,
+                        message: err.message,
+                    });
+                }
+            }
+        };
+
+        const sendResponse = (details) => {
+            const s3BaseUrl = Tables.attributesMeta.s3_base_url;
+            responseObject.message = 'Files uploaded successfully';
+            responseObject.meta = {
+                ...sails.config.custom.s3_bucket_options,
+                example_video: {
+                    hd: sails.config.custom.s3_bucket_options.table_video.hd + 'video-1_1.mp4',
+                    standardResolution: sails.config.custom.s3_bucket_options.table_video.hd + 'video-1_1.mp4'
+                },
+
+            };
+            responseObject.details = details[0];
+            return response.ok(responseObject);
+        };
+
+        await validateUploadedFiles();
+
+    } catch (err) {
+        console.error(err);
+        if (!response.headersSent) {
+            response.status(500).json({ error: 'Internal Server Error' });
+        }
     }
-  }
 };
+
+function getFileType(mimeType) {
+    if (mimeType.startsWith('image')) {
+        return 'media';
+    } else if (mimeType.startsWith('video')) {
+        return 'video';
+    } else {
+        throw new Error(`Unsupported file type: ${mimeType}`);
+    }
+}

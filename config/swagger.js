@@ -22,7 +22,7 @@ module.exports.swagger = {
         },
         version: '1.0.0'
       },
-      host: 'localhost:1337',
+      host: 'localhost:1338',
       basePath: '/',
       schemes: [
         'http',

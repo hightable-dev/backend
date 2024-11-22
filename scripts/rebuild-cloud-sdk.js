@@ -67,8 +67,8 @@ module.exports = {
         continue;
       }
       var def = requestable.toJSON && requestable.toJSON();
-      if (def && def.fn) {
-        if (def.args !== undefined) {
+      if (def?.fn) {
+        if (def?.args !== undefined) {
           endpointsByMethodName[methodName].args = def.args;
         } else {
           endpointsByMethodName[methodName].args = _.reduce(def.inputs, (args, inputDef, inputCodeName)=>{
@@ -91,7 +91,7 @@ module.exports = {
     await sails.helpers.fs.write.with({
       destination: path.resolve(sails.config.appPath, 'assets/js/cloud.setup.js'),
       force: true,
-      string: ``+
+      string:''+
 `/**
  * cloud.setup.js
  *
@@ -111,7 +111,7 @@ Cloud.setup({
   /* eslint-enable */
 
 });`+
-      `\n`
+      '\n'
     });
 
     // Also, if a `test/` folder exists, set up a barebones bounce of this data

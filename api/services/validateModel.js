@@ -271,7 +271,7 @@ exports.validate = function (model, input_attributes, post_request_data, validat
                     }
                 }
                 if (value.time) {
-                    time = post_request_data[value.name].split(':');
+                   let time = post_request_data[value.name].split(':');
                     if (time.length !== 2 || _.isNaN(parseInt(time[0])) || _.isNaN(parseInt(time[1])) || parseInt(time[0]) < 0 || parseInt(time[0]) > 23 || parseInt(time[1]) < 0 || parseInt(time[1]) > 59) {
                         var error_obj = new Error();
                         error_obj.code = "E_VIOLATES_RULES";
@@ -352,7 +352,7 @@ exports.validate = function (model, input_attributes, post_request_data, validat
                         date = value.date;
                     }
                     if (!validator.isBefore(post_request_data[value.name], String(date))) {
-                        printable_date = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
+                      let printable_date = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
                         var error_obj = new Error();
                         error_obj.code = "E_VIOLATES_RULES";
                         if (value.message) {
@@ -372,7 +372,7 @@ exports.validate = function (model, input_attributes, post_request_data, validat
                         date = value.date;
                     }
                     if (!validator.isAfter(post_request_data[value.name], String(date))) {
-                        printable_date = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
+                       let printable_date = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
                         var error_obj = new Error();
                         error_obj.code = "E_VIOLATES_RULES";
                         if (value.message) {
@@ -428,13 +428,13 @@ exports.validate = function (model, input_attributes, post_request_data, validat
                         }
                     }
                     else if (value.individual_rule) {
-                        sub_filtered_post_data = {};
-                        sub_input_attributes = [];
+                       let sub_filtered_post_data = {};
+                       let sub_input_attributes = [];
                         post_request_data[value.name].forEach(function (sub_value, sub_key) {
                             sub_filtered_post_data[sub_key] = sub_value;
-                            sub_rule = Object.assign({}, value.individual_rule);
+                           let sub_rule = Object.assign({}, value.individual_rule);
                             sub_rule.name = sub_key;
-                            sub_rule.array_child = true;
+                            sub_rule.array_child = true;    
                             sub_rule.parent_name = value.name;
                             if (value.individual_rule.message) {
                                 sub_rule.message = value.individual_rule.message;

@@ -1,8 +1,45 @@
 // swagger-gen.js
 
+/**
+ * Generates a Swagger endpoint definition for an API.
+ * 
+ * @module swagger-gen
+ */
+
+/**
+ * Generates a Swagger endpoint object based on the provided parameters.
+ * 
+ * @param {Object} obj - The object containing endpoint configuration.
+ * @param {string} obj.key - The key representing the endpoint in the generated Swagger document.
+ * @param {string} obj.Tags - The tags associated with the endpoint for documentation purposes.
+ * @param {string} obj.Description - A brief description of the endpoint's purpose.
+ * @param {Object|Array} obj.data - The data structure for which the schema will be generated.
+ * 
+ * @returns {Object} The Swagger endpoint definition.
+ * 
+ * @example
+ * const swaggerEndpoint = generateSwaggerEndpoint({
+ *   key: 'getUser',
+ *   Tags: 'User',
+ *   Description: 'Retrieve user information',
+ *   data: {
+ *     id: 1,
+ *     name: 'John Doe',
+ *     email: 'john.doe@example.com',
+ *   },
+ * });
+ */
 function generateSwaggerEndpoint(obj) {
     const { key, Tags, Description, data } = obj;
 
+    /**
+     * Generates the schema for the given data object for Swagger documentation.
+     * 
+     * @param {Object|Array} data - The data structure to generate a schema for.
+     * @returns {Object} The generated schema for the data.
+     * 
+     * @private
+     */
     function generateSwaggerSchema(data) {
         const schema = {
             type: typeof data === 'object' && Array.isArray(data) ? 'array' : 'object',

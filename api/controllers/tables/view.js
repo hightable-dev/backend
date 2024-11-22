@@ -1,153 +1,182 @@
-const DataService = require("../../services/DataService");
-const moment = require('moment');
+const _ = require('lodash');
+const DataService = require('../../services/DataService');
+const moment = require('moment-timezone');
 
-module.exports = async function findOne(request, response) {
+module.exports = function list(request, response) {
+  const request_query = request.allParams();
+  const filtered_query_data = _.pick(request_query, ['id']);
+  const { id } = filtered_query_data;
+  const { bookingClosed, bookmarkTable, bookingCancelledByUser } = UseDataService;
+  const input_attributes = [
+    { name: 'id', number: true, min: 1 },
+  ];
 
-  const { payPending, orderExpired, paymentSuccess } = paymentStatusCode;
-  const { pending, approved, rejected, bookingClosed, bookmarkTable, eventExpired } = tableStatusCode;
-  const { tablesVideo, tablesPhoto} = file_path;
-              
+  let responseObject = {};
+  const sendResponse = (item) => {
+    responseObject = {
+      meta: {
+        ...sails.config.custom.s3_bucket_options,
+      },
+      message: 'Table viewed successfully.',
+      details: item, // return single item
+    };
 
-  try {
-    var _response_object = {};
-    // Extract ID from request parameters
-    const { id } = request.query;
+    response.ok(responseObject)
 
-    // if any booking status is 5 and expired will update
-    const expiredBookings = await TableBooking.find({
-      where: { table_id: id, status: payPending, expiry_date: { '<': new Date() } }
-    });
+    return;
+  };
 
-    // Update status of expired bookings to 6
-    for (const booking of expiredBookings) {
-      await TableBooking.updateOne({ id: booking.id }).set({ status: orderExpired });
-    }
+  // Function to build the query criteria for fetching the table
+  function buildCriteria() {
+    return {
+      id,
+    };
+  }
 
-    // Find item by ID
-    const specificTable = await Tables.find({ id }).limit(1);
 
-    // Check if table exists
-    if (!specificTable || specificTable.length === 0) {
-      return response.status(404).json({ error: [] });
-    }
+  // Validate input attributes and proceed if valid
+  validateModel.validate(null, input_attributes, filtered_query_data, async function (valid, errors) {
+    if (valid) {
+      try {
+        const criteria = buildCriteria();
 
-    let item = specificTable[0];
-    const { lat, lng } = item.location;
+        // Fetch table data and populate related entities
+        let item = await Tables.findOne(criteria)
+          .populate('category')
+          .populate('user_profile');
 
-    item.location_details = await DataService.locationUtils.extractLocationDetails(
-      {
-        x : lat,
-        y : lng
-      }
-    );
-    const currentDate = moment();
-    const eventDate = moment(item.event_date, "DD-MM-YYYY HH:mm");
-    if (eventDate.isBefore(currentDate) && item.status === approved ) {
-      // Event date is expired, update status to 7 in the database
-      Tables.updateOne({ id: item.id }, { status: eventExpired }, (err, result) => {
-        if (err) {
-          console.error("Error occurred while updating table status:", err);
-          return response.serverError({ error: "Error occurred while updating table status" });
-        } else {
-          // Send response after updating table status
-          _response_object = { message: "Table Event date is expired" };
-          return response.ok(_response_object);
+        if (!item) {
+          return response.notFound({ message: 'Table not found' });
         }
-      });
-    } else {
+
+        if (item?.user_profile?.phone) {
+          await phoneEncryptor.decrypt(item?.user_profile?.phone, function (decrypted_text) {
+            item.user_profile.phone = decrypted_text;
+          });
+        }
+
+        item.creator_details = item.user_profile;
+        delete item.user_profile;
+
+        // Process the item (media, video, user profile photo)
+        if (item.event_date) {
+          item.event_date = UseDataService.dateHelper(
+            item.event_date,
+            "YYYY-MM-DDTHH:mm:ss.SSSZ",
+            "DD-MM-YYYY HH:mm"
+          );
+
+        }
+        item.media = item.media?.length > 0 ? item.media[0] : null;
+        item.video = item.video?.length > 0 ? item.video[0] : null;
+
+        // Check if a review exists for the table and user
+        const review = await Reviews.findOne({ reviewer_profile_id: ProfileMemberId(request), table_id: id });
+
+        const is_review = !!review;
+
+        if (UserType(request) === roles.member) {
+          // Check if the current user is a follower of the creator of the table
+          const followerRecord = await Followers.findOne({
+            follower_profile_id: ProfileMemberId(request),
+            creator_profile_id: parseInt(item.created_by)
+          });
+
+          // If follower record found, set is_follower to true, otherwise false
+          const bookmarkRecord = await BookMarks.findOne({
+            user_id: ProfileMemberId(request),
+            table_id: item.id
+          });
+
+          // const isBooked = await TableBooking.findOne({
+          //   user_id: ProfileMemberId(request),
+          //   table_id: item.id,
+          //   status: { in: [payPending, bookingConfirmationPendingByCreator] }
+          // });
+
+          let isBooked = await TableBooking.find({
+            user_id: ProfileMemberId(request),
+            table_id: item.id,
+            // status: { in: [payPending, bookingConfirmationPendingByCreator, bookingCancelledByUser, paymentSuccess, cancelled, refundRequest, refundSuccess ] }
+          })
+            .sort('created_at DESC')  // Assuming 'createdAt' exists, sorting by most recent
+            .limit(1);  // Limiting the result to just one (latest entry)
+          isBooked = isBooked[0];
+          console.log("Last Booking Entry:", isBooked);
 
 
-    item.media =  item.media ? tablesPhoto + item.media : null;
-    item.video = item.video ? tablesVideo + item.video : null;
+          const isEventStatusByUser = await EventStatus.findOne({
+            user_id: ProfileMemberId(request),
+            table_id: item.id
+          });
 
-      item.event_date = DataService.formatDate.ddmmyyyy_hhmm(item.event_date);
-    if (!item.media && !item.video) {
-      // Set default media path if both are undefined
-      item.media = tablesPhoto + 'tables-media-1.png';
-    }
+          const is_follower = followerRecord ? followerRecord.status === sails.config.custom.statusCode.follower : false;
+          // item.is_follower = is_follower;
 
-    
+          const is_bookmark = bookmarkRecord ? bookmarkRecord.status === bookmarkTable : false;
+          const isBookingClosed = item.max_seats <= item.booked;
+          //           const now = moment().utcOffset("+05:30").toDate();; // Get the current date and time
+          //           // const now = new Date(); // Get the current date and time
 
-       // Get creator details
-    const creatorDetails = await ProfileMembers.findOne({ id: parseInt(item.created_by) });
-    if (creatorDetails?.phone) {
-      await phoneEncryptor.decrypt(creatorDetails.phone, function (decrypted_text) {
-        creatorDetails.phone = decrypted_text;
-      });
-    }
+          //           // const eventDate = moment(item.event_date, "DD-MM-YYYY HH:mm").toDate(); // Parse event_date correctly
+          //           const eventDate = moment(item.event_date, "YYYY-MM-DD HH:mm").utcOffset("+05:30").toDate();
+          // console.log("========",{now,eventDate})
+          //           item.event_expired = now < eventDate;
+          // item.event_expired2 = now > eventDate;
 
+          // Set your timezone
+          // const userTimezone = "UTC+5:30"; // UTC+5:30
+          let now = new Date();
+          let eventDate = item.event_date;
+          const reportedHost = await ReportHost.findOne({ user_id: ProfileMemberId(request), table_id: id })
+          const reportedTable = await ReportTable.findOne({ user_id: ProfileMemberId(request), table_id: id })
 
-    if (!creatorDetails) {
-      return response.status(404).json({ error: 'Creator details not found' });
-    }
+          now = moment(now, "YYYY-MM-DD HH:mm").toDate();
+          now = moment.utc(now).tz("Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+          now = moment.tz(now, "YYYY-MM-DD HH:mm").toDate();
 
-    const category = await Interests.findOne({ id: parseInt(item.category) });
+          eventDate = moment(eventDate, "DD-MM-YYYY HH:mm").toDate();
+          eventDate = moment.utc(eventDate).tz("Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
+          eventDate = moment.tz(eventDate, "DD-MM-YYYY HH:mm").toDate();
 
-    if (category && category.name) {
-      item.category = category.name;
-    } else {
-      item.category = [];
-    }
-    const totalReviewsCount = await Reviews.count({ creator_profile_id: parseInt(item.created_by) });
+          console.log("EVENTSTATUS", { now, eventDate });
+          item.event_expired = now > eventDate;
+          item.is_bookmark = is_bookmark;
+          item.is_review = is_review;
+          item.is_booked = isBooked ? true : false;
+          // item.event_on =
+          // item.is_booked = isBooked?.status ;
+          item.booking_status = isBookingClosed
+            ? bookingClosed
+            : isBooked ? isBooked.status : false;
+          /* 
+            isBooked.status = 11;
+            item.order_id = isBooked ?
+            isBooked.status !== bookingCancelledByUser ? isBooked.order_id : null : false;
+           */
+          item.order_id = isBooked?.order_id;
 
-    // Total Tables Count created by user
-    const totalTablesCount = await Tables.count({ created_by: parseInt(item.created_by) });
-    item.CreaterTableCount = totalTablesCount; // requested by frontend
+          // item.order_id = isBooked ? isBooked.order_id : null ;
+          item.is_event_status_byuser = isEventStatusByUser?.event_done_flag;
+          item.is_follower = is_follower;
 
-    // Add creator details to item
-    item.creator_details = {
-      tableCount: totalTablesCount,
-      reviewsCount: totalReviewsCount,
-      phone: creatorDetails.phone,
-      photo: sails.config.custom.filePath.members + creatorDetails.photo,
-    };
+          item.reportedHost = reportedHost ? true : false;
+          item.reportedTable = reportedTable ? true : false;
 
-    // Check if a review exists for the table and user
-    const review = await Reviews.findOne({ reviewer_profile_id: ProfileMemberId(request), table_id: id });
+        }
+        sendResponse(item);
 
-    // If review not found, set is_review to false
-    // For commit changes  only
-    const is_review = !!review;
+        // DataService.completedEvent()
 
-    // Check if the current user is a follower of the creator of the table
-    const followerRecord = await Followers.findOne({
-      follower_profile_id: ProfileMemberId(request),
-      creator_profile_id: parseInt(item.created_by)
-    });
-
-    // If follower record found, set is_follower to true, otherwise false
-    const is_follower = followerRecord ? followerRecord.status === sails.config.custom.statusCode.follower : false;
-    const bookmarkRecord = await Bookmarks.findOne({
-      user_id: ProfileMemberId(request),
-      table_id: item.id
-    });
-    // If follower record found, set is_follower to true, otherwise false
-    const is_bookmark = bookmarkRecord ? bookmarkRecord.status === bookmarkTable : false;
-
-    function generateRandomSixDigit() {
-      let randomSixDigit = '';
-      for (let i = 0; i < 6; i++) {
-          randomSixDigit += Math.floor(Math.random() * 10);
+      } catch (error) {
+        console.error('Error retrieving service requests:', error);
+        return response.serverError('Server Error');
       }
-      return randomSixDigit;
-  }
-    // Send response
-    item.randomDigit = generateRandomSixDigit();
-    console.log('generateRandomSixDigit', item.randomDigit)
-    _response_object = {
-      message: 'item retrieved successfully.',
-      is_review: is_review,
-      is_follower: is_follower,
-      is_bookmark: is_bookmark,
-      data: item,
-    };
-
-    return response.ok(_response_object);
-  }
-  } catch (error) {
-    console.error("Error occurred while fetching item:", error);
-    return response.status(500).json({ error: "Error occurred while fetching item" });
-  }
-
-
+    } else {
+      return response.status(400).json({
+        errors: errors,
+        count: errors.length,
+      });
+    }
+  });
 };

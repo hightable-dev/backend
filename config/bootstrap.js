@@ -14,6 +14,12 @@ module.exports.bootstrap = async function() {
   // Import dependencies
   var path = require('path');
 
+  const cronJobs = require('../api/services/Common/croneJobs');
+  const jobCompletedEvent = require('../api/services/Common/completedEventCroneJobs');
+
+  
+  // console.log(cronJobs)
+
   // This bootstrap version indicates what version of fake data we're dealing with here.
   var HARD_CODED_DATA_VERSION = 0;
 

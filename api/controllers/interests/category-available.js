@@ -1,7 +1,9 @@
+const _ = require('lodash');
 
-module.exports = async function list(request, response) {
-  const { pending, cancelled, eventExpired } = sails.config.custom.tableStatusCode;
-  const { inactive } = sails.config.custom.statusCode;
+module.exports =  function list(request, response) {
+  // const { pending, cancelled, eventExpired } = sails.config.custom.tableStatusCode;
+  const { pending, cancelled, eventExpired, inactive } = UseDataService;
+  // const { inactive } = sails.config.custom.statusCode;
   const currentDate = new Date();
   const formattedDate = dateService.ddmmyyyy_hhmm(currentDate);
   const request_query = request.allParams();

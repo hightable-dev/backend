@@ -13,9 +13,15 @@ exports.sendOTP = async function (phone, callback) {
                 secureOptions: crypto.constants.SSL_OP_LEGACY_SERVER_CONNECT,
             }),
         };
+        console.log({config})
 
         const postresponse = await axios.request(config);
+
+        console.log({postresponse})
+
         const responseData = postresponse.data;
+        console.log({responseData})
+
         const parts = responseData.split('|').map(part => part.trim());
 
         const jsonObject = {

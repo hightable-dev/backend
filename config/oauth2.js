@@ -4,15 +4,14 @@
  *
  */
 
-var oauth2orize = require('oauth2orize'),
-    passport = require('passport'),
-    login = require('connect-ensure-login'),
-    bcrypt = require('bcrypt');
+const oauth2orize = require('oauth2orize');
+const  passport = require('passport');
+const  bcrypt = require('bcrypt');
 trustedClientPolicy = require('../api/policies/isTrustedClient.js');
 SocialLoginPolicy = require('../api/policies/socialLoginPolicy.js');
 
 // Create OAuth 2.0 server
-var server = oauth2orize.createServer();
+const server = oauth2orize.createServer();
 
 server.serializeClient(function (client, done) {
     return done(null, client.id);
@@ -98,7 +97,7 @@ server.exchange(oauth2orize.exchange.password(async function (client, username, 
     // }
     await loginService.findUser(username, 'phone', async function (err, user) {
         if (!user) {
-            return done({ message: 'Invalid username or password combination3.' }, false, { message: 'Invalid username or password combination 102.' });
+            return done({ message: 'Invalid username or password combination. User not registered.' }, false, { message: 'Invalid username or password combination 102.' });
         } else if (user.status !== 1) {
             return done({ message: 'Your account has been deactived. Please contact admin for further details.' }, false, { message: 'Child account are not allowed to login.' });
         } else {
@@ -177,7 +176,7 @@ function generateToken(user, client, done) {
     });
 }
 // Exchange refreshToken for access token.
-server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken, scope, done) {
+server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken, done) {
     RefreshTokens.findOne({ token: refreshToken }, function (err, token) {
         if (err) { return done(err); }
         if (!token) { return done({ message: 'Unauthorized' }, false); }
@@ -190,7 +189,7 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken
                 return done({ message: 'Unauthorized' }, false, { message: 'Unauthorized' });
             }
             else {
-                destroyExistingTokens(user_result, client, function (err, destroy_success) {
+                destroyExistingTokens( function (err) {
                     if (err) {
                         return done(err);
                     } else {
@@ -200,8 +199,8 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken
             }
         });
         //Destroying existing tokens
-        function destroyExistingTokens(user, client, destroy_callback) {
-            RefreshTokens.destroy({ token: refreshToken }, function (err, destoyed_token) {
+        function destroyExistingTokens( destroy_callback) {
+            RefreshTokens.destroy({ token: refreshToken }, function (err) {
                 if (err) {
                     return destroy_callback(err);
                 } else {
@@ -219,7 +218,11 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken
                         if (err) {
                             return done(err);
                         } else {
-                            Users.update({ id: user.id }, { last_active: new Date() }, function (err, updated_user) {
+                            Users.update({ id: user.id }, { last_active: new Date() }, function (err) {
+                                if(err){
+                                    return done(err);
+
+                                }
                           
                                 done(null, accessToken.token, refreshToken.token, { 'expires_in': sails.config.oauth.tokenLife, types: [user.types] });
                             });
@@ -237,8 +240,8 @@ module.exports = {
     http: {
         middleware: {
             initializePassport: (function () {
-                var passport = require('passport');
-                var reqResNextFn = passport.initialize();
+                // var passport = require('passport');
+                let reqResNextFn = passport.initialize();
                 return reqResNextFn;
             })(),
             // passportSession : (function (){

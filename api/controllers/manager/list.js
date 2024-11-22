@@ -1,5 +1,5 @@
 
-module.exports = async function list(request, response) {
+module.exports = function list(request, response) {
   const request_query = request.allParams();
   const {status } = request_query;
 
@@ -11,13 +11,13 @@ module.exports = async function list(request, response) {
     { name: 'page', number: true, min: 1 },
     { name: 'limit', number: true, min: 1 },
   ];
-
+  let responseObject = {};
 
   const sendResponse = (items, total) => {
     const pageNum = parseInt(page) || 1;
     const limitNum = parseInt(limit) || 10;
 
-    const responseObject = 
+    responseObject = 
     {
       message: 'Request form list retrieved successfully.',
       meta: {
@@ -31,26 +31,30 @@ module.exports = async function list(request, response) {
 
      response.ok(responseObject);
 
-    process.nextTick(() => {
+     process.nextTick(() => {
+      const capitalizeFirstLetter = (str) => {
+        if (typeof str !== 'string' || str.length === 0) return str;
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      };
+      
+      const relativePath = SwaggerGenService.getRelativePath(__filename);
+      
+      // Check the value of input_attributes before passing it
+      if (!Array.isArray(input_attributes)) {
+        throw new Error('input_attributes should be an array');
+      }
+      
       SwaggerGenService.generateJsonFile({
-        key: `/${SwaggerGenService.getRelativePath(__filename)}`,
-        Tags: "Interests",
-        Description: "Retrieve a list of tables based on various filters.",
+        key: `/${relativePath}`,
+        Tags: capitalizeFirstLetter(relativePath.split('/')[0]),
+        Description: `Retrieve a ${relativePath.split('/')[0]} list.`,
         body: {},
         params: { page: 1, limit: 10 },
-        required_data: {
-          page: { type: "integer", example: 1 },
-          limit: { type: "integer", example: 10 },
-          search: { type: "string", example: "searchTerm" },
-          from_date: { type: "string", format: "date-time", example: "2024-01-01T00:00:00Z" },
-          to_date: { type: "string", format: "date-time", example: "2024-01-31T23:59:59Z" },
-          category: { type: "integer", example: 1 },
-          created_by: { type: "integer", example: 123 },
-          type: { type: "integer", example: 2 }
-        },
+        required_data: input_attributes,  // This should be an array
         response: responseObject
       });
     });
+    
     return ;
 
   };

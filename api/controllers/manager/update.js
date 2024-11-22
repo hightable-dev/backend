@@ -4,7 +4,7 @@
 
 /* global _, ProfileManagers /sails */
 
-module.exports = async function update(request, response) {
+module.exports = function update(request, response) {
     try {
         const { id, first_name, last_name, email, city, phone } = request.body;
         const updateData = { first_name, last_name, email, city ,phone };

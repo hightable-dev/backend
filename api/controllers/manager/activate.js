@@ -3,7 +3,7 @@
  */
 
 /* global _, ProfileManagers /sails */
-module.exports = async function update(request, response) {
+module.exports =  function update(request, response) {
     const active = sails.config.custom.statusCode.active;
     const inActive = sails.config.custom.statusCode.inactive;
 

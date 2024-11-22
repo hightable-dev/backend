@@ -6,11 +6,12 @@
 
 const Razorpay = require('razorpay');
 
+
 module.exports = async function capturePayment(req, res) {
-    const { table_id, order_id, payment_id, amount,creator_profile_id } = req.body;
-    const { pending, expired, paymentSuccess} = paymentStatusCode;
-    const { approved } = tableStatusCode;
-    const UserId=req.user
+    const {paymentSuccess,approved} = UseDataService ;
+    const profileId = req.user.profile_members;
+    const { table_id, order_id, payment_id } = req.body;
+
     const razorpay = new Razorpay({
         key_id: process.env.RAZORPAY_KEY_ID,
         key_secret: process.env.RAZORPAY_KEY_SECRET
@@ -19,36 +20,70 @@ module.exports = async function capturePayment(req, res) {
     try {
         // const capturedPayment = await razorpay.payments.capture(payment_id, amount * 100); // Convert amount to paisa
         const paymentDetails = await razorpay.payments.fetch(payment_id);
+
         // Update TableBooking with the captured payment details
         const updatedBooking = await TableBooking.updateOne({ order_id }).set({
             payment_details: paymentDetails, // Use the full captured payment response from Razorpay
             payment_id: paymentDetails.id,
             status: paymentSuccess,
+            status_glossary : "paymentSuccess"
         });
 
         if (updatedBooking) {
             /** Update the booked Seats count  in Tables*/
-           const totalBookedSeats = await TableBooking.find({ table_id, status:paymentSuccess });
+            const totalBookedSeats = await TableBooking.find({ table_id, status: paymentSuccess });
 
-        await Tables.updateOne({ id:table_id }).set({
-            booked: totalBookedSeats.length, // Use the full captured payment response from Razorpay
-            booked_seats: totalBookedSeats.length, // Use the full captured payment response from Razorpay
-        });
+            await Tables.updateOne({ id: parseInt(table_id) }).set({
+                booked: totalBookedSeats.length, // Use the full captured payment response from Razorpay
+                booked_seats: totalBookedSeats.length, // Use the full captured payment response from Razorpay
+            });
 
-        const TableName = await Tables.findOne({ id: parseInt(updatedBooking?.table_id) })
+            const getBookedTable = await TableBooking.findOne({ order_id })
+            const tableData = await Tables.findOne({ id: parseInt(getBookedTable?.table_id) });
+
+            await UseDataService.sendNotification({
+                notification: {
+                    senderId: profileId,
+                    type: 'bookingConfirm',
+                    message: `Congratulations! You got a new booking! for the table '${tableData?.title}'.`,
+                    receiverId: getBookedTable.creator_id,
+                    followUser: null,
+                    tableId: getBookedTable.table_id,
+                    payOrderId: '',
+                    isPaid: true,
+                    templateId: 'bookingConfirm',
+                    roomName: 'AcceptBooking_',
+                    creatorId: getBookedTable.creator_id,
+                    status: approved, // approved
+                },
+                pushMessage: {
+                    title: tableData?.title,
+                    // message: `Congratulations! Booking confirmed '${tableData?.title}'.`,
+                }
+            });
+
+            const TableName = await Tables.findOne({ id: parseInt(updatedBooking?.table_id) })
             await Notifications.updateOne({ pay_order_id: order_id, status: approved }).set({
                 is_paid: 1,
-                message:`Your payment for the ${TableName?.title} is completed.`
+                message: `Your payment for the ${TableName?.title} is completed.`
             });
-            return res.json({ message: 'Payment captured and booking updated successfully', booking: updatedBooking });
-        }
 
-        if (!updatedBooking) {
+            /******* Update booked table count after payment success *******/ 
+            await UseDataService.countTablesBooked(ProfileMemberId(req))
+
+            return res.json({ message: 'Payment captured and booking updated successfully', booking: updatedBooking });
+            
+        } else {
+
             return res.status(500).json({ error: 'No matching record found for table_booking_id:', table_id });
 
-        } else {
-            console.log('Updated Booking:', updatedBooking); // Log updated booking details
         }
+
+        // if (!updatedBooking) {
+        //     return res.status(500).json({ error: 'No matching record found for table_booking_id:', table_id });
+
+        // } else {
+        // }
     } catch (err) {
         console.error('Capture Payment Error:', err); // Log any errors
 

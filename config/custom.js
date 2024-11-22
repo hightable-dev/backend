@@ -27,38 +27,59 @@ module.exports.custom = {
     active: 1
   },
 
-
+  tableExpense: {
+    byHost: 1,
+    split: 2
+  },
 
   tableStatusCode: {
     pending: 2,
+    noImage: 99,
     approved: 3,
     reject: 4,
-    bookingClosed: 15,
-    cancelled: 6, // for delete and cancel Should happen refund if
+    cancelled: 6,
     eventExpired: 7,
     eventCompleted: 8,
-    bookmarkTable: 13, 
     follower: 14,
+    bookingClosed: 15,
     followerUsers: 19,
     deletedAccountTables: 20,
+    eventStatusPending: 21,
+    bookmarkTable: 22,
+    autoCancelledMinSeatsNotBooked: 34
   },
 
   paymentStatusCode: {
-    payPending: 5, // 5, // If BookingAccepted by createor staus is 5
-    orederExpired: 16, //6,
-    refundRequest: 17 , //7
-    refundSuccess:  18,//8,
+    payPending: 5,
     paymentSuccess: 9,
     eventAttended: 10,
-    bookingConfirmationPendingByCreator : 11,
-    bookingRejectByCreator : 12
+    bookingConfirmationPendingByCreator: 11,
+    bookingRejectByCreator: 12,
+    bookingCancelledByUser: 13,
+    orederExpired: 16,
+    refundRequest: 17,
+    refundSuccess: 18,
   },
 
   tableType: {
     standard: 1,
     premium: 2,
   },
-
+  orderByStatus: {
+    orderO1: '01',
+    orderO2: '02',
+    orderO3: '03',
+    orderO4: '04',
+    orderO5: '05',
+    orderO6: '06',
+  },
+  
+  errorTypeCodes: {
+    razorpayErr: 1,
+    createOrderErr: 2,
+    paymentErr: 3,
+    refundErr: 4
+  },
 
   //sails.config.custom.plans.standard;
 
@@ -67,7 +88,22 @@ module.exports.custom = {
     premium: 2
   },
 
-
+  s3_bucket_options: {
+    base_url: {
+      table_photo: 'https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/',
+      table_video: "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/",
+    },
+    table_photo: {
+      hd: "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+      standardResolution: 'https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/'
+    },
+    table_video: {
+      hd: "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+      standardResolution: 'https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/'
+    },
+    profile_photo: "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/",
+    category_photo: 'https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/',
+  },
   /** 
    * image: ['image/jpg', 'image/png', 'image/jpeg'],
    * video: ['video/mp4', 'video/m4v'],
@@ -77,7 +113,7 @@ module.exports.custom = {
     image: ['image/jpg', 'image/png', 'image/jpeg'],
     video: ['video/mp4', 'video/m4v'],
   },
-  //sails.config.custom.filePath.tables;
+  //sails.config.custom.s3_bucket_options;
 
   /**
    * 
@@ -92,7 +128,6 @@ module.exports.custom = {
 
 
   file_path: {
-
     tablesVideo: "https://s3.ap-south-1.amazonaws.com/high-table/public/video/tables/",
     tablesPhoto: "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/",
     interestsPhoto: "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/",
@@ -149,13 +184,7 @@ module.exports.custom = {
    **************************************************************************/
   platformCopyrightYear: "2021",
 
-  // status_codes: {
-  //   inactive: 0,
-  //   active: 1,
-  //   reported: 2,
-  //   deleted: 3,
-  //   removed: 4,
-  // },
+
   push_messages: {
     questionnaire_create: {
       title: "hightbale App ",
@@ -254,35 +283,6 @@ global.paymentStatusCode = module.exports.custom.paymentStatusCode;
 global.roles = module.exports.custom.roles;
 global.file_path = module.exports.custom.file_path;
 global.path = module.exports.custom.path;
+global.tableExpense = module.exports.custom.tableExpense;
 
 
-
-
-// statusCode: {
-//   inactive: 0,
-//   active: 1,
-// follower: 14,
-// followerUsers: 15,
-// pending: 2,
-// approved: 3,
-// rejected: 4,
-// Payment status
-// ordered: 5,
-// expired: 6,
-// payment_pending: 7,
-// payment_failed: 8,
-// payment_successful: 9,
-// payment_refund_initiate: 10,
-// payment_refunded: 11,
-// booking_closed: 12,
-//Book marks
-// bookmark: 13,
-//Follower
-
-// tables: {
-//   pending: 2,
-//   approved: 3,
-//   rejected: 4,
-//   booking_closed: 5,
-// },
-// },

@@ -3,11 +3,9 @@
  */
 
 /* global _, ProfileManagers /sails */
+const _ = require('lodash');
 
-const moment = require('moment');
-const generateJsonFile = require('../../services/SwaggerGenService');
-
-module.exports = async function list(request, response) {
+module.exports = function list(request, response) {
   try {
     var _response_object = {};
 
@@ -17,21 +15,15 @@ module.exports = async function list(request, response) {
     // for commit changes 
     var input_attributes = [
       { name: 'page', number: true, min: 1 },
-      { name: 'limit', number: true, min: 1 }
+      // { name: 'limit', number: true, min: 1 }
     ];
 
     validateModel.validate(null, input_attributes, filtered_query_data, async function (valid, errors) {
       if (valid) {
         const page = parseInt(filtered_query_data.page) || 1;
-        const limit = parseInt(filtered_query_data.limit) || 10;
-        const skip = (page - 1) * limit;
-
         // Fetch interests with pagination
         const interests = await Interests.find()
-        .sort('name ASC')
-        .skip(skip)
-        .limit(limit);
-
+          .sort('orderby ASC')
 
         let filteredItems = interests;
         filteredItems = common.filterDataItems(filteredItems, filterData);
@@ -47,43 +39,40 @@ module.exports = async function list(request, response) {
           }
         }
 
-
-        // Format interests data
-        // const formattedInterests = interests.map(interest => ({ id: interest.id, name: interest.name }));
-
         // Send response
         _response_object.message = 'Interests retrieved successfully.';
         _response_object.meta = {
           page: page,
-          limit: limit,
+          // limit: limit,
           total: interests.length
         };
 
         _response_object.items = interests;
+        response.ok(_response_object);
 
-         response.ok(_response_object);
-
-         const capitalizeFirstLetter = (str) => {
-          if (typeof str !== 'string' || str.length === 0) return str;
-          return str.charAt(0).toUpperCase() + str.slice(1);
-        };
-        
+        //  process.nextTick(() => {
+        //   const relativePath = SwaggerGenService.getRelativePath(__filename);
+        //   const capitalizeFirstLetter = (str) => {
+        //     if (typeof str !== 'string' || str.length === 0) return str;
+        //     return str.charAt(0).toUpperCase() + str.slice(1);
+        //   };
+        //   SwaggerGenService.generateJsonFile({
+        //     key: `/${relativePath}`,
+        //     Tags: capitalizeFirstLetter(relativePath.split('/')[0]),
+        //     Description: `Retrieve data of ${capitalizeFirstLetter(relativePath.split('/')[0])} - ${relativePath.split('/')[1]}` ,
+        //     body: {},
+        //     params: { page: 1, limit: 10 },
+        //     required_data: input_attributes,
+        //     response: _response_object
+        //   });
+        // });
         process.nextTick(() => {
           const relativePath = SwaggerGenService.getRelativePath(__filename);
-        
-          console.log('capitalizeFirstLetter( relativePath.split('/')[0])', )
-          SwaggerGenService.generateJsonFile({
-            key: `/${relativePath}`,
-            Tags: capitalizeFirstLetter( relativePath.split('/')[0]),
-            Description: "Retrieve a list of tables based on various filters.",
-            body: {},
-            params: { page: 1, limit: 10 },
-            required_data: input_attributes,
-            response: _response_object
-          });
+          UseDataService.processSwaggerGeneration({ relativePath, inputAttributes :input_attributes, responseObject: _response_object });
+
         });
 
-        return ;
+        return;
       } else {
         _response_object.errors = errors;
         _response_object.count = errors.length;

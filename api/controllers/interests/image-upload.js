@@ -14,7 +14,7 @@ module.exports = async function updateFile(request, response) {
     const { id: InterestId } = allParams();
     // Prepare data for processing
     const insertData = {};
-    const responseObject = {};
+    let responseObject = {};
     
     const allowedFileTypes = sails.config.custom.fileTypes.image ;
     /**
@@ -44,14 +44,14 @@ module.exports = async function updateFile(request, response) {
 
     // Function to handle file upload
     const uploadFiles = async (image, callback) => {
-      try {
+      // try {
         const path = require("path");
         const filename = `${namePrefix}-${fieldName}-${InterestId}${path.extname(image.filename)}`;
         const filePath = s3Folder;
 
         insertData[fieldName] = filename;
 
-        await fileUpload.S3file(image, filePath, filename, [256, 512], async function (err, done) {
+        await fileUpload.S3file(image, filePath, filename, [256, 512],  function (err, done) {
           if (err) {
             err.field = `${fieldName}`;
             throw err;
@@ -61,9 +61,9 @@ module.exports = async function updateFile(request, response) {
             }
           }
         });
-      } catch (err) {
-        throw err;
-      }
+      // } catch (err) {
+        // throw err;
+      // }
     };
 
     // Function to add a record
@@ -103,7 +103,7 @@ module.exports = async function updateFile(request, response) {
             fs.unlink(uploadedFile.fd, () => {});
             throw { field: `${fieldName}`, message: `${fieldName} should be only of type jpg, png or jpeg` };
           }
-          await uploadFiles(uploadedFile, async function (filename) {});
+          await uploadFiles(uploadedFile, async function () {});
         }
         await addRecord(insertData);
       } catch (err) {

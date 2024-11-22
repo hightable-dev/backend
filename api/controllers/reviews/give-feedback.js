@@ -1,6 +1,7 @@
-module.exports = async function reviews(request, response) {
+const _ = require('lodash');
+
+module.exports = function reviews(request, response) {
     const profileId = request.user.profile_members;
-    const UserId = request.user
     const post_request_data = request.body;
     const filtered_post_data = _.pick(post_request_data, ['reviewer_profile_id', 'creator_profile_id', 'table_id', 'reviews', 'comments']);
     const input_attributes = [
@@ -9,7 +10,7 @@ module.exports = async function reviews(request, response) {
         { name: 'reviews' },
         { name: 'comments' },
     ];
-
+    // hightable_reviews_id_seq
     const createOrUpdateReviews = async () => {
         try {
             // Check if the table_id exists in the Tables model
@@ -38,64 +39,58 @@ module.exports = async function reviews(request, response) {
             }
 
             // Create new reviews
-            const newReviews = await Reviews.create(filtered_post_data).fetch();
+            const newReviews = await Reviews.create(filtered_post_data);
+            const tableDetails = await Tables.findOne({ id: filtered_post_data.table_id })
             if (newReviews) {
-                await NotificationService({
-                    senderId: logged_in_user?.profile_members,
-                    type: 'Review',
-                    message: `Congratulations, You got a rating.`,
-                    receiverId: filtered_post_data?.creator_profile_id,
-                    followUser: null,
-                    tableId: newReviews?.table_id,
-                    payOrderId: '',
-                    isPaid: false,
-                    templateId: 'review',
-                    roomName: 'Review_',
-                    creatorId: null,
-                    pushMsgTitle: `${UserId?.first_name} You got a new rating`,    // Title, Name ...
-                    pushMessage: `New table found from '${logged_in_user?.first_name}'.`
+
+                await UseDataService.sendNotification({
+                    notification: {
+                        senderId: profileId,
+                        type: 'Review',
+                        message: `Please confirm status for the table '${tableDetails?.title}'.`,
+                        receiverId: filtered_post_data?.creator_profile_id,
+                        followUser: null,
+                        tableId: newReviews?.table_id,
+                        payOrderId: '',
+                        isPaid: true,
+                        templateId: 'review',
+                        roomName: 'Review_',
+                        creatorId: null,
+                        status: 1,
+                    },
+                    pushMessage: {
+                        title: 'Review',
+                    }
                 });
-
-                // await Notifications.create(
-                //     {
-
-                //         sender: filtered_post_data?.reviewer_profile_id,
-                //         type: "Review",
-                //         message: `Review created`,
-                //         table_id: newReviews?.table_id,
-                //         receiver: filtered_post_data?.creator_profile_id,
-                //     },
-                //     async function (err, notification) {
-
-                //         var roomName = 'Review_' + filtered_post_data?.creator_profile_id;
-                //         newReviews.user = filtered_post_data?.creator_profile_id
-                //         socketService.notification(roomName, newReviews);
-
-                //         var push_data = {
-                //             title: UserId?.first_name,
-                //             message: `Congratulations! You got a new rating`,
-                //             // player_ids: UserId?.onesignal_player_ids,
-                //             player_ids:`user-${profileId}`,
-
-                //         };
-
-                //         push_data.data = {
-                //             templateId: 'review',
-                //             id: newReviews?.table_id,
-                //             review: 5
-                //         };
-                //         await pushService.sendPush(push_data,function (data,error){
-
-                //         })
-                //     }
-                // );
             }
-
-
             // Update reviews count
             await updateReviewsCount(newReviews);
+            response.ok({ message: "Reviews created successfully.", reviews: newReviews });
+            // process.nextTick(() => {
+            //     const relativePath = SwaggerGenService.getRelativePath(__filename);
+            //     UseDataService.processSwaggerGeneration({ relativePath, inputAttributes: input_attributes, responseObject: newReviews });
 
-            return response.ok({ message: "Reviews created successfully.", reviews: newReviews });
+            // });
+
+            process.nextTick(() => {
+                const relativePath = SwaggerGenService.getRelativePath(__filename);
+                const capitalizeFirstLetter = (str) => {
+                    if (typeof str !== "string" || str.length === 0) return str;
+                    return str.charAt(0).toUpperCase() + str.slice(1);
+                };
+                SwaggerGenService.generateJsonFile({
+                    key: `/${relativePath}`,
+                    Tags: capitalizeFirstLetter(relativePath.split("/")[0]),
+                    Description: `Create a table ${capitalizeFirstLetter(
+                        relativePath.split("/")[0]
+                    )} - ${relativePath.split("/")[1]}`,
+                    body: {},
+                    required_data: input_attributes,
+                    response: newReviews,
+                });
+            });
+
+            return
         } catch (err) {
             console.error('Error creating Reviews:', err);
             return response.serverError(err);
@@ -108,18 +103,14 @@ module.exports = async function reviews(request, response) {
             const tableReviews = await Reviews.sum('reviews').where({ table_id: newReviews.table_id });
             const tableReviewsCount = await Reviews.count().where({ table_id: newReviews.table_id });
             const avgTableReview = parseFloat((tableReviews / tableReviewsCount).toFixed(2));
-
-
             // Update total reviews by creator_profile_id
             const creatorReviews = await Reviews.sum('reviews').where({ creator_profile_id: newReviews.creator_profile_id });
             const creatorReviewsCount = await Reviews.count().where({ creator_profile_id: newReviews.creator_profile_id });
             const avgCreatorReview = parseFloat((creatorReviews / creatorReviewsCount).toFixed(2));
 
             await Tables.updateOne({ id: parseInt(newReviews.table_id) }).set({ reviews: avgTableReview });
-
             // Update avgCreatorReview in ProfileMembers where id === creator_profile_id
-            await ProfileMembers.updateOne({ id: parseInt(newReviews.creator_profile_id) }).set({ reviews: avgCreatorReview });
-
+            await ProfileMembers.updateOne({ id: parseInt(newReviews.creator_profile_id) }).set({ reviews: avgCreatorReview, reviews_count: tableReviewsCount });
             // await CreatorReviews.updateOrCreate({ creator_profile_id: newReviews.creator_profile_id }, { creator_profile_id: newReviews.
         } catch (err) {
             console.error('Error updating reviews count:', err);

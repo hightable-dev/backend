@@ -11,89 +11,95 @@
 module.exports.policies = {
 
   'interests/users-interests-list': ['oauthBearer'],
-  // 'users/profile': ['oauthBearer'],
   'users/list': true,
   'users/create': true,
   'users/update': ['oauthBearer'],
   "users/view": ['oauthBearer'],
-  'users/login-email': true,
   'users/notification-status': true,
   'users/photo-upload': ['oauthBearer'],
-  // 'users/update': ['oauthBearer'],
   'users/notification': ['oauthBearer'],
-  'users/notification-status': ['oauthBearer'],
+  // 'users/notification-status': ['oauthBearer'],
 
-  /************************  Standard Tables ************************/ 
+  /************************  Standard Tables ************************/
   'standard-table/set-price': ['oauthBearer', 'isAdmin'],
   'standard-table/view-price': ['oauthBearer', 'isAdmin'],
 
-  /************************  Tables ************************/ 
+  /************************  Tables ************************/
   'tables/my-list': ['oauthBearer'],
-  'tables/create': ['oauthBearer', 'isMember'],
-  'tables/create-by-admin': ['oauthBearer', 'isManagerOrAdmin'],
-  'tables/table-status': ['oauthBearer','isManagerOrAdmin'],
+  'tables/create': ['oauthBearer'],
+  'tables/table-status': ['oauthBearer', 'isManagerOrAdmin'],
   'tables/cancel-table': ['oauthBearer'],
-  'tables/my-tables-list': ['oauthBearer'],
   'tables/list': ['oauthBearer'],
-  'tables/list-amdin': ['oauthBearer','isManagerOrAdmin'],
   'tables/update': ['oauthBearer'],
   'tables/table-search': ['oauthBearer'],
-  // 'tables/list-by-members-cateogry': ['oauthBearer'],
   'tables/view': ['oauthBearer'],
   'tables/view-web': true,
-
-  // 'tables/photo-upload': ['oauthBearer'],
   'tables/high-booked': ['oauthBearer'],
-  'tables/approved-list': ['oauthBearer'],
-  'tables/pending-list': ['oauthBearer', 'isManagerOrAdmin'],
-  // 'tables/approve-table': ['oauthBearer'],
-
   'tables/event-status-host': ['oauthBearer'],
   'tables/event-status-user': ['oauthBearer'],
+  'tables/video-upload': ['oauthBearer'],
+  'tables/media-upload': ['oauthBearer'],
 
-  /************************  Bookmark ************************/ 
+  /************************  Bookmark ************************/
   'bookmark/create': ['oauthBearer'],
   'bookmark/list': ['oauthBearer'],
 
-  /************************  Profile Members ************************/ 
+  /************************  Profile Members ************************/
   'profile-members/list': ['oauthBearer'],
   'profile-members/profile': ['oauthBearer'],
   'profile-members/update': ['oauthBearer'],
   'profile-members/view': ['oauthBearer'],
-  'profile-members/view-admin': ['oauthBearer','isAdmin'],
+  'profile-members/view-admin': ['oauthBearer', 'isAdmin'],
   'profile-members/activate': ['oauthBearer', 'isAdmin'],
   'profile-members/destroy-user': ['oauthBearer'],
+  'profile-members/photo-upload': ['oauthBearer'],
 
-  /************************ Table Booking ************************/ 
-  'table-booking':{
-    'list-admin': ['oauthBearer','isManagerOrAdmin'],
-    'list': ['oauthBearer'],
-    'book-table': ['oauthBearer', 'isMember'],
-    'booked-list-all': ['oauthBearer'],
-    'booked-my-tables': ['oauthBearer'],
-    'booked-my-tables-user-list': ['oauthBearer'],
-    'booked-all-my-list': ['oauthBearer'],
-    'capture-payment': ['oauthBearer'],
-    'refund': ['oauthBearer','isAdmin'],
-    'refund-payment': ['oauthBearer'],
-    'pay-order': ['oauthBearer'],
-    'accept-booking': ['oauthBearer'],
-
-  },
+  /************************ Table Booking ************************/
+  'table-booking/list-admin': ['oauthBearer', 'isManagerOrAdmin'],
+  'table-booking/list': ['oauthBearer'],
+  'table-booking/book-table': ['oauthBearer', 'isMember'],
+  'table-booking/booked-list-all': ['oauthBearer'],
+  'table-booking/booked-my-tables': ['oauthBearer'],
+  'table-booking/booked-my-tables-user-list': ['oauthBearer'],
+  'table-booking/booked-all-my-list': ['oauthBearer'],
+  'table-booking/capture-payment': ['oauthBearer'],
+  'table-booking/refund-payment': ['oauthBearer'],
+  'table-booking/accept-booking': ['oauthBearer'],
+  'table-booking/cancel-booking': ['oauthBearer'],
   'reviews/give-feedback': ['oauthBearer'],
   'followers/create': ['oauthBearer'],
- 
 
-  /************************ Managers ************************/ 
-  // 'manager/list': ['oauthBearer','isAdmin'],
-  'manager/view': ['oauthBearer','isAdmin'],
-  'manager/create': ['oauthBearer','isAdmin'],
-  'manager/activate': ['oauthBearer','isAdmin'],
-  'manager/update': ['oauthBearer','isAdmin'],
-  'manager/photo-upload': ['oauthBearer','isAdmin'],
+  /************************ Managers ************************/
+  'manager/view': ['oauthBearer', 'isAdmin'],
+  'manager/create': ['oauthBearer', 'isAdmin'],
+  'manager/activate': ['oauthBearer', 'isAdmin'],
+  'manager/update': ['oauthBearer', 'isAdmin'],
+  'manager/photo-upload': ['oauthBearer', 'isAdmin'],
 
-  /************************ Razorpay  ************************/ 
+  /************************ Razorpay  ************************/
   'razorpay/create-account': ['oauthBearer'],
-  'payout-host/payment-to-host': ['oauthBearer'],
+
+  /************************ Report  ************************/
+  'report/create-host': ['oauthBearer'],
+  'report/create-table': ['oauthBearer'],
+
 };
+
+/*
+ 'tables/list-by-members-cateogry': ['oauthBearer'],
+ 'users/login-email': true,
+ 'users/update': ['oauthBearer'],
+ 'payout-host/payment-to-host': ['oauthBearer'],
+ 'users/profile': ['oauthBearer'],
+ 'manager/list': ['oauthBearer','isAdmin'],
+ 'pay-order': ['oauthBearer'],
+ 'refund': ['oauthBearer','isAdmin'],
+ 'tables/approved-list': ['oauthBearer'],
+ 'tables/pending-list': ['oauthBearer', 'isManagerOrAdmin'],
+ 'tables/photo-upload': ['oauthBearer'],
+ 'tables/approve-table': ['oauthBearer'],
+ 'tables/my-tables-list': ['oauthBearer'],
+ 'tables/list-amdin': ['oauthBearer','isManagerOrAdmin'],
+ 'tables/create-by-admin': ['oauthBearer', 'isManagerOrAdmin'],
+*/
 
