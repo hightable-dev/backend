@@ -5,17 +5,19 @@
  *
  */
 
-module.exports = async function update(request, response) {
+module.exports = function update(request, response) {
     const profileId = request.user.profile_members;
 
     try {
         const postRequestData = request.body;
-        const { interests, instagram_id, instagram_data, phone, description,email, about_me, pronoun,linkedin_link, instagram_link, age, gender } = postRequestData;
+        const { first_name, last_name, interests, instagram_id, instagram_data, phone, description, email, about_me, pronoun, linkedin_link, instagram_link, age, gender, facebook_data, linkedin_data, x_data, x_link } = postRequestData;
 
         // Construct update data including interests, instagram_id, and instagram_data
-        const updateData = { interests, instagram_id, instagram_data, description ,email, about_me, pronoun, linkedin_link, instagram_link,age,gender };
+        const updateData = { first_name, last_name, interests, instagram_id, instagram_data, description, email, about_me, pronoun, linkedin_link, instagram_link, age, gender, facebook_data, linkedin_data, x_data, x_link };
 
         const inputAttributes = [
+            { name: 'first_name' },
+            { name: 'last_name' },
             { name: 'interests', type: Array },
             { name: 'instagram_id' },
             { name: 'phone' },
@@ -25,6 +27,11 @@ module.exports = async function update(request, response) {
             { name: 'pronoun' },
             { name: 'linkedin_link' },
             { name: 'instagram_link' },
+            { name: 'facebook_data' },
+            { name: 'linkedin_data' },
+            { name: 'instagram_data' },
+            { name: 'x_data' },
+            { name: 'x_link' },
             { name: 'age' },
             { name: 'gender' },
         ];
@@ -40,20 +47,23 @@ module.exports = async function update(request, response) {
                     }
 
                     // Encrypt the phone number before updating
-                    if (phone) {
-                        await phoneEncryptor.encrypt(phone, function (encryptedPhone) {
-                            updateData.phone = encryptedPhone;
-                        });
+                    if (phone && phone.trim() !== '' ) {
+                        // await phoneEncryptor.encrypt(phone, function (encryptedPhone) {
+                        //     updateData.phone = encryptedPhone;
+                        // });
+                        updateData.phone = UseDataService.phoneCrypto.encryptPhone(phone);
                     }
 
                     // Update profile member record with new data
-                    await ProfileMembers.updateOne({ id: profileId }).set(updateData);
+                    const updatedUser = await ProfileMembers.updateOne({ id: profileId }).set(updateData).fetch();
 
-                    // Fetch the updated profile member
-                    const updatedProfileMember = await ProfileMembers.findOne({ id: profileId });
+                    const getPercentileData = await UseDataService.profilePercentile(updatedUser);
 
-                    // Build and send response with updated details
-                    return response.ok({ message: 'Profile member data updated successfully', data: updatedProfileMember });
+                    if (getPercentileData > 100) {
+                        return response.status(500).json({ error: `Profile completion percentage cannot exceed 100. Calculated percentage: ${getPercentileData}` });
+                    }
+
+                    return response.ok({ message: 'Profile member data updated successfully', data: getPercentileData.updatedProfile });
                 } catch (error) {
                     console.error('Error updating profile member:', error);
                     return response.serverError(error);

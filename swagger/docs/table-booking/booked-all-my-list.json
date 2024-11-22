@@ -1,456 +1,128 @@
 {
-    "/booked-all-my-list": {
-        "tags": [
-            "Booking"
-        ],
-        "summary": "View all my bookings",
-        "description": "Allows a user to view all their bookings.",
-        "operationId": "bookedAllMyList",
-        "requestBody": {
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "creator_profile_id": {
-                                "type": "integer",
-                                "description": "ID of the creator profile",
-                                "example": 740
-                            },
-                            "follower_profile_id": {
-                                "type": "integer",
-                                "description": "ID of the follower profile",
-                                "example": 723
-                            }
-                        },
-                        "required": [
-                            "creator_profile_id",
-                            "follower_profile_id"
-                        ]
-                    }
-                }
-            },
-            "required": true
-        },
-        "responses": {
-            "200": {
-                "description": "Successful operation (Retrieved bookings)",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "type": "string",
-                                    "example": "Tables retrieved successfully."
-                                },
-                                "meta": {
-                                    "type": "object",
-                                    "properties": {
-                                        "page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "limit": {
-                                            "type": "integer",
-                                            "example": 10
-                                        },
-                                        "total": {
-                                            "type": "integer",
-                                            "example": 1
-                                        }
-                                    },
-                                    "required": [
-                                        "page",
-                                        "limit",
-                                        "total"
-                                    ]
-                                },
-                                "items": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "id": {
-                                                "type": "string",
-                                                "example": "512"
-                                            },
-                                            "seats": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "payment_id": {
-                                                "type": "string",
-                                                "example": "pay_Oj4nU0ynptoDsG"
-                                            },
-                                            "expires_at": {
-                                                "type": "integer",
-                                                "example": 100
-                                            },
-                                            "amount": {
-                                                "type": "integer",
-                                                "example": 35
-                                            },
-                                            "status": {
-                                                "type": "integer",
-                                                "example": 9
-                                            },
-                                            "refund_details": {
-                                                "type": "string",
-                                                "nullable": true
-                                            },
-                                            "event_done_flag": {
-                                                "type": "boolean",
-                                                "example": false
-                                            },
-                                            "creator_id": {
-                                                "type": "string",
-                                                "example": "723"
-                                            },
-                                            "table_id": {
-                                                "type": "string",
-                                                "example": "968"
-                                            },
-                                            "user_id": {
-                                                "type": "integer",
-                                                "example": 725
-                                            },
-                                            "table_details": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2024-08-10T05:09:50.360Z"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2024-08-10T05:11:29.426Z"
-                                                    },
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 968
-                                                    },
-                                                    "full_name": {
-                                                        "type": "string",
-                                                        "example": "Dgs"
-                                                    },
-                                                    "type": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "media": {
-                                                        "type": "string",
-                                                        "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/tables-media-968.jpg"
-                                                    },
-                                                    "video": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "example": "expirs aug 11"
-                                                    },
-                                                    "phone": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "min_seats": {
-                                                        "type": "integer",
-                                                        "example": 4
-                                                    },
-                                                    "max_seats": {
-                                                        "type": "integer",
-                                                        "example": 10
-                                                    },
-                                                    "booked_seats": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "booked": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "bookmarks": {
-                                                        "type": "integer",
-                                                        "example": 0
-                                                    },
-                                                    "followers": {
-                                                        "type": "integer",
-                                                        "example": 0
-                                                    },
-                                                    "title": {
-                                                        "type": "string",
-                                                        "example": "Flowser aug 11"
-                                                    },
-                                                    "price": {
-                                                        "type": "integer",
-                                                        "example": 35
-                                                    },
-                                                    "tags": {
-                                                        "type": "string",
-                                                        "example": "Celebrity"
-                                                    },
-                                                    "address": {
-                                                        "type": "string",
-                                                        "example": "Pondicherry, Puducherry, India"
-                                                    },
-                                                    "city": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "created_by": {
-                                                        "type": "integer",
-                                                        "example": 723
-                                                    },
-                                                    "event_date": {
-                                                        "type": "string",
-                                                        "example": "11-08-2024 05:09"
-                                                    },
-                                                    "reviews": {
-                                                        "type": "integer",
-                                                        "example": 0
-                                                    },
-                                                    "status": {
-                                                        "type": "integer",
-                                                        "example": 3
-                                                    },
-                                                    "admin_id": {
-                                                        "type": "integer",
-                                                        "example": 0
-                                                    },
-                                                    "user_type": {
-                                                        "type": "integer",
-                                                        "example": 2
-                                                    },
-                                                    "location": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "lat": {
-                                                                "type": "number",
-                                                                "format": "float",
-                                                                "example": 11.9415915
-                                                            },
-                                                            "lng": {
-                                                                "type": "number",
-                                                                "format": "float",
-                                                                "example": 79.8083133
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "lat",
-                                                            "lng"
-                                                        ]
-                                                    },
-                                                    "event_done_flag": {
-                                                        "type": "boolean",
-                                                        "example": false
-                                                    },
-                                                    "category": {
-                                                        "type": "integer",
-                                                        "example": 22
-                                                    },
-                                                    "category_name": {
-                                                        "type": "string",
-                                                        "example": "general"
-                                                    }
-                                                },
-                                                "required": [
-                                                    "created_at",
-                                                    "updated_at",
-                                                    "id",
-                                                    "full_name",
-                                                    "type",
-                                                    "media",
-                                                    "description",
-                                                    "min_seats",
-                                                    "max_seats",
-                                                    "booked_seats",
-                                                    "booked",
-                                                    "title",
-                                                    "price",
-                                                    "tags",
-                                                    "address",
-                                                    "created_by",
-                                                    "event_date",
-                                                    "status",
-                                                    "user_type",
-                                                    "location",
-                                                    "category",
-                                                    "category_name"
-                                                ]
-                                            },
-                                            "creator_details": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2024-05-13T06:08:50.944Z"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2024-08-01T08:17:50.298Z"
-                                                    },
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 723
-                                                    },
-                                                    "email": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "first_name": {
-                                                        "type": "string",
-                                                        "example": "Dgs"
-                                                    },
-                                                    "last_name": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "photo": {
-                                                        "type": "string",
-                                                        "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/members/members-photo-723.png"
-                                                    },
-                                                    "phone": {
-                                                        "type": "string",
-                                                        "example": "3c16ec70ea30c6f7d316901aeb0cfd31"
-                                                    },
-                                                    "street": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "address": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "city": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "state": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "postal_code": {
-                                                        "type": "string",
-                                                        "example": ""
-                                                    },
-                                                    "status": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "location": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "lat": {
-                                                                "type": "number",
-                                                                "format": "float",
-                                                                "example": 11.9415915
-                                                            },
-                                                            "lng": {
-                                                                "type": "number",
-                                                                "format": "float",
-                                                                "example": 79.8083133
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "lat",
-                                                            "lng"
-                                                        ]
-                                                    }
-                                                },
-                                                "required": [
-                                                    "created_at",
-                                                    "updated_at",
-                                                    "id",
-                                                    "email",
-                                                    "first_name",
-                                                    "last_name",
-                                                    "description",
-                                                    "photo",
-                                                    "phone",
-                                                    "street",
-                                                    "address",
-                                                    "city",
-                                                    "state",
-                                                    "postal_code",
-                                                    "status",
-                                                    "location"
-                                                ]
-                                            }
-                                        },
-                                        "required": [
-                                            "id",
-                                            "seats",
-                                            "payment_id",
-                                            "expires_at",
-                                            "amount",
-                                            "status",
-                                            "refund_details",
-                                            "event_done_flag",
-                                            "creator_id",
-                                            "table_id",
-                                            "user_id",
-                                            "table_details",
-                                            "creator_details"
-                                        ]
-                                    }
-                                }
-                            },
-                            "required": [
-                                "message",
-                                "meta",
-                                "items"
-                            ]
-                        }
-                    }
-                }
-            },
-            "400": {
-                "description": "Invalid input",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "type": "string",
-                                    "example": "Invalid input"
-                                }
-                            },
-                            "required": [
-                                "message"
-                            ]
-                        }
-                    }
-                }
-            },
-            "401": {
-                "description": "Unauthorized",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "type": "string",
-                                    "example": "Unauthorized access"
-                                }
-                            },
-                            "required": [
-                                "message"
-                            ]
-                        }
-                    }
-                }
-            }
+  "/table-booking/booked-all-my-list": {
+    "tags": [
+      "Table-booking"
+    ],
+    "summary": "Retrieve data of Table-booking - booked-all-my-list",
+    "description": "Use this API to retrieve data of table-booking - booked-all-my-list.",
+    "operationId": "table-booking/booked-all-my-list",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {},
+            "required": [
+              "0",
+              "1"
+            ]
+          }
         }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Request completed successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Operation completed successfully."
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }

@@ -4,22 +4,15 @@
 
 /* global _, ProfileManagers /sails */
 
-module.exports = async function createEventStatus(request, response) {
+module.exports = function createEventStatus(request, response) {
     try {
         const post_request_data = request.body;
-        const { table_id, creator_id, user_id } = post_request_data;
-
-        // Check if all required fields are present
-        // if (!table_type || !price || !admin_id || !admin_type) {
-        //     return response.status(400).json({ error: "Missing required fields." });
-        // }
 
         // Validate the model
         const input_attributes = [
             { name: 'table_id', required: true },
             { name: 'user_id', required: true },
         ];
-
         
         const _response_object = {};
         post_request_data.creator_id = ProfileMemberId(request);

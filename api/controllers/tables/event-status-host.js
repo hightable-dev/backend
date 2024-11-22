@@ -6,8 +6,9 @@
 const common = require('../../services/common');
 
 
-module.exports = async function update(request, response) {
-    const { pending, approved, reject, bookingClosed, eventCompleted } = tableStatusCode;
+module.exports = function update(request, response) {
+    // const { pending, approved, reject, bookingClosed, eventCompleted } = tableStatusCode;
+    const {eventCompleted } = UseDataService;
     try {
         const { table_id, event_done_flag, status } = request.body;
         const updateData = { event_done_flag, status };
@@ -61,38 +62,26 @@ module.exports = async function update(request, response) {
                                 };
                                 const eventDone = await EventStatus.create(requestData);
 
-                                await Notifications.create(
-                                    {
-                                        // sender: logged_in_user?.profile_members, // table created
-                                        sender: ProfileMemberId(request), // table created
-                                        // sender: checkEveStatus.created_by, // table created
-                                        type: "EventComplete",
-                                        message: `Notified to all users`,
-                                        table_id: table_id,
-                                        receiver: eventDone.user_id
+                                await UseDataService.sendNotification({
+                                    notification: {
+                                        senderId: ProfileMemberId(request),
+                                        type: 'eventCompleteStatus',
+                                        message: `We hope you enjoyed the '${checkEveStatus.title}'. As the event is ended, please click here to close the session..`,
+                                        receiverId: eventDone.user_id,
+                                        followUser: null,
+                                        tableId: table_id,
+                                        payOrderId: '',
+                                        isPaid: true,
+                                        templateId: 'EventComplete',
+                                        roomName: 'EventComplete_',
+                                        creatorId: checkEveStatus.created_by,
+                                        status: 1,
                                     },
-                                    async function (err, notification) {
-                                        var roomName = 'EventComplete' + notification?.receiver;
-                                        notification.user = notification?.receiver
-                                        socketService.notification(roomName, notification);
-
-                                        var push_data = {
-                                            // title: `${logged_in_user?.first_name} created ${createdTable?.title} table`,
-                                            title: `Your event completed the table is ${checkEveStatus.title} `,
-                                            message: checkEveStatus.description,
-                                            player_ids: `user-${eventDone.user_id}`,
-                                        };
-                                        push_data.data = {
-                                            templateId: 'EventComplete',
-                                            id: table_id,
-
-                                        };
-                                        await pushService.sendPush(push_data, function (data, error) {
-
-                                        })
-
+                                    pushMessage: {
+                                        title: 'Event Complete',
+                                        // message: `We hope you enjoyed the '${checkEveStatus.title}'. As the event is ended, please click here to close the session..`,
                                     }
-                                );
+                                });
                             });
 
                             const bookings = await TableBooking.find({ table_id: table_id });

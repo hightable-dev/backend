@@ -52,10 +52,22 @@
       "name": "index"
     },
     {
+      "name": "Fb"
+    },
+    {
       "name": "LinkedIn"
     },
     {
+      "name": "view"
+    },
+    {
+      "name": "test-capture-payment"
+    },
+    {
       "name": "create"
+    },
+    {
+      "name": "photo-upload"
     },
     {
       "name": "activate"
@@ -64,13 +76,7 @@
       "name": "update"
     },
     {
-      "name": "photo-upload"
-    },
-    {
-      "name": "view"
-    },
-    {
-      "name": "list"
+      "name": "Manager"
     },
     {
       "name": "set-price"
@@ -79,7 +85,7 @@
       "name": "view-price"
     },
     {
-      "name": "book-table"
+      "name": "list"
     },
     {
       "name": "list-admin"
@@ -91,10 +97,16 @@
       "name": "booked-my-tables-user-list"
     },
     {
+      "name": "accept-booking"
+    },
+    {
       "name": "booked-all-my-list"
     },
     {
       "name": "booked-my-tables"
+    },
+    {
+      "name": "book-table"
     },
     {
       "name": "capture-payment"
@@ -103,10 +115,10 @@
       "name": "refund-payment"
     },
     {
-      "name": "accept-booking"
+      "name": "cancel-booking"
     },
     {
-      "name": "destroy-user"
+      "name": "Bookmark"
     },
     {
       "name": "profile"
@@ -115,7 +127,16 @@
       "name": "view-admin"
     },
     {
+      "name": "destroy-user"
+    },
+    {
       "name": "create-account"
+    },
+    {
+      "name": "create-host"
+    },
+    {
+      "name": "create-table"
     }
   ],
   "components": {
@@ -169,18 +190,12 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/bookmarks-without-required-constraint"
-          },
-          {
-            "required": [
-              "table_id",
-              "user_id"
-            ]
           }
         ]
       },
       "bookmarks-without-required-constraint": {
         "type": "object",
-        "description": "Sails ORM Model **Bookmarks**",
+        "description": "Sails ORM Model **BookMarks**",
         "properties": {
           "created_at": {
             "type": "string",
@@ -202,15 +217,19 @@
             "type": "number",
             "format": "double"
           },
-          "creator_profile_id": {
-            "type": "number",
-            "format": "double"
-          },
           "table_id": {
             "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "creator_profile_id": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
               }
             ]
           },
@@ -274,36 +293,6 @@
           "trusted": {
             "type": "boolean",
             "default": false
-          }
-        }
-      },
-      "dataservice": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/dataservice-without-required-constraint"
-          }
-        ]
-      },
-      "dataservice-without-required-constraint": {
-        "type": "object",
-        "description": "Sails ORM Model **DataService**",
-        "properties": {
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Note Sails special attributes: autoCreatedAt"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Note Sails special attributes: autoUpdatedAt"
-          },
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "uniqueItems": true,
-            "description": "Note Sails special attributes: autoIncrement"
           }
         }
       },
@@ -454,6 +443,74 @@
                 "$ref": "#/components/schemas/users"
               }
             ]
+          }
+        }
+      },
+      "errordetail": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/errordetail-without-required-constraint"
+          }
+        ]
+      },
+      "errordetail-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **ErrorDetail**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "table_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "user_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "type": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "type_glossary": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "booking_id": {
+            "type": "number",
+            "format": "double",
+            "default": 0
+          },
+          "error_details": {},
+          "booking_details": {},
+          "issued_at": {
+            "type": "string"
+          },
+          "status": {
+            "type": "number",
+            "format": "double",
+            "default": 1,
+            "example": 1
           }
         }
       },
@@ -658,6 +715,10 @@
             "example": 50
           },
           "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "orderby": {
             "type": "number",
             "format": "double"
           }
@@ -1085,6 +1146,10 @@
             "nullable": true
           },
           "reviews": {},
+          "reviews_count": {
+            "type": "number",
+            "format": "double"
+          },
           "linked_account_id": {
             "type": "string"
           },
@@ -1094,13 +1159,22 @@
           "pronoun": {
             "type": "string"
           },
+          "instagram_data": {},
           "instagram_link": {
             "type": "string"
           },
           "linkedin_link": {
             "type": "string"
           },
+          "x_link": {
+            "type": "string"
+          },
+          "x_data": {},
           "table_count": {
+            "type": "number",
+            "format": "double"
+          },
+          "booked": {
             "type": "number",
             "format": "double"
           },
@@ -1111,6 +1185,8 @@
           "gender": {
             "type": "string"
           },
+          "account_details": {},
+          "profile_completion_status": {},
           "uu_id": {
             "type": "string"
           },
@@ -1163,6 +1239,110 @@
             "type": "string"
           },
           "token": {
+            "type": "string"
+          }
+        }
+      },
+      "reporthost": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/reporthost-without-required-constraint"
+          }
+        ]
+      },
+      "reporthost-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **ReportHost**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "table_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "user_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "status_glossary": {
+            "type": "string"
+          },
+          "host_complaint": {
+            "type": "string"
+          }
+        }
+      },
+      "reporttable": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/reporttable-without-required-constraint"
+          }
+        ]
+      },
+      "reporttable-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **ReportTable**",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoCreatedAt"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Note Sails special attributes: autoUpdatedAt"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "uniqueItems": true,
+            "description": "Note Sails special attributes: autoIncrement"
+          },
+          "table_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "creator_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "user_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "number",
+            "format": "double"
+          },
+          "status_glossary": {
+            "type": "string"
+          },
+          "table_complaint": {
             "type": "string"
           }
         }
@@ -1407,6 +1587,7 @@
           {
             "required": [
               "table_id",
+              "creator_id",
               "user_id"
             ]
           }
@@ -1431,22 +1612,6 @@
             "format": "int64",
             "uniqueItems": true,
             "description": "Note Sails special attributes: autoIncrement"
-          },
-          "table_id": {
-            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/tables"
-              }
-            ]
-          },
-          "user_id": {
-            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/profilemembers"
-              }
-            ]
           },
           "order_id": {
             "type": "string"
@@ -1476,7 +1641,34 @@
           "event_done_flag": {
             "type": "boolean"
           },
-          "creator_id": {}
+          "table_id": {
+            "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/tables"
+              }
+            ]
+          },
+          "creator_id": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          },
+          "user_id": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          },
+          "remarks": {},
+          "status_glossary": {
+            "type": "string"
+          }
         }
       },
       "tablestatus": {
@@ -1579,12 +1771,8 @@
             "type": "number",
             "format": "double"
           },
-          "media": {
-            "type": "string"
-          },
-          "video": {
-            "type": "string"
-          },
+          "media": {},
+          "video": {},
           "description": {
             "type": "string"
           },
@@ -1634,12 +1822,15 @@
           "city": {
             "type": "string"
           },
-          "created_by": {},
           "event_date": {
             "type": "string",
             "format": "date-time"
           },
           "reviews": {
+            "type": "number",
+            "format": "double"
+          },
+          "user_type": {
             "type": "number",
             "format": "double"
           },
@@ -1651,18 +1842,30 @@
             "type": "number",
             "format": "double"
           },
-          "user_type": {
-            "type": "number",
-            "format": "double"
-          },
-          "location": {},
           "event_done_flag": {
             "type": "boolean"
           },
           "state": {
             "type": "string"
           },
+          "district": {
+            "type": "string"
+          },
           "pincode": {
+            "type": "string"
+          },
+          "order_by": {
+            "type": "string"
+          },
+          "table_expense": {
+            "type": "number",
+            "format": "double"
+          },
+          "location": {},
+          "inclusion": {
+            "type": "string"
+          },
+          "exclusions": {
             "type": "string"
           },
           "category": {
@@ -1673,6 +1876,14 @@
               }
             ]
           },
+          "created_by": {
+            "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/profilemembers"
+              }
+            ]
+          },
           "user_profile": {
             "description": "JSON dictionary representing the **profilemembers** instance or FK when creating / updating / not populated",
             "oneOf": [
@@ -1680,6 +1891,9 @@
                 "$ref": "#/components/schemas/profilemembers"
               }
             ]
+          },
+          "format_geo_address": {
+            "type": "string"
           }
         }
       },
@@ -1775,7 +1989,6 @@
             "type": "string",
             "maxLength": 100
           },
-          "one_signal_push_tokens": {},
           "tokens": {},
           "last_active": {
             "type": "string",
@@ -1795,7 +2008,6 @@
             "nullable": true
           },
           "linkedin_data": {},
-          "onesignal_player_ids": {},
           "google_id": {
             "type": "string",
             "nullable": true
@@ -1806,10 +2018,6 @@
             "nullable": true
           },
           "apple_data": {},
-          "otp_session_id": {
-            "type": "string",
-            "nullable": true
-          },
           "uu_id": {
             "type": "string"
           },
@@ -1889,11 +2097,91 @@
     }
   },
   "paths": {
-    "/all-status-codes": {
+    "/status-codes": {
       "get": {
-        "summary": "/all-status-codes",
+        "summary": "/status-codes",
         "tags": [
           "index"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/fb-connect": {
+      "get": {
+        "summary": "/fb-connect",
+        "tags": [
+          "Fb"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/linkedin-connect": {
+      "get": {
+        "summary": "/linkedin-connect",
+        "tags": [
+          "LinkedIn"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/view": {
+      "get": {
+        "summary": "/table-booking/view",
+        "tags": [
+          "view"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/testpayment/capture": {
+      "post": {
+        "summary": "/testpayment/capture",
+        "tags": [
+          "test-capture-payment"
         ],
         "parameters": [],
         "responses": {
@@ -1969,6 +2257,26 @@
         }
       }
     },
+    "/manager/photo-upload": {
+      "post": {
+        "summary": "/manager/photo-upload",
+        "tags": [
+          "photo-upload"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/manager/activate": {
       "put": {
         "summary": "/manager/activate",
@@ -2009,26 +2317,6 @@
         }
       }
     },
-    "/manager/photo-upload": {
-      "post": {
-        "summary": "/manager/photo-upload",
-        "tags": [
-          "photo-upload"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
     "/manager/view": {
       "get": {
         "summary": "/manager/view",
@@ -2051,20 +2339,235 @@
     },
     "/manager/list": {
       "get": {
-        "summary": "/manager/list",
+        "summary": "Retrieve a manager list.",
+        "description": "Use this API to retrieve a manager list..",
+        "operationId": "manager/list",
         "tags": [
-          "list"
+          "Manager"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
+            "description": "Request form list retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Request form list retrieved successfully."
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "count": {
+                          "description": "Count of the meta data.",
+                          "type": "number",
+                          "example": 2
+                        },
+                        "total": {
+                          "description": "Total of the meta data.",
+                          "type": "number",
+                          "example": 2
+                        },
+                        "page": {
+                          "description": "Page of the meta data.",
+                          "type": "number",
+                          "example": 1
+                        },
+                        "limit": {
+                          "description": "Limit of the meta data.",
+                          "type": "number",
+                          "example": 3
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "created_at": {
+                            "description": "Created_at of the item.",
+                            "type": "object",
+                            "example": "2024-09-28T03:51:09.295Z"
+                          },
+                          "updated_at": {
+                            "description": "Updated_at of the item.",
+                            "type": "object",
+                            "example": "2024-09-28T03:51:09.295Z"
+                          },
+                          "id": {
+                            "description": "Id of the item.",
+                            "type": "number",
+                            "example": 108
+                          },
+                          "first_name": {
+                            "description": "First_name of the item.",
+                            "type": "string",
+                            "example": "man3 john"
+                          },
+                          "last_name": {
+                            "description": "Last_name of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "email": {
+                            "description": "Email of the item.",
+                            "type": "string",
+                            "example": "admin@hightable.ai"
+                          },
+                          "phone": {
+                            "description": "Phone of the item.",
+                            "type": "string",
+                            "example": "123"
+                          },
+                          "photo": {
+                            "description": "Photo of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "status_glossary": {
+                            "description": "Status_glossary of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "status": {
+                            "description": "Status of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "uu_id": {
+                            "description": "Uu_id of the item.",
+                            "type": "string",
+                            "example": "HPAzQV1PuS"
+                          },
+                          "account": {
+                            "description": "Account of the item.",
+                            "type": "number",
+                            "example": 1470
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page": {
+                    "description": "Page of the request.",
+                    "type": "integer",
+                    "example": 1,
+                    "minimum": 1
+                  },
+                  "limit": {
+                    "description": "Limit of the request.",
+                    "type": "integer",
+                    "example": 1,
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
           }
         }
       }
@@ -2089,11 +2592,77 @@
         }
       }
     },
+    "/interests/create": {
+      "post": {
+        "summary": "Create Interests",
+        "description": "Create a new **Interests** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "tags": [
+          "Interests"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the newly created **Interests** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/interests"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON dictionary representing the Interests instance to create.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/interests"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/interests/image-upload": {
+      "post": {
+        "summary": "/interests/image-upload",
+        "tags": [
+          "Interests"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/interests/list": {
       "get": {
-        "summary": "Retrieve a list of tables based on various filters.",
-        "description": "Use this API to retrieve a list of tables based on various filters..",
-        "operationId": "interestsList",
+        "summary": "Retrieve data of Interests - list",
+        "description": "Use this API to retrieve data of interests - list.",
+        "operationId": "interests/list",
         "tags": [
           "Interests"
         ],
@@ -2119,15 +2688,10 @@
                           "type": "number",
                           "example": 1
                         },
-                        "limit": {
-                          "description": "Limit of the meta data.",
-                          "type": "number",
-                          "example": 10
-                        },
                         "total": {
                           "description": "Total of the meta data.",
                           "type": "number",
-                          "example": 5
+                          "example": 7
                         }
                       }
                     },
@@ -2144,25 +2708,30 @@
                           "name": {
                             "description": "Name of the item.",
                             "type": "string",
-                            "example": "art"
+                            "example": "Travel"
                           },
                           "image": {
                             "description": "Image of the item.",
                             "type": "string",
-                            "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/interests-image-1.png"
+                            "example": ""
                           },
                           "width": {
                             "description": "Width of the item.",
                             "type": "number",
-                            "example": 11
+                            "example": 50
                           },
                           "height": {
                             "description": "Height of the item.",
                             "type": "number",
-                            "example": 11
+                            "example": 50
                           },
                           "status": {
                             "description": "Status of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "orderby": {
+                            "description": "Orderby of the item.",
                             "type": "number",
                             "example": 1
                           }
@@ -2175,19 +2744,89 @@
             }
           },
           "400": {
-            "description": "Bad request"
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
           },
           "403": {
-            "description": "You don't have permission to perform this action"
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "requestBody": {
@@ -2195,19 +2834,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
-                  "0": {
-                    "description": "0 of the request.",
-                    "type": "string"
-                  },
-                  "1": {
-                    "description": "1 of the request.",
-                    "type": "string"
-                  }
-                },
+                "properties": {},
                 "required": [
-                  "0",
-                  "1"
+                  "0"
                 ]
               }
             }
@@ -2238,26 +2867,6 @@
     "/interests/users-interests-list": {
       "get": {
         "summary": "/interests/users-interests-list",
-        "tags": [
-          "Interests"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/interests/image-upload": {
-      "post": {
-        "summary": "/interests/image-upload",
         "tags": [
           "Interests"
         ],
@@ -2315,228 +2924,1446 @@
         }
       }
     },
-    "/tables/create": {
-      "post": {
-        "summary": "Create Tables",
-        "description": "Create a new **Tables** record.",
-        "externalDocs": {
-          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
-          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
-        },
+    "/tables/list": {
+      "get": {
+        "summary": "Retrieve data of Tables - list",
+        "description": "Use this API to retrieve data of tables - list.",
+        "operationId": "tables/list",
         "tags": [
           "Tables"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Responds with a JSON dictionary representing the newly created **Tables** instance",
+            "description": "Request for list retrieved successfully.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/tables"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Request for list retrieved successfully."
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "description": "Total of the meta data.",
+                          "type": "number",
+                          "example": 4
+                        },
+                        "page": {
+                          "description": "Page of the meta data.",
+                          "type": "number",
+                          "example": 1
+                        },
+                        "limit": {
+                          "description": "Limit of the meta data.",
+                          "type": "number",
+                          "example": 50
+                        },
+                        "base_url": {
+                          "description": "Base_url of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                            "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                          }
+                        },
+                        "table_photo": {
+                          "description": "Table_photo of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                          }
+                        },
+                        "table_video": {
+                          "description": "Table_video of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                          }
+                        },
+                        "profile_photo": {
+                          "description": "Profile_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                        },
+                        "category_photo": {
+                          "description": "Category_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "created_at": {
+                            "description": "Created_at of the item.",
+                            "type": "object",
+                            "example": "2024-11-05T14:08:44.591Z"
+                          },
+                          "updated_at": {
+                            "description": "Updated_at of the item.",
+                            "type": "object",
+                            "example": "2024-11-15T06:50:39.859Z"
+                          },
+                          "id": {
+                            "description": "Id of the item.",
+                            "type": "string",
+                            "example": "560"
+                          },
+                          "full_name": {
+                            "description": "Full_name of the item.",
+                            "type": "string",
+                            "example": "Arshia  "
+                          },
+                          "type": {
+                            "description": "Type of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "media": {
+                            "description": "Media of the item.",
+                            "type": "string",
+                            "example": "image-560_1.webp"
+                          },
+                          "video": {
+                            "description": "Video of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "description": {
+                            "description": "Description of the item.",
+                            "type": "string",
+                            "example": "Hey guys\nI’m a model /social worker from Mumbai travelling to Bangalore next week for work. Looking forward to a good meal/ conversation 🌸"
+                          },
+                          "phone": {
+                            "description": "Phone of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "min_seats": {
+                            "description": "Min_seats of the item.",
+                            "type": "number",
+                            "example": 4
+                          },
+                          "max_seats": {
+                            "description": "Max_seats of the item.",
+                            "type": "number",
+                            "example": 6
+                          },
+                          "booked_seats": {
+                            "description": "Booked_seats of the item.",
+                            "type": "number",
+                            "example": 19
+                          },
+                          "booked": {
+                            "description": "Booked of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "bookmarks": {
+                            "description": "Bookmarks of the item.",
+                            "type": "number",
+                            "example": 8
+                          },
+                          "followers": {
+                            "description": "Followers of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "title": {
+                            "description": "Title of the item.",
+                            "type": "string",
+                            "example": "Newbie in Blr🌸"
+                          },
+                          "price": {
+                            "description": "Price of the item.",
+                            "type": "number",
+                            "example": 500
+                          },
+                          "tags": {
+                            "description": "Tags of the item.",
+                            "type": "string",
+                            "example": "Beginners,Student,Regional"
+                          },
+                          "address": {
+                            "description": "Address of the item.",
+                            "type": "string",
+                            "example": "Cafe Noir Indiranagar, 12th Main Road, HAL 2nd Stage, Appareddipalya, Indiranagar, Bengaluru, Karnataka, India"
+                          },
+                          "city": {
+                            "description": "City of the item.",
+                            "type": "string",
+                            "example": "Bengaluru"
+                          },
+                          "event_date": {
+                            "description": "Event_date of the item.",
+                            "type": "string",
+                            "example": "16-11-2024 16:00"
+                          },
+                          "reviews": {
+                            "description": "Reviews of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "user_type": {
+                            "description": "User_type of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "status": {
+                            "description": "Status of the item.",
+                            "type": "number",
+                            "example": 3
+                          },
+                          "admin_id": {
+                            "description": "Admin_id of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "event_done_flag": {
+                            "description": "Event_done_flag of the item.",
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "state": {
+                            "description": "State of the item.",
+                            "type": "string",
+                            "example": "Karnataka"
+                          },
+                          "district": {
+                            "description": "District of the item.",
+                            "type": "string",
+                            "example": "Bengaluru Urban"
+                          },
+                          "pincode": {
+                            "description": "Pincode of the item.",
+                            "type": "string",
+                            "example": "560038"
+                          },
+                          "order_by": {
+                            "description": "Order_by of the item.",
+                            "type": "string",
+                            "example": "01"
+                          },
+                          "table_expense": {
+                            "description": "Table_expense of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "location": {
+                            "description": "Location of the item.",
+                            "type": "object",
+                            "example": {
+                              "lat": 12.9700076,
+                              "lng": 77.6362704
+                            }
+                          },
+                          "inclusion": {
+                            "description": "Inclusion of the item.",
+                            "type": "string",
+                            "example": "One beverage of your choice"
+                          },
+                          "exclusions": {
+                            "description": "Exclusions of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "format_geo_address": {
+                            "description": "Format_geo_address of the item.",
+                            "type": "string",
+                            "example": "th Main Rd, near Indian Overseas Bank, North, Appareddipalya, Domlur, Bengaluru, Karnataka, India"
+                          },
+                          "category": {
+                            "description": "Category of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-09-18T09:41:23.033Z",
+                              "updated_at": "2024-09-18T09:41:23.033Z",
+                              "id": "7",
+                              "name": "Others",
+                              "image": "",
+                              "width": 50,
+                              "height": 50,
+                              "status": 1,
+                              "orderby": 7
+                            }
+                          },
+                          "created_by": {
+                            "description": "Created_by of the item.",
+                            "type": "number",
+                            "example": 1155
+                          },
+                          "user_profile": {
+                            "description": "User_profile of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-10-23T03:32:58.912Z",
+                              "updated_at": "2024-11-15T03:24:40.738Z",
+                              "id": 1155,
+                              "email": "",
+                              "first_name": "Arshia ",
+                              "last_name": "",
+                              "description": "",
+                              "photo": "members-photo-1155.png",
+                              "phone": "d47f33600d7beade53616e6119d5e883",
+                              "street": "",
+                              "address": "",
+                              "city": "",
+                              "state": "",
+                              "postal_code": "",
+                              "status": 1,
+                              "status_glossary": "",
+                              "about_me": "I’m a 23year old Model/ law student/Scuba diver etc etc rendering my million different interests in life. Looking for great meals,people&conversations",
+                              "one_signal_push_tokens": null,
+                              "tokens": null,
+                              "last_active": null,
+                              "last_checkin_via": "",
+                              "facebook_id": null,
+                              "facebook_data": null,
+                              "linkedin_id": null,
+                              "linkedin_data": null,
+                              "interests": [
+                                1,
+                                5,
+                                26,
+                                8,
+                                12,
+                                13,
+                                18,
+                                30
+                              ],
+                              "followers": 0,
+                              "google_id": null,
+                              "google_data": null,
+                              "otp_session_id": null,
+                              "reviews": null,
+                              "reviews_count": 0,
+                              "linked_account_id": "",
+                              "linked_product_id": "",
+                              "pronoun": "",
+                              "instagram_data": null,
+                              "instagram_link": "https://www.instagram.com/arshiarashidd?igsh=MTNzNXowdWUwaTE4dw==",
+                              "linkedin_link": "",
+                              "x_link": "",
+                              "x_data": null,
+                              "table_count": 4,
+                              "booked": 0,
+                              "age": 23,
+                              "gender": "Female",
+                              "account_details": null,
+                              "profile_completion_status": [
+                                100
+                              ],
+                              "uu_id": "rb5e8IR_mq",
+                              "account": 1508
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "Validation errors; details in JSON response"
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
-          }
-        },
-        "requestBody": {
-          "description": "JSON dictionary representing the Tables instance to create.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/tables"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
               }
             }
           }
-        }
-      }
-    },
-    "/tables/create-by-admin": {
-      "post": {
-        "summary": "/tables/create-by-admin",
-        "tags": [
-          "Tables"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/tables/table-status": {
-      "post": {
-        "summary": "/tables/table-status",
-        "tags": [
-          "Tables"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/tables/cancel-table": {
-      "put": {
-        "summary": "/tables/cancel-table",
-        "tags": [
-          "Tables"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/tables/list": {
-      "get": {
-        "summary": "/tables/list",
-        "tags": [
-          "Tables"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/tables/list-admin": {
-      "get": {
-        "summary": "/tables/list-admin",
-        "tags": [
-          "Tables"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
           }
         }
       }
     },
     "/tables/my-list": {
       "get": {
-        "summary": "/tables/my-list",
+        "summary": "Retrieve data of Tables - my-list",
+        "description": "Use this API to retrieve data of tables - my-list.",
+        "operationId": "tables/my-list",
         "tags": [
           "Tables"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
+            "description": "Request form list retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Request form list retrieved successfully."
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "count": {
+                          "description": "Count of the meta data.",
+                          "type": "number",
+                          "example": 3
+                        },
+                        "total": {
+                          "description": "Total of the meta data.",
+                          "type": "number",
+                          "example": 3
+                        },
+                        "page": {
+                          "description": "Page of the meta data.",
+                          "type": "number",
+                          "example": 1
+                        },
+                        "limit": {
+                          "description": "Limit of the meta data.",
+                          "type": "number",
+                          "example": 10
+                        },
+                        "base_url": {
+                          "description": "Base_url of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                            "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                          }
+                        },
+                        "table_photo": {
+                          "description": "Table_photo of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                          }
+                        },
+                        "table_video": {
+                          "description": "Table_video of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                          }
+                        },
+                        "profile_photo": {
+                          "description": "Profile_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                        },
+                        "category_photo": {
+                          "description": "Category_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "created_at": {
+                            "description": "Created_at of the item.",
+                            "type": "object",
+                            "example": "2024-11-03T23:00:27.026Z"
+                          },
+                          "updated_at": {
+                            "description": "Updated_at of the item.",
+                            "type": "object",
+                            "example": "2024-11-06T22:59:19.110Z"
+                          },
+                          "id": {
+                            "description": "Id of the item.",
+                            "type": "string",
+                            "example": "554"
+                          },
+                          "full_name": {
+                            "description": "Full_name of the item.",
+                            "type": "string",
+                            "example": "Test Account "
+                          },
+                          "type": {
+                            "description": "Type of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "media": {
+                            "description": "Media of the item.",
+                            "type": "string",
+                            "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/image-554_1.webp"
+                          },
+                          "video": {
+                            "description": "Video of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "description": {
+                            "description": "Description of the item.",
+                            "type": "string",
+                            "example": "Test"
+                          },
+                          "phone": {
+                            "description": "Phone of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "min_seats": {
+                            "description": "Min_seats of the item.",
+                            "type": "number",
+                            "example": 4
+                          },
+                          "max_seats": {
+                            "description": "Max_seats of the item.",
+                            "type": "number",
+                            "example": 5
+                          },
+                          "booked_seats": {
+                            "description": "Booked_seats of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "booked": {
+                            "description": "Booked of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "bookmarks": {
+                            "description": "Bookmarks of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "followers": {
+                            "description": "Followers of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "title": {
+                            "description": "Title of the item.",
+                            "type": "string",
+                            "example": "Test"
+                          },
+                          "price": {
+                            "description": "Price of the item.",
+                            "type": "number",
+                            "example": 299
+                          },
+                          "tags": {
+                            "description": "Tags of the item.",
+                            "type": "string",
+                            "example": "Celebrity"
+                          },
+                          "address": {
+                            "description": "Address of the item.",
+                            "type": "string",
+                            "example": "Puducherry, India"
+                          },
+                          "city": {
+                            "description": "City of the item.",
+                            "type": "string",
+                            "example": "Puducherry"
+                          },
+                          "event_date": {
+                            "description": "Event_date of the item.",
+                            "type": "string",
+                            "example": "26-11-2024 06:30"
+                          },
+                          "reviews": {
+                            "description": "Reviews of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "user_type": {
+                            "description": "User_type of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "status": {
+                            "description": "Status of the item.",
+                            "type": "number",
+                            "example": 6
+                          },
+                          "admin_id": {
+                            "description": "Admin_id of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "event_done_flag": {
+                            "description": "Event_done_flag of the item.",
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "state": {
+                            "description": "State of the item.",
+                            "type": "string",
+                            "example": "Puducherry"
+                          },
+                          "district": {
+                            "description": "District of the item.",
+                            "type": "string",
+                            "example": "Puducherry"
+                          },
+                          "pincode": {
+                            "description": "Pincode of the item.",
+                            "type": "string",
+                            "example": "605009"
+                          },
+                          "order_by": {
+                            "description": "Order_by of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "table_expense": {
+                            "description": "Table_expense of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "location": {
+                            "description": "Location of the item.",
+                            "type": "object",
+                            "example": {
+                              "lat": 11.9415915,
+                              "lng": 79.8083133
+                            }
+                          },
+                          "inclusion": {
+                            "description": "Inclusion of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "exclusions": {
+                            "description": "Exclusions of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "format_geo_address": {
+                            "description": "Format_geo_address of the item.",
+                            "type": "string",
+                            "example": "Pondicherry, Aruthra Nagar, Puducherry, India"
+                          },
+                          "category": {
+                            "description": "Category of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-09-18T09:41:23.033Z",
+                              "updated_at": "2024-09-18T09:41:23.033Z",
+                              "id": "7",
+                              "name": "Others",
+                              "image": "",
+                              "width": 50,
+                              "height": 50,
+                              "status": 1,
+                              "orderby": 7
+                            }
+                          },
+                          "created_by": {
+                            "description": "Created_by of the item.",
+                            "type": "number",
+                            "example": 1030
+                          },
+                          "user_profile": {
+                            "description": "User_profile of the item.",
+                            "type": "number",
+                            "example": 1030
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
           }
-        }
-      }
-    },
-    "/tables/table-search": {
-      "post": {
-        "summary": "/tables/table-search",
-        "tags": [
-          "Tables"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
           }
         }
       }
     },
     "/tables/high-booked": {
       "get": {
-        "summary": "/tables/high-booked",
+        "summary": "Retrieve data of Tables - high-booked",
+        "description": "Use this API to retrieve data of tables - high-booked.",
+        "operationId": "tables/high-booked",
         "tags": [
           "Tables"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
+            "description": "Request form list retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Request form list retrieved successfully."
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "count": {
+                          "description": "Count of the meta data.",
+                          "type": "number",
+                          "example": 4
+                        },
+                        "total": {
+                          "description": "Total of the meta data.",
+                          "type": "undefined"
+                        },
+                        "page": {
+                          "description": "Page of the meta data.",
+                          "type": "number",
+                          "example": 1
+                        },
+                        "limit": {
+                          "description": "Limit of the meta data.",
+                          "type": "number",
+                          "example": 7
+                        },
+                        "base_url": {
+                          "description": "Base_url of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                            "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                          }
+                        },
+                        "table_photo": {
+                          "description": "Table_photo of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                          }
+                        },
+                        "table_video": {
+                          "description": "Table_video of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                          }
+                        },
+                        "profile_photo": {
+                          "description": "Profile_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                        },
+                        "category_photo": {
+                          "description": "Category_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "created_at": {
+                            "description": "Created_at of the item.",
+                            "type": "object",
+                            "example": "2024-11-15T03:33:59.445Z"
+                          },
+                          "updated_at": {
+                            "description": "Updated_at of the item.",
+                            "type": "object",
+                            "example": "2024-11-15T06:50:39.859Z"
+                          },
+                          "id": {
+                            "description": "Id of the item.",
+                            "type": "string",
+                            "example": "580"
+                          },
+                          "full_name": {
+                            "description": "Full_name of the item.",
+                            "type": "string",
+                            "example": "Hightable "
+                          },
+                          "type": {
+                            "description": "Type of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "media": {
+                            "description": "Media of the item.",
+                            "type": "string",
+                            "example": "image-580_1.webp"
+                          },
+                          "video": {
+                            "description": "Video of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "description": {
+                            "description": "Description of the item.",
+                            "type": "string",
+                            "example": "Love street food?\nPriya Bala’s got you!\nThe renowned food critic and judge of Times Food Guide is serving up food stories and her new book."
+                          },
+                          "phone": {
+                            "description": "Phone of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "min_seats": {
+                            "description": "Min_seats of the item.",
+                            "type": "number",
+                            "example": 4
+                          },
+                          "max_seats": {
+                            "description": "Max_seats of the item.",
+                            "type": "number",
+                            "example": 10
+                          },
+                          "booked_seats": {
+                            "description": "Booked_seats of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "booked": {
+                            "description": "Booked of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "bookmarks": {
+                            "description": "Bookmarks of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "followers": {
+                            "description": "Followers of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "title": {
+                            "description": "Title of the item.",
+                            "type": "string",
+                            "example": "Best Street Food across India by Priya Bala"
+                          },
+                          "price": {
+                            "description": "Price of the item.",
+                            "type": "number",
+                            "example": 1000
+                          },
+                          "tags": {
+                            "description": "Tags of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "address": {
+                            "description": "Address of the item.",
+                            "type": "string",
+                            "example": "Thelagram, Bannerghatta Road, opposite Shell Petrol Pump, Dollar Layout, Phase 4, J. P. Nagar, Bengaluru, Karnataka, India"
+                          },
+                          "city": {
+                            "description": "City of the item.",
+                            "type": "string",
+                            "example": "Bengaluru"
+                          },
+                          "event_date": {
+                            "description": "Event_date of the item.",
+                            "type": "string",
+                            "example": "23-11-2024 16:00"
+                          },
+                          "reviews": {
+                            "description": "Reviews of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "user_type": {
+                            "description": "User_type of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "status": {
+                            "description": "Status of the item.",
+                            "type": "number",
+                            "example": 3
+                          },
+                          "admin_id": {
+                            "description": "Admin_id of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "event_done_flag": {
+                            "description": "Event_done_flag of the item.",
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "state": {
+                            "description": "State of the item.",
+                            "type": "string",
+                            "example": "Karnataka"
+                          },
+                          "district": {
+                            "description": "District of the item.",
+                            "type": "string",
+                            "example": "Bengaluru Urban"
+                          },
+                          "pincode": {
+                            "description": "Pincode of the item.",
+                            "type": "string",
+                            "example": "560078"
+                          },
+                          "order_by": {
+                            "description": "Order_by of the item.",
+                            "type": "string",
+                            "example": "01"
+                          },
+                          "table_expense": {
+                            "description": "Table_expense of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "location": {
+                            "description": "Location of the item.",
+                            "type": "object",
+                            "example": {
+                              "lat": 12.9057911,
+                              "lng": 77.60141879999999
+                            }
+                          },
+                          "inclusion": {
+                            "description": "Inclusion of the item.",
+                            "type": "string",
+                            "example": "🍹1 Beverage \n🥪1 Snack \n📖 Book "
+                          },
+                          "exclusions": {
+                            "description": "Exclusions of the item.",
+                            "type": "string",
+                            "example": "Anything else you choose to order"
+                          },
+                          "format_geo_address": {
+                            "description": "Format_geo_address of the item.",
+                            "type": "string",
+                            "example": "Dollar Layout, Phase, J. P. Nagar, Bengaluru, Karnataka, India"
+                          },
+                          "category": {
+                            "description": "Category of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-09-18T09:41:10.415Z",
+                              "updated_at": "2024-09-18T09:41:10.415Z",
+                              "id": "4",
+                              "name": "F&B",
+                              "image": "",
+                              "width": 50,
+                              "height": 50,
+                              "status": 1,
+                              "orderby": 4
+                            }
+                          },
+                          "created_by": {
+                            "description": "Created_by of the item.",
+                            "type": "number",
+                            "example": 1320
+                          },
+                          "user_profile": {
+                            "description": "User_profile of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-11-15T01:37:53.341Z",
+                              "updated_at": "2024-11-15T05:36:51.537Z",
+                              "id": 1320,
+                              "email": "",
+                              "first_name": "Hightable",
+                              "last_name": "",
+                              "description": "",
+                              "photo": "members-photo-1320.png",
+                              "phone": "fde7297d21c20d41ba3f110854e612f7",
+                              "street": "",
+                              "address": "",
+                              "city": "",
+                              "state": "",
+                              "postal_code": "",
+                              "status": 1,
+                              "status_glossary": "",
+                              "about_me": "Passionate about building meaningful connections in real life by bringing people together to network based on their interests.",
+                              "one_signal_push_tokens": null,
+                              "tokens": null,
+                              "last_active": null,
+                              "last_checkin_via": "",
+                              "facebook_id": null,
+                              "facebook_data": null,
+                              "linkedin_id": null,
+                              "linkedin_data": null,
+                              "interests": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7
+                              ],
+                              "followers": 0,
+                              "google_id": null,
+                              "google_data": null,
+                              "otp_session_id": null,
+                              "reviews": null,
+                              "reviews_count": 0,
+                              "linked_account_id": "",
+                              "linked_product_id": "",
+                              "pronoun": "",
+                              "instagram_data": null,
+                              "instagram_link": "https://www.instagram.com/Hightable.irl",
+                              "linkedin_link": "",
+                              "x_link": "https://www.x.com/Hightable_irl",
+                              "x_data": null,
+                              "table_count": 1,
+                              "booked": 0,
+                              "age": 0,
+                              "gender": "",
+                              "account_details": null,
+                              "profile_completion_status": [
+                                80
+                              ],
+                              "uu_id": "EoftTP14Bv",
+                              "account": 1673
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [
+                  "0"
+                ]
+              }
+            }
           }
         }
       }
     },
     "/tables/view": {
       "get": {
-        "summary": "/tables/view",
+        "summary": "Retrieve data of Tables - view",
+        "description": "Use this API to retrieve data of tables - view.",
+        "operationId": "tables/view",
         "tags": [
           "Tables"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Operation completed successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "Id of the request.",
+                    "type": "integer",
+                    "example": 1,
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "0"
+                ]
+              }
+            }
           }
         }
       }
@@ -2557,6 +4384,435 @@
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/table-search": {
+      "post": {
+        "summary": "Retrieve data of Tables - table-search",
+        "description": "Use this API to retrieve data of tables - table-search.",
+        "operationId": "tables/table-search",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Request form list retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Request form list retrieved successfully."
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "description": "Total of the meta data.",
+                          "type": "number",
+                          "example": 6
+                        },
+                        "page": {
+                          "description": "Page of the meta data.",
+                          "type": "number",
+                          "example": 1
+                        },
+                        "limit": {
+                          "description": "Limit of the meta data.",
+                          "type": "number",
+                          "example": 10
+                        },
+                        "base_url": {
+                          "description": "Base_url of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                            "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                          }
+                        },
+                        "table_photo": {
+                          "description": "Table_photo of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                          }
+                        },
+                        "table_video": {
+                          "description": "Table_video of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                          }
+                        },
+                        "profile_photo": {
+                          "description": "Profile_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                        },
+                        "category_photo": {
+                          "description": "Category_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "created_at": {
+                            "description": "Created_at of the item.",
+                            "type": "object",
+                            "example": "2024-11-04T11:10:23.258Z"
+                          },
+                          "updated_at": {
+                            "description": "Updated_at of the item.",
+                            "type": "object",
+                            "example": "2024-11-04T11:10:23.258Z"
+                          },
+                          "id": {
+                            "description": "Id of the item.",
+                            "type": "string",
+                            "example": "702"
+                          },
+                          "full_name": {
+                            "description": "Full_name of the item.",
+                            "type": "string",
+                            "example": "mohan "
+                          },
+                          "type": {
+                            "description": "Type of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "media": {
+                            "description": "Media of the item.",
+                            "type": "string",
+                            "example": "image-256_1.webp"
+                          },
+                          "video": {
+                            "description": "Video of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "description": {
+                            "description": "Description of the item.",
+                            "type": "string",
+                            "example": "Explore the ethical implications of AI and how to build responsible tech."
+                          },
+                          "phone": {
+                            "description": "Phone of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "min_seats": {
+                            "description": "Min_seats of the item.",
+                            "type": "number",
+                            "example": 5
+                          },
+                          "max_seats": {
+                            "description": "Max_seats of the item.",
+                            "type": "number",
+                            "example": 5
+                          },
+                          "booked_seats": {
+                            "description": "Booked_seats of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "booked": {
+                            "description": "Booked of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "bookmarks": {
+                            "description": "Bookmarks of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "followers": {
+                            "description": "Followers of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "title": {
+                            "description": "Title of the item.",
+                            "type": "string",
+                            "example": "Testing Prodction"
+                          },
+                          "price": {
+                            "description": "Price of the item.",
+                            "type": "number",
+                            "example": 99
+                          },
+                          "tags": {
+                            "description": "Tags of the item.",
+                            "type": "string",
+                            "example": "Beginners"
+                          },
+                          "address": {
+                            "description": "Address of the item.",
+                            "type": "string",
+                            "example": "Test Nove 05"
+                          },
+                          "city": {
+                            "description": "City of the item.",
+                            "type": "string",
+                            "example": "Puducherry"
+                          },
+                          "event_date": {
+                            "description": "Event_date of the item.",
+                            "type": "string",
+                            "example": "05-11-2024 00:00"
+                          },
+                          "reviews": {
+                            "description": "Reviews of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "user_type": {
+                            "description": "User_type of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "status": {
+                            "description": "Status of the item.",
+                            "type": "number",
+                            "example": 3
+                          },
+                          "admin_id": {
+                            "description": "Admin_id of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "event_done_flag": {
+                            "description": "Event_done_flag of the item.",
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "state": {
+                            "description": "State of the item.",
+                            "type": "string",
+                            "example": "Puducherry"
+                          },
+                          "district": {
+                            "description": "District of the item.",
+                            "type": "string",
+                            "example": "Puducherry"
+                          },
+                          "pincode": {
+                            "description": "Pincode of the item.",
+                            "type": "string",
+                            "example": "605001"
+                          },
+                          "table_expense": {
+                            "description": "Table_expense of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "location": {
+                            "description": "Location of the item.",
+                            "type": "object",
+                            "example": {
+                              "lat": 11.9338,
+                              "lng": 79.8298
+                            }
+                          },
+                          "format_geo_address": {
+                            "description": "Format_geo_address of the item.",
+                            "type": "string",
+                            "example": "Needarajapaiyer St, MG Road Area, Puducherry, India"
+                          },
+                          "category": {
+                            "description": "Category of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-09-18T09:42:06.348Z",
+                              "updated_at": "2024-09-18T09:42:06.348Z",
+                              "id": "49",
+                              "name": "Wine Lovers",
+                              "image": "",
+                              "width": 50,
+                              "height": 50,
+                              "status": 1,
+                              "orderby": 18
+                            }
+                          },
+                          "created_by": {
+                            "description": "Created_by of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "user_profile": {
+                            "description": "User_profile of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-10-23T06:19:13.085Z",
+                              "updated_at": "2024-11-04T11:10:23.307Z",
+                              "id": 1,
+                              "email": "",
+                              "first_name": "mohan",
+                              "last_name": "",
+                              "description": "",
+                              "photo": "",
+                              "phone": "2c823751c6edcd2db69c67f11a4a29ef",
+                              "street": "",
+                              "address": "",
+                              "city": "",
+                              "state": "",
+                              "postal_code": "",
+                              "status": 1,
+                              "status_glossary": "",
+                              "about_me": "",
+                              "one_signal_push_tokens": null,
+                              "tokens": null,
+                              "last_active": null,
+                              "last_checkin_via": "",
+                              "facebook_id": null,
+                              "facebook_data": null,
+                              "linkedin_id": null,
+                              "linkedin_data": null,
+                              "interests": null,
+                              "followers": 0,
+                              "google_id": null,
+                              "google_data": null,
+                              "otp_session_id": null,
+                              "reviews": null,
+                              "reviews_count": 0,
+                              "linked_account_id": "",
+                              "linked_product_id": "",
+                              "pronoun": "",
+                              "instagram_data": null,
+                              "instagram_link": "",
+                              "linkedin_link": "",
+                              "x_link": "",
+                              "x_data": null,
+                              "table_count": 7,
+                              "booked": 0,
+                              "age": 0,
+                              "gender": "",
+                              "profile_completion_status": [
+                                30
+                              ],
+                              "uu_id": "Mhw2_gwme_",
+                              "account": 3
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
           }
         }
       }
@@ -2584,6 +4840,457 @@
     "/tables/video-upload": {
       "post": {
         "summary": "/tables/video-upload",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tables/create": {
+      "post": {
+        "summary": "Create a table Tables - create",
+        "description": "Use this API to create a table tables - create.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "operationId": "tables/create",
+        "tags": [
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Table created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Table created successfully."
+                    },
+                    "details": {
+                      "type": "object",
+                      "properties": {
+                        "thumbnail": {
+                          "description": "Thumbnail of the details.",
+                          "type": "object",
+                          "example": null
+                        },
+                        "event_date2": {
+                          "description": "Event_date2 of the details.",
+                          "type": "object",
+                          "example": null
+                        },
+                        "created_at": {
+                          "description": "Created_at of the details.",
+                          "type": "object",
+                          "example": "2024-11-06T13:52:17.032Z"
+                        },
+                        "updated_at": {
+                          "description": "Updated_at of the details.",
+                          "type": "object",
+                          "example": "2024-11-06T13:52:17.032Z"
+                        },
+                        "id": {
+                          "description": "Id of the details.",
+                          "type": "string",
+                          "example": "744"
+                        },
+                        "full_name": {
+                          "description": "Full_name of the details.",
+                          "type": "string",
+                          "example": "Test user Hightable "
+                        },
+                        "type": {
+                          "description": "Type of the details.",
+                          "type": "number",
+                          "example": 2
+                        },
+                        "media": {
+                          "description": "Media of the details.",
+                          "type": "object",
+                          "example": null
+                        },
+                        "video": {
+                          "description": "Video of the details.",
+                          "type": "object",
+                          "example": null
+                        },
+                        "description": {
+                          "description": "Description of the details.",
+                          "type": "string",
+                          "example": "Understand how blockchain can impact large enterprises."
+                        },
+                        "phone": {
+                          "description": "Phone of the details.",
+                          "type": "string",
+                          "example": ""
+                        },
+                        "min_seats": {
+                          "description": "Min_seats of the details.",
+                          "type": "number",
+                          "example": 5
+                        },
+                        "max_seats": {
+                          "description": "Max_seats of the details.",
+                          "type": "number",
+                          "example": 5
+                        },
+                        "booked_seats": {
+                          "description": "Booked_seats of the details.",
+                          "type": "number",
+                          "example": 0
+                        },
+                        "booked": {
+                          "description": "Booked of the details.",
+                          "type": "number",
+                          "example": 0
+                        },
+                        "bookmarks": {
+                          "description": "Bookmarks of the details.",
+                          "type": "number",
+                          "example": 0
+                        },
+                        "followers": {
+                          "description": "Followers of the details.",
+                          "type": "number",
+                          "example": 0
+                        },
+                        "title": {
+                          "description": "Title of the details.",
+                          "type": "string",
+                          "example": "Blockchain for Enterprises"
+                        },
+                        "price": {
+                          "description": "Price of the details.",
+                          "type": "number",
+                          "example": 200
+                        },
+                        "tags": {
+                          "description": "Tags of the details.",
+                          "type": "string",
+                          "example": "Experts"
+                        },
+                        "address": {
+                          "description": "Address of the details.",
+                          "type": "string",
+                          "example": "Whitefield, Bengaluru"
+                        },
+                        "city": {
+                          "description": "City of the details.",
+                          "type": "string",
+                          "example": "Bengaluru"
+                        },
+                        "event_date": {
+                          "description": "Event_date of the details.",
+                          "type": "string",
+                          "example": "2024-10-07 08:00"
+                        },
+                        "reviews": {
+                          "description": "Reviews of the details.",
+                          "type": "number",
+                          "example": 0
+                        },
+                        "user_type": {
+                          "description": "User_type of the details.",
+                          "type": "number",
+                          "example": 2
+                        },
+                        "status": {
+                          "description": "Status of the details.",
+                          "type": "number",
+                          "example": 2
+                        },
+                        "admin_id": {
+                          "description": "Admin_id of the details.",
+                          "type": "number",
+                          "example": 0
+                        },
+                        "event_done_flag": {
+                          "description": "Event_done_flag of the details.",
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "state": {
+                          "description": "State of the details.",
+                          "type": "string",
+                          "example": "Karnataka"
+                        },
+                        "district": {
+                          "description": "District of the details.",
+                          "type": "string",
+                          "example": "Bengaluru Urban"
+                        },
+                        "pincode": {
+                          "description": "Pincode of the details.",
+                          "type": "string",
+                          "example": "560002"
+                        },
+                        "table_expense": {
+                          "description": "Table_expense of the details.",
+                          "type": "number",
+                          "example": 1
+                        },
+                        "location": {
+                          "description": "Location of the details.",
+                          "type": "object",
+                          "example": {
+                            "lat": 12.9716,
+                            "lng": 77.5946
+                          }
+                        },
+                        "inclusion": {
+                          "description": "Inclusion of the details.",
+                          "type": "string",
+                          "example": ""
+                        },
+                        "exclusions": {
+                          "description": "Exclusions of the details.",
+                          "type": "string",
+                          "example": ""
+                        },
+                        "format_geo_address": {
+                          "description": "Format_geo_address of the details.",
+                          "type": "string",
+                          "example": "KG Halli, D' Souza Layout, Ashok Nagar, Bengaluru, Karnataka, India"
+                        },
+                        "category": {
+                          "description": "Category of the details.",
+                          "type": "string",
+                          "example": "53"
+                        },
+                        "created_by": {
+                          "description": "Created_by of the details.",
+                          "type": "number",
+                          "example": 1183
+                        },
+                        "user_profile": {
+                          "description": "User_profile of the details.",
+                          "type": "number",
+                          "example": 1183
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "description": "Type of the request.",
+                    "type": "number",
+                    "example": 1
+                  },
+                  "description": {
+                    "description": "Description of the request.",
+                    "type": "string",
+                    "example": "Capture the wild beauty of nature at Guindy National Park."
+                  },
+                  "title": {
+                    "description": "Title of the request.",
+                    "type": "string",
+                    "example": "Prd APi 003"
+                  },
+                  "min_seats": {
+                    "description": "Min_seats of the request.",
+                    "type": "number",
+                    "example": 5
+                  },
+                  "max_seats": {
+                    "description": "Max_seats of the request.",
+                    "type": "number",
+                    "example": 5
+                  },
+                  "category": {
+                    "description": "Category of the request.",
+                    "type": "string",
+                    "example": "35"
+                  },
+                  "tags": {
+                    "description": "Tags of the request.",
+                    "type": "string",
+                    "example": "Business"
+                  },
+                  "event_date": {
+                    "description": "Event_date of the request.",
+                    "type": "string",
+                    "example": "2024-10-04T00:30:00.000Z"
+                  },
+                  "status": {
+                    "description": "Status of the request.",
+                    "type": "number",
+                    "example": 3
+                  },
+                  "location": {
+                    "description": "Location of the request.",
+                    "type": "object",
+                    "example": {
+                      "lat": 11.0168,
+                      "lng": 76.9558
+                    }
+                  },
+                  "user_type": {
+                    "description": "User_type of the request.",
+                    "type": "number",
+                    "example": 2
+                  },
+                  "table_expense": {
+                    "description": "Table_expense of the request.",
+                    "type": "number",
+                    "example": 1
+                  },
+                  "price": {
+                    "description": "Price of the request.",
+                    "type": "number",
+                    "example": 99
+                  }
+                },
+                "required": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                  "14",
+                  "15",
+                  "16",
+                  "17",
+                  "18",
+                  "19",
+                  "20",
+                  "21",
+                  "22",
+                  "23",
+                  "24",
+                  "25",
+                  "26",
+                  "27"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tables/table-status": {
+      "post": {
+        "summary": "/tables/table-status",
         "tags": [
           "Tables"
         ],
@@ -2641,11 +5348,147 @@
         }
       }
     },
-    "/table-booking/book-table": {
-      "post": {
-        "summary": "/table-booking/book-table",
+    "/tables/cancel-table": {
+      "put": {
+        "summary": "Delete data of Tables - cancel-table",
+        "description": "Use this API to delete data of tables - cancel-table.",
+        "operationId": "tables/cancel-table",
         "tags": [
-          "book-table"
+          "Tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Deleted successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "description": "Status of the request.",
+                    "type": "number",
+                    "example": 3,
+                    "minimum": 6
+                  }
+                },
+                "required": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/error-detail/list": {
+      "get": {
+        "summary": "/error-detail/list",
+        "tags": [
+          "list"
         ],
         "parameters": [],
         "responses": {
@@ -2741,6 +5584,26 @@
         }
       }
     },
+    "/table-booking/accept-booking": {
+      "get": {
+        "summary": "/table-booking/accept-booking",
+        "tags": [
+          "accept-booking"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/table-booking/booked-all-my-list": {
       "get": {
         "summary": "/table-booking/booked-all-my-list",
@@ -2766,6 +5629,26 @@
         "summary": "/table-booking/booked-my-tables",
         "tags": [
           "booked-my-tables"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/table-booking/book-table": {
+      "post": {
+        "summary": "/table-booking/book-table",
+        "tags": [
+          "book-table"
         ],
         "parameters": [],
         "responses": {
@@ -2821,11 +5704,11 @@
         }
       }
     },
-    "/table-booking/accept-booking": {
-      "get": {
-        "summary": "/table-booking/accept-booking",
+    "/table-booking/cancel-booking": {
+      "post": {
+        "summary": "/table-booking/cancel-booking",
         "tags": [
-          "accept-booking"
+          "cancel-booking"
         ],
         "parameters": [],
         "responses": {
@@ -2843,20 +5726,131 @@
     },
     "/reviews/give-feedback": {
       "post": {
-        "summary": "/reviews/give-feedback",
+        "summary": "Create a table Reviews - give-feedback",
+        "description": "Use this API to create a table reviews - give-feedback.",
+        "operationId": "reviews/give-feedback",
         "tags": [
           "Reviews"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Operation completed successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [
+                  "0",
+                  "1",
+                  "2",
+                  "3"
+                ]
+              }
+            }
           }
         }
       }
@@ -2883,20 +5877,129 @@
     },
     "/bookmark/list": {
       "get": {
-        "summary": "/bookmark/list",
+        "summary": "Retrieve data of Bookmark - list",
+        "description": "Use this API to retrieve data of bookmark - list.",
+        "operationId": "bookmark/list",
         "tags": [
-          "list"
+          "Bookmark"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
+            "description": "Request completed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Operation completed successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
           }
         }
       }
@@ -2943,46 +6046,6 @@
                 "$ref": "#/components/schemas/followers"
               }
             }
-          }
-        }
-      }
-    },
-    "/profile-members/create": {
-      "post": {
-        "summary": "/profile-members/create",
-        "tags": [
-          "create"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/profile-members/destroy-user": {
-      "delete": {
-        "summary": "/profile-members/destroy-user",
-        "tags": [
-          "destroy-user"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
           }
         }
       }
@@ -3127,6 +6190,46 @@
         }
       }
     },
+    "/profile-members/create": {
+      "post": {
+        "summary": "/profile-members/create",
+        "tags": [
+          "create"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/profile-members/destroy-user": {
+      "delete": {
+        "summary": "/profile-members/destroy-user",
+        "tags": [
+          "destroy-user"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/users/notification": {
       "post": {
         "summary": "/users/notification",
@@ -3232,6 +6335,46 @@
         "summary": "/razorpay/create-account",
         "tags": [
           "create-account"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/report/create-host": {
+      "post": {
+        "summary": "/report/create-host",
+        "tags": [
+          "create-host"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/report/create-table": {
+      "post": {
+        "summary": "/report/create-table",
+        "tags": [
+          "create-table"
         ],
         "parameters": [],
         "responses": {

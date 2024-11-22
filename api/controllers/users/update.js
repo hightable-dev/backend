@@ -5,7 +5,7 @@
  */
 
 /* global _, Users /sails */
-module.exports = async function update(request, response) {
+module.exports = function update(request, response) {
 
     const logged_in_user = request.user;
 

@@ -36,7 +36,7 @@ module.exports = async function list(request, response) {
         console.error('LinkedIn API Error:', error.response ? error.response.data : error.message);
 
         // Even if there's an error, send the access token in the response
-        if (error.response && error.response.data && error.response.data.access_token) {
+        if (error.response?.data?.access_token) {
             response.json({ accessToken: error.response.data.access_token });
         } else {
             response.status(500).send(error);

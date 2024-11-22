@@ -1,142 +1,426 @@
 {
-    "/tables/create": {
-        "tags": [
-            "Tables"
-        ],
-        "summary": "Create a table",
-        "description": "Use this API to create a new table.",
-        "operationId": "createTable",
-        "requestBody": {
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "type": {
-                                "description": "1 Standard, 2 for Premium",
-                                "type": "string",
-                                "example": "1"
-                            },
-                            "media": {
-                                "description": "Media associated with the event.",
-                                "type": "string",
-                                "example": "name.jpeg or name.mp4"
-                            },
-                            "min_seats": {
-                                "description": "Minimum number of seats.",
-                                "type": "integer",
-                                "example": 4
-                            },
-                            "max_seats": {
-                                "description": "Maximum number of seats.",
-                                "type": "integer",
-                                "example": 10
-                            },
-                            "event_date": {
-                                "description": "Date and time of the event.",
-                                "type": "string",
-                                "format": "date-time",
-                                "example": "2024-04-28T00:00:00Z"
-                            },
-                            "title": {
-                                "description": "Title of the event.",
-                                "type": "string",
-                                "example": "Tested from postman"
-                            },
-                            "description": {
-                                "description": "Description of the event.",
-                                "type": "string",
-                                "example": "The only way to do great work is to love what you do."
-                            },
-                            "category": {
-                                "description": "Category of the event.",
-                                "type": "integer",
-                                "example": 1
-                            },
-                            "price": {
-                                "description": "Price of the event. Not applicable if Table is standard.",
-                                "type": "integer",
-                                "example": 200
-                            },
-                            "tags": {
-                                "description": "Tags for the event.",
-                                "type": "string",
-                                "example": "Health"
-                            },
-                            "location": {
-                                "description": "Geographic location of the event.",
-                                "type": "object",
-                                "properties": {
-                                    "lat": {
-                                        "description": "Latitude of the event location.",
-                                        "type": "number",
-                                        "example": 70.7128
-                                    },
-                                    "lng": {
-                                        "description": "Longitude of the event location.",
-                                        "type": "number",
-                                        "example": -80.0060
-                                    }
-                                },
-                                "required": ["lat", "lng"]
-                            }
-                        },
-                        "required": [
-                            "type",
-                            "media",
-                            "min_seats",
-                            "max_seats",
-                            "title",
-                            "description",
-                            "category",
-                            "location",
-                            "event_date",
-                            "tags"
-                        ]
-                    }
+  "/tables/create": {
+    "tags": [
+      "Tables"
+    ],
+    "summary": "Create a table Tables - create",
+    "description": "Use this API to create a table tables - create.",
+    "operationId": "tables/create",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "Type of the request.",
+                "type": "number",
+                "example": 1
+              },
+              "description": {
+                "description": "Description of the request.",
+                "type": "string",
+                "example": "Capture the wild beauty of nature at Guindy National Park."
+              },
+              "title": {
+                "description": "Title of the request.",
+                "type": "string",
+                "example": "Prd APi 003"
+              },
+              "min_seats": {
+                "description": "Min_seats of the request.",
+                "type": "number",
+                "example": 5
+              },
+              "max_seats": {
+                "description": "Max_seats of the request.",
+                "type": "number",
+                "example": 5
+              },
+              "category": {
+                "description": "Category of the request.",
+                "type": "string",
+                "example": "35"
+              },
+              "tags": {
+                "description": "Tags of the request.",
+                "type": "string",
+                "example": "Business"
+              },
+              "event_date": {
+                "description": "Event_date of the request.",
+                "type": "string",
+                "example": "2024-10-04T00:30:00.000Z"
+              },
+              "status": {
+                "description": "Status of the request.",
+                "type": "number",
+                "example": 3
+              },
+              "location": {
+                "description": "Location of the request.",
+                "type": "object",
+                "example": {
+                  "lat": 11.0168,
+                  "lng": 76.9558
                 }
-         
-            }
-        },
-        "responses": {
-            "200": {
-                "description": "Table created successfully",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "id": {
-                                    "description": "Unique identifier of the created table.",
-                                    "type": "string",
-                                    "example": "abcd1234"
-                                },
-                                "message": {
-                                    "description": "Confirmation message.",
-                                    "type": "string",
-                                    "example": "Table created successfully."
-                                }
-                            },
-                            "required": [
-                                "id",
-                                "message"
-                            ]
-                        }
-                    }
-                }
+              },
+              "user_type": {
+                "description": "User_type of the request.",
+                "type": "number",
+                "example": 2
+              },
+              "table_expense": {
+                "description": "Table_expense of the request.",
+                "type": "number",
+                "example": 1
+              },
+              "price": {
+                "description": "Price of the request.",
+                "type": "number",
+                "example": 99
+              }
             },
-            "400": {
-                "description": "Bad request"
-            },
-            "401": {
-                "description": "Unauthorized"
-            },
-            "403": {
-                "description": "You don't have permission to perform this action"
-            },
-            "500": {
-                "description": "Internal server error"
-            }
+            "required": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "25",
+              "26",
+              "27"
+            ]
+          }
         }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Table created successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Table created successfully."
+                },
+                "details": {
+                  "type": "object",
+                  "properties": {
+                    "thumbnail": {
+                      "description": "Thumbnail of the details.",
+                      "type": "object",
+                      "example": null
+                    },
+                    "event_date2": {
+                      "description": "Event_date2 of the details.",
+                      "type": "object",
+                      "example": null
+                    },
+                    "created_at": {
+                      "description": "Created_at of the details.",
+                      "type": "object",
+                      "example": "2024-11-06T13:52:17.032Z"
+                    },
+                    "updated_at": {
+                      "description": "Updated_at of the details.",
+                      "type": "object",
+                      "example": "2024-11-06T13:52:17.032Z"
+                    },
+                    "id": {
+                      "description": "Id of the details.",
+                      "type": "string",
+                      "example": "744"
+                    },
+                    "full_name": {
+                      "description": "Full_name of the details.",
+                      "type": "string",
+                      "example": "Test user Hightable "
+                    },
+                    "type": {
+                      "description": "Type of the details.",
+                      "type": "number",
+                      "example": 2
+                    },
+                    "media": {
+                      "description": "Media of the details.",
+                      "type": "object",
+                      "example": null
+                    },
+                    "video": {
+                      "description": "Video of the details.",
+                      "type": "object",
+                      "example": null
+                    },
+                    "description": {
+                      "description": "Description of the details.",
+                      "type": "string",
+                      "example": "Understand how blockchain can impact large enterprises."
+                    },
+                    "phone": {
+                      "description": "Phone of the details.",
+                      "type": "string",
+                      "example": ""
+                    },
+                    "min_seats": {
+                      "description": "Min_seats of the details.",
+                      "type": "number",
+                      "example": 5
+                    },
+                    "max_seats": {
+                      "description": "Max_seats of the details.",
+                      "type": "number",
+                      "example": 5
+                    },
+                    "booked_seats": {
+                      "description": "Booked_seats of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "booked": {
+                      "description": "Booked of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "bookmarks": {
+                      "description": "Bookmarks of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "followers": {
+                      "description": "Followers of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "title": {
+                      "description": "Title of the details.",
+                      "type": "string",
+                      "example": "Blockchain for Enterprises"
+                    },
+                    "price": {
+                      "description": "Price of the details.",
+                      "type": "number",
+                      "example": 200
+                    },
+                    "tags": {
+                      "description": "Tags of the details.",
+                      "type": "string",
+                      "example": "Experts"
+                    },
+                    "address": {
+                      "description": "Address of the details.",
+                      "type": "string",
+                      "example": "Whitefield, Bengaluru"
+                    },
+                    "city": {
+                      "description": "City of the details.",
+                      "type": "string",
+                      "example": "Bengaluru"
+                    },
+                    "event_date": {
+                      "description": "Event_date of the details.",
+                      "type": "string",
+                      "example": "2024-10-07 08:00"
+                    },
+                    "reviews": {
+                      "description": "Reviews of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "user_type": {
+                      "description": "User_type of the details.",
+                      "type": "number",
+                      "example": 2
+                    },
+                    "status": {
+                      "description": "Status of the details.",
+                      "type": "number",
+                      "example": 2
+                    },
+                    "admin_id": {
+                      "description": "Admin_id of the details.",
+                      "type": "number",
+                      "example": 0
+                    },
+                    "event_done_flag": {
+                      "description": "Event_done_flag of the details.",
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "state": {
+                      "description": "State of the details.",
+                      "type": "string",
+                      "example": "Karnataka"
+                    },
+                    "district": {
+                      "description": "District of the details.",
+                      "type": "string",
+                      "example": "Bengaluru Urban"
+                    },
+                    "pincode": {
+                      "description": "Pincode of the details.",
+                      "type": "string",
+                      "example": "560002"
+                    },
+                    "table_expense": {
+                      "description": "Table_expense of the details.",
+                      "type": "number",
+                      "example": 1
+                    },
+                    "location": {
+                      "description": "Location of the details.",
+                      "type": "object",
+                      "example": {
+                        "lat": 12.9716,
+                        "lng": 77.5946
+                      }
+                    },
+                    "inclusion": {
+                      "description": "Inclusion of the details.",
+                      "type": "string",
+                      "example": ""
+                    },
+                    "exclusions": {
+                      "description": "Exclusions of the details.",
+                      "type": "string",
+                      "example": ""
+                    },
+                    "format_geo_address": {
+                      "description": "Format_geo_address of the details.",
+                      "type": "string",
+                      "example": "KG Halli, D' Souza Layout, Ashok Nagar, Bengaluru, Karnataka, India"
+                    },
+                    "category": {
+                      "description": "Category of the details.",
+                      "type": "string",
+                      "example": "53"
+                    },
+                    "created_by": {
+                      "description": "Created_by of the details.",
+                      "type": "number",
+                      "example": 1183
+                    },
+                    "user_profile": {
+                      "description": "User_profile of the details.",
+                      "type": "number",
+                      "example": 1183
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }

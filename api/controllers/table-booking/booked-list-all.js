@@ -5,14 +5,11 @@
 /* global _, ProfileManagers /sails */
 
 const moment = require('moment');
-// const searchService = require('../../services/common');
-// const paginationService = require('../../services/common');
 const common = require('../../services/common');
 
 module.exports = function list(request, response) {
 
-  const { pending, expired, paymentSuccess} = paymentStatusCode;
-
+  const { paymentSuccess} = UseDataService;
   const request_query = request.allParams();
   const { page, limit, search, date, to, category } = request_query;
   const filterData = ["payment_details", "created_at", "updated_at"]; // Specify fields to filter
@@ -43,7 +40,7 @@ module.exports = function list(request, response) {
       const limitNumber = parseInt(limit) || 10;
 
       // Fetch all tables without any filtering
-      TableBooking.find()
+     await TableBooking.find()
         .sort([{ created_at: 'DESC' }])
         .exec(async (err, tables) => {
           if (err) {
@@ -120,22 +117,18 @@ module.exports = function list(request, response) {
               const user = await Users.findOne({ id: parseInt(item.created_by) });
 
               // Assuming user.photo is the attribute that holds the user's photo
-              if (user && user.photo) {
+              if (user && user?.photo) {
                 // Assign the user's photo to the creator_photo property of the current item
                 item.creator_photo = sails.config.custom.filePath.users + user.photo;
-              } else {
-                console.log(`User ${item.created_by} does not have a photo.`);
-              }
+              } 
 
 
               const cateory = await Interests.findOne({ id: parseInt(item.category) });
       
               // Assuming user.photo is the attribute that holds the user's photo
-              if (cateory && cateory.name) {
+              if (cateory?.name) {
                   // Assign the user's photo to the creator_photo property of the current item
                   item.category = cateory.name;
-              } else {
-                  console.log(`User ${item.created_by} does not have a photo.`);
               }
 
             } catch (error) {

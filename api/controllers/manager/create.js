@@ -6,10 +6,11 @@
 
 
 module.exports = function create(request, response) {
-    
+
     const post_request_data = request.body;
     const filtered_post_data = _.pick(post_request_data, ['username', 'first_name', 'last_name', 'email', 'phone', 'pincode', 'password', 'dob', 'gender', 'address', 'city', 'state']);
     const Insert_post_data = _.pick(post_request_data, ['username', 'first_name', 'last_name', 'email', 'phone', 'pincode', 'password', 'dob', 'address', 'city', 'state']);
+    const {active} = UseDataService ;
 
     const input_attributes = [
         { name: 'username' },
@@ -21,7 +22,7 @@ module.exports = function create(request, response) {
     ];
 
     const filtered_post_keys = Object.keys(filtered_post_data);
-    Insert_post_data.status = statusCode.active;
+    Insert_post_data.status = active;
 
     const sendResponse = (details) => {
         const _response_object = {
@@ -29,6 +30,15 @@ module.exports = function create(request, response) {
             details: _.cloneDeep(details)
         };
         return response.ok(_response_object);
+    };
+
+    let handleError = (error) => {
+        console.error(error);
+        const _response_object = {
+            errors: [{ message: error.message }],
+            count: 1
+        };
+        return response.status(500).json(_response_object);
     };
 
     const createUser = async (post_data) => {
@@ -49,7 +59,7 @@ module.exports = function create(request, response) {
                 password: post_data.password,
                 last_checkin_via: 'web',
                 types: roles.manager,
-                status: statusCode.active,
+                status: active,
                 last_active: new Date(),
                 verified: true
             };
@@ -74,16 +84,9 @@ module.exports = function create(request, response) {
     };
 
 
-    const handleError = (error) => {
-        console.error(error);
-        const _response_object = {
-            errors: [{ message: error.message }],
-            count: 1
-        };
-        return response.status(500).json(_response_object);
-    };
 
-    validateModel.validate(ProfileManagers, input_attributes, filtered_post_data, async (valid, errors) => {
+
+    validateModel.validate(ProfileManagers, input_attributes, filtered_post_data, (valid, errors) => {
         if (valid) {
             if (filtered_post_keys.includes('email')) {
                 filtered_post_data.email = filtered_post_data.email.toLowerCase();

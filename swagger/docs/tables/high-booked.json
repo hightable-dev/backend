@@ -1,246 +1,455 @@
 {
-    "/tables/high-booked": {
-        "tags": [
-            "Tables"
-        ],
-        "summary": "Lists the highly booked at first ",
-        "description": "Displays item highly booked.",
-        "operationId": "tablesHighBooked",
-        "requestBody": {
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "page": {
-                                "description": "Page number to retrieve.",
-                                "type": "integer",
-                                "example": 1
-                            },
-                            "limit": {
-                                "description": "Number of items per page.",
-                                "type": "integer",
-                                "example": 10
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "responses": {
-            "200": {
-                "description": "Interests retrieved successfully.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "description": "Confirmation message.",
-                                    "type": "string",
-                                    "example": "Tables retrieved successfully."
-                                },
-                                "meta": {
-                                    "type": "object",
-                                    "properties": {
-                                        "page": {
-                                            "description": "Current page number.",
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "limit": {
-                                            "description": "Number of items per page.",
-                                            "type": "integer",
-                                            "example": 5
-                                        },
-                                        "total": {
-                                            "description": "Total number of items.",
-                                            "type": "integer",
-                                            "example": 6
-                                        }
-                                    }
-                                },
-                                "items": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "id": {
-                                                "description": "Unique identifier of the table.",
-                                                "type": "integer",
-                                                "example": 956
-                                            },
-                                            "full_name": {
-                                                "description": "Name of the person hosting the table.",
-                                                "type": "string",
-                                                "example": "Deepak"
-                                            },
-                                            "type": {
-                                                "description": "Type of the table.",
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "media": {
-                                                "description": "URL of the image associated with the table.",
-                                                "type": "string",
-                                                "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/photo/tables/tables-media-956.jpg"
-                                            },
-                                            "video": {
-                                                "description": "URL of the video associated with the table.",
-                                                "type": "string",
-                                                "nullable": true,
-                                                "example": null
-                                            },
-                                            "description": {
-                                                "description": "Description of the table.",
-                                                "type": "string",
-                                                "example": "I am hosting a curated table exclusively for Indian startup founders"
-                                            },
-                                            "phone": {
-                                                "description": "Phone number for contact.",
-                                                "type": "string",
-                                                "example": ""
-                                            },
-                                            "min_seats": {
-                                                "description": "Minimum number of seats.",
-                                                "type": "integer",
-                                                "example": 4
-                                            },
-                                            "max_seats": {
-                                                "description": "Maximum number of seats.",
-                                                "type": "integer",
-                                                "example": 10
-                                            },
-                                            "booked_seats": {
-                                                "description": "Number of booked seats.",
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "booked": {
-                                                "description": "Booking status (1 for booked, 0 for not booked).",
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "bookmarks": {
-                                                "description": "Number of bookmarks.",
-                                                "type": "integer",
-                                                "example": 0
-                                            },
-                                            "followers": {
-                                                "description": "Number of followers.",
-                                                "type": "integer",
-                                                "example": 0
-                                            },
-                                            "title": {
-                                                "description": "Title of the table.",
-                                                "type": "string",
-                                                "example": "Founders Table"
-                                            },
-                                            "price": {
-                                                "description": "Price of the table.",
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 35
-                                            },
-                                            "tags": {
-                                                "description": "Tags associated with the table.",
-                                                "type": "string",
-                                                "example": "Business"
-                                            },
-                                            "address": {
-                                                "description": "Address where the table is located.",
-                                                "type": "string",
-                                                "example": "Third Wave Coffee, Ganapathi Temple Road, Koramangala 8th Block, Koramangala, Bengaluru, Karnataka, India"
-                                            },
-                                            "city": {
-                                                "description": "City where the table is located.",
-                                                "type": "string",
-                                                "example": ""
-                                            },
-                                            "created_by": {
-                                                "description": "ID of the user who created the table.",
-                                                "type": "integer",
-                                                "example": 785
-                                            },
-                                            "event_date": {
-                                                "description": "Date and time of the event.",
-                                                "type": "string",
-                                                "format": "date-time",
-                                                "example": "09-09-2024 10:30"
-                                            },
-                                            "reviews": {
-                                                "description": "Number of reviews.",
-                                                "type": "integer",
-                                                "example": 0
-                                            },
-                                            "status": {
-                                                "description": "Status of the table.",
-                                                "type": "integer",
-                                                "example": 3
-                                            },
-                                            "admin_id": {
-                                                "description": "Admin ID associated with the table.",
-                                                "type": "integer",
-                                                "example": 0
-                                            },
-                                            "user_type": {
-                                                "description": "Type of user (e.g., 1 for admin, 2 for regular user).",
-                                                "type": "integer",
-                                                "example": 2
-                                            },
-                                            "location": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "lat": {
-                                                        "description": "Latitude of the table location.",
-                                                        "type": "number",
-                                                        "format": "float",
-                                                        "example": 12.9396226
-                                                    },
-                                                    "lng": {
-                                                        "description": "Longitude of the table location.",
-                                                        "type": "number",
-                                                        "format": "float",
-                                                        "example": 77.6194182
-                                                    }
-                                                }
-                                            },
-                                            "event_done_flag": {
-                                                "description": "Flag indicating if the event is done.",
-                                                "type": "boolean",
-                                                "example": false
-                                            },
-                                            "category": {
-                                                "description": "Category of the table.",
-                                                "type": "string",
-                                                "example": "startups"
-                                            },
-                                            "creator_photo": {
-                                                "description": "URL of the creator's photo.",
-                                                "type": "string",
-                                                "nullable": true,
-                                                "example": null
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "400": {
-                "description": "Bad request"
-            },
-            "401": {
-                "description": "Unauthorized"
-            },
-            "403": {
-                "description": "You don't have permission to perform this action"
-            },
-            "500": {
-                "description": "Internal server error"
-            }
+  "/tables/high-booked": {
+    "tags": [
+      "Tables"
+    ],
+    "summary": "Retrieve data of Tables - high-booked",
+    "description": "Use this API to retrieve data of tables - high-booked.",
+    "operationId": "tables/high-booked",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {},
+            "required": [
+              "0"
+            ]
+          }
         }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Request form list retrieved successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Request form list retrieved successfully."
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "description": "Count of the meta data.",
+                      "type": "number",
+                      "example": 4
+                    },
+                    "total": {
+                      "description": "Total of the meta data.",
+                      "type": "undefined"
+                    },
+                    "page": {
+                      "description": "Page of the meta data.",
+                      "type": "number",
+                      "example": 1
+                    },
+                    "limit": {
+                      "description": "Limit of the meta data.",
+                      "type": "number",
+                      "example": 7
+                    },
+                    "base_url": {
+                      "description": "Base_url of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                        "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                      }
+                    },
+                    "table_photo": {
+                      "description": "Table_photo of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                      }
+                    },
+                    "table_video": {
+                      "description": "Table_video of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                      }
+                    },
+                    "profile_photo": {
+                      "description": "Profile_photo of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                    },
+                    "category_photo": {
+                      "description": "Category_photo of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                    }
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "created_at": {
+                        "description": "Created_at of the item.",
+                        "type": "object",
+                        "example": "2024-11-15T03:33:59.445Z"
+                      },
+                      "updated_at": {
+                        "description": "Updated_at of the item.",
+                        "type": "object",
+                        "example": "2024-11-15T06:50:39.859Z"
+                      },
+                      "id": {
+                        "description": "Id of the item.",
+                        "type": "string",
+                        "example": "580"
+                      },
+                      "full_name": {
+                        "description": "Full_name of the item.",
+                        "type": "string",
+                        "example": "Hightable "
+                      },
+                      "type": {
+                        "description": "Type of the item.",
+                        "type": "number",
+                        "example": 2
+                      },
+                      "media": {
+                        "description": "Media of the item.",
+                        "type": "string",
+                        "example": "image-580_1.webp"
+                      },
+                      "video": {
+                        "description": "Video of the item.",
+                        "type": "object",
+                        "example": null
+                      },
+                      "description": {
+                        "description": "Description of the item.",
+                        "type": "string",
+                        "example": "Love street food?\nPriya Bala’s got you!\nThe renowned food critic and judge of Times Food Guide is serving up food stories and her new book."
+                      },
+                      "phone": {
+                        "description": "Phone of the item.",
+                        "type": "string",
+                        "example": ""
+                      },
+                      "min_seats": {
+                        "description": "Min_seats of the item.",
+                        "type": "number",
+                        "example": 4
+                      },
+                      "max_seats": {
+                        "description": "Max_seats of the item.",
+                        "type": "number",
+                        "example": 10
+                      },
+                      "booked_seats": {
+                        "description": "Booked_seats of the item.",
+                        "type": "number",
+                        "example": 2
+                      },
+                      "booked": {
+                        "description": "Booked of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "bookmarks": {
+                        "description": "Bookmarks of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "followers": {
+                        "description": "Followers of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "title": {
+                        "description": "Title of the item.",
+                        "type": "string",
+                        "example": "Best Street Food across India by Priya Bala"
+                      },
+                      "price": {
+                        "description": "Price of the item.",
+                        "type": "number",
+                        "example": 1000
+                      },
+                      "tags": {
+                        "description": "Tags of the item.",
+                        "type": "string",
+                        "example": ""
+                      },
+                      "address": {
+                        "description": "Address of the item.",
+                        "type": "string",
+                        "example": "Thelagram, Bannerghatta Road, opposite Shell Petrol Pump, Dollar Layout, Phase 4, J. P. Nagar, Bengaluru, Karnataka, India"
+                      },
+                      "city": {
+                        "description": "City of the item.",
+                        "type": "string",
+                        "example": "Bengaluru"
+                      },
+                      "event_date": {
+                        "description": "Event_date of the item.",
+                        "type": "string",
+                        "example": "23-11-2024 16:00"
+                      },
+                      "reviews": {
+                        "description": "Reviews of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "user_type": {
+                        "description": "User_type of the item.",
+                        "type": "number",
+                        "example": 2
+                      },
+                      "status": {
+                        "description": "Status of the item.",
+                        "type": "number",
+                        "example": 3
+                      },
+                      "admin_id": {
+                        "description": "Admin_id of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "event_done_flag": {
+                        "description": "Event_done_flag of the item.",
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "state": {
+                        "description": "State of the item.",
+                        "type": "string",
+                        "example": "Karnataka"
+                      },
+                      "district": {
+                        "description": "District of the item.",
+                        "type": "string",
+                        "example": "Bengaluru Urban"
+                      },
+                      "pincode": {
+                        "description": "Pincode of the item.",
+                        "type": "string",
+                        "example": "560078"
+                      },
+                      "order_by": {
+                        "description": "Order_by of the item.",
+                        "type": "string",
+                        "example": "01"
+                      },
+                      "table_expense": {
+                        "description": "Table_expense of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "location": {
+                        "description": "Location of the item.",
+                        "type": "object",
+                        "example": {
+                          "lat": 12.9057911,
+                          "lng": 77.60141879999999
+                        }
+                      },
+                      "inclusion": {
+                        "description": "Inclusion of the item.",
+                        "type": "string",
+                        "example": "🍹1 Beverage \n🥪1 Snack \n📖 Book "
+                      },
+                      "exclusions": {
+                        "description": "Exclusions of the item.",
+                        "type": "string",
+                        "example": "Anything else you choose to order"
+                      },
+                      "format_geo_address": {
+                        "description": "Format_geo_address of the item.",
+                        "type": "string",
+                        "example": "Dollar Layout, Phase, J. P. Nagar, Bengaluru, Karnataka, India"
+                      },
+                      "category": {
+                        "description": "Category of the item.",
+                        "type": "object",
+                        "example": {
+                          "created_at": "2024-09-18T09:41:10.415Z",
+                          "updated_at": "2024-09-18T09:41:10.415Z",
+                          "id": "4",
+                          "name": "F&B",
+                          "image": "",
+                          "width": 50,
+                          "height": 50,
+                          "status": 1,
+                          "orderby": 4
+                        }
+                      },
+                      "created_by": {
+                        "description": "Created_by of the item.",
+                        "type": "number",
+                        "example": 1320
+                      },
+                      "user_profile": {
+                        "description": "User_profile of the item.",
+                        "type": "object",
+                        "example": {
+                          "created_at": "2024-11-15T01:37:53.341Z",
+                          "updated_at": "2024-11-15T05:36:51.537Z",
+                          "id": 1320,
+                          "email": "",
+                          "first_name": "Hightable",
+                          "last_name": "",
+                          "description": "",
+                          "photo": "members-photo-1320.png",
+                          "phone": "fde7297d21c20d41ba3f110854e612f7",
+                          "street": "",
+                          "address": "",
+                          "city": "",
+                          "state": "",
+                          "postal_code": "",
+                          "status": 1,
+                          "status_glossary": "",
+                          "about_me": "Passionate about building meaningful connections in real life by bringing people together to network based on their interests.",
+                          "one_signal_push_tokens": null,
+                          "tokens": null,
+                          "last_active": null,
+                          "last_checkin_via": "",
+                          "facebook_id": null,
+                          "facebook_data": null,
+                          "linkedin_id": null,
+                          "linkedin_data": null,
+                          "interests": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7
+                          ],
+                          "followers": 0,
+                          "google_id": null,
+                          "google_data": null,
+                          "otp_session_id": null,
+                          "reviews": null,
+                          "reviews_count": 0,
+                          "linked_account_id": "",
+                          "linked_product_id": "",
+                          "pronoun": "",
+                          "instagram_data": null,
+                          "instagram_link": "https://www.instagram.com/Hightable.irl",
+                          "linkedin_link": "",
+                          "x_link": "https://www.x.com/Hightable_irl",
+                          "x_data": null,
+                          "table_count": 1,
+                          "booked": 0,
+                          "age": 0,
+                          "gender": "",
+                          "account_details": null,
+                          "profile_completion_status": [
+                            80
+                          ],
+                          "uu_id": "EoftTP14Bv",
+                          "account": 1673
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }

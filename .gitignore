@@ -118,6 +118,7 @@ logs
 # operating systems, file systems, dbs, etc.
 ################################################
 Z_HTTP
+notes
 *~
 *#
 .DS_STORE
@@ -135,4 +136,6 @@ lib-cov
 *.log
 *.out
 *.pid
+chat_*
+* copy*
 

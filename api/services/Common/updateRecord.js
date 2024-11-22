@@ -7,7 +7,7 @@
  * @returns {Promise<number>} - A promise that resolves to the number of updated records.
  */
 module.exports = async function (data) {
-    console.log('Updating records for model:', data.modelName, 'where matchCriteria:', data.matchCriteria, 'and update data:', data.values);
+    // console.log('Updating records for model:', data.modelName, 'where matchCriteria:', data.matchCriteria, 'and update data:', data.values);
     // Ensure the model exists
     const model = sails.models[data.modelName.toLowerCase()];
     if (!model) {
@@ -17,7 +17,6 @@ module.exports = async function (data) {
     try {
         // Perform the update query
         const updatedRecords = await model.update(data.matchCriteria).set(data.values).fetch();
-        console.log('Updated Records:', updatedRecords); // Log the count for debugging
         return updatedRecords;
     } catch (error) {
         sails.log.error('Error executing update query', error);

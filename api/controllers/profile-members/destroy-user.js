@@ -1,14 +1,14 @@
 const DataService = require("../../services/DataService");
 
 module.exports = async function userDestroy(request, response) {
-  const { deletedAccountTables } = tableStatusCode;
-  const profileId = request.user.profile_members;
-  const { payPending, orederExpired, refundRequest, refundSuccess, paymentSuccess } = paymentStatusCode;
+  const { deletedAccountTables, refundRequest, paymentSuccess } = UseDataService;
+  let errorDetails;
 
-  async function updateUserProfile(idArray) {
-    console.log("destory-user", parseInt(profileId));
-    const findUserProfile = await ProfileMembers.findOne({ id: profileId });
-    const findUser = await Users.findOne({ profile_members: parseInt(profileId) });
+  const profileId = request.user.profile_members;
+
+  async function updateUserProfile() {
+    const findUserProfile = await ProfileMembers.findOne({ id: ProfileMemberId(request) });
+    const findUser = await Users.findOne({ profile_members: ProfileMemberId(request) });
 
     if (!findUserProfile) {
       throw new Error("User profile not found.");
@@ -30,24 +30,17 @@ module.exports = async function userDestroy(request, response) {
   async function updateTables(data) {
     const findTables = await Tables.find(data);
 
-    // if (!findTables || findTables.length === 0) {
-    //   console.log("There are no tables for this user.");
-    // }
-
     const updatedTables = await Promise.all(
       findTables.map(async (table) => {
-        console.log("Processing table:", table);
 
         if (table.id) {
-          console.log("tableidiidd", table.id)
           try {
             const bookedList = await paidBooking(table.id);
-            console.log('bookedList', bookedList);
 
             if (bookedList) {
               await requestRefund(bookedList)
-              .then((result) => console.log('Refund requested successfully:', result))
-              .catch((error) => console.error('Error requesting refund:', error));
+                .then((result) => console.log('Refund requested successfully:', result))
+                .catch((error) => console.error('Error requesting refund:', error));
               await DataService.initiateRefund({
                 userId: profileId,
                 tableId: parseInt(table.id),
@@ -55,8 +48,12 @@ module.exports = async function userDestroy(request, response) {
             }
             return await Tables.updateOne({ id: table.id }).set({ status: deletedAccountTables });
           } catch (error) {
-            console.error(`Error processing table with ID ${table.id}:`, error);
+            errorDetails = error;
             throw new Error(`Failed to process table with ID ${table.id}`);
+          } 
+          finally {
+            console.log({ finally: 'This will always run' });
+            await TableBooking.updateOne({ table_id: table.id, status: paymentSuccess }).set({ status: deletedAccountTables, remarks: errorDetails, status_glossary: "deletedAccountTables" })
           }
         }
         return table;
@@ -81,7 +78,7 @@ module.exports = async function userDestroy(request, response) {
 
       for (const item of data) {
         if (item.table_id) {
-          const updatedBookings = await TableBooking.update({ table_id: item.table_id, status : paymentSuccess})
+          const updatedBookings = await TableBooking.update({ table_id: item.table_id, status: paymentSuccess })
             .set({ status: refundRequest })
             .fetch();
 
@@ -103,11 +100,9 @@ module.exports = async function userDestroy(request, response) {
 
     // Update the user profile and associated tables
     const updatedUserProfile = await updateUserProfile(profileId);
-    console.log('Updated User Profile:', updatedUserProfile);
 
     // Create a deleted user record in DeletedAccount
-    const deletedUserData = await DeletedAccount.create(updatedUserProfile);
-    console.log('Deleted User Data:', deletedUserData);
+    await DeletedAccount.create(updatedUserProfile);
 
     // Proceed to destroy users and profile members after table tasks are completed
     const delUser = await Users.destroy({ profile_members: profileId });

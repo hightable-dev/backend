@@ -17,7 +17,7 @@ module.exports = function list(request, response) {
     { name: 'limit', number: true, min: 1 }
   ];
 
-  validateModel.validate(null, input_attributes, { page, limit }, async function (valid, errors) {
+  validateModel.validate(null, input_attributes, { page, limit },  function (valid, errors) {
     if (valid) {
       const pageNumber = parseInt(page) || 1;
       const limitNumber = parseInt(limit) || 10;
@@ -25,7 +25,7 @@ module.exports = function list(request, response) {
       // Fetch all tables without any filtering
       StandardTable.find().limit(1)
         .sort([{ created_at: 'DESC' }])
-        .exec(async (err, tables) => {
+        .exec((err, tables) => {
           if (err) {
             console.error("Error occurred while fetching tables:", err);
             return response.serverError({ error: "Error occurred while fetching tables" });

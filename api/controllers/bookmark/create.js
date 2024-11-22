@@ -5,28 +5,31 @@
 /* global _, ProfileManagers /sails */
 
 module.exports = async function (request, response) {
-    // const profileId = request.user.profile_members;
-    const { pending, approved, rejected, bookingClosed, bookmarkTable } = tableStatusCode;
-
-    const ModelPrimary = Bookmarks;
+    const { bookmarkTable } = UseDataService;
+    const ModelPrimary = BookMarks;
     const ModelSecond = Tables;
     const setStatus = sails.config.custom.statusCode.active; //set default value
-    // const bookmarkTableddff = sails.config.custom.statusCode.bookmark; // change status for bookmark 13
-    //sails.config.custom.statusCode.follower;
     const post_request_data = request.body;
-    /*  user_id as userId ,table_id as tableId   */
-    const { user_id: userId, table_id: tableId } = post_request_data;
+    const { table_id: tableId } = post_request_data;
 
     let _response_object = {};
     const msg = "Bookmarks";
     const filtered_post_data = _.pick(post_request_data, ['user_id', 'table_id']);
 
-    // Destructure post_request_data object to extract userId and tableId
-
     const input_attributes = [
         { name: 'user_id' },
         { name: 'table_id', required: true }
     ];
+
+    /* Check table created by user */
+    const isCheckdata = await UseDataService.checkTableCreatedByCurrentUser({
+        tableId,
+        userId: ProfileMemberId(request)
+    })
+
+    if (isCheckdata) {
+        return response.status(400).json({ error: 'You cannot add to wishlist for your table.' });
+    }
 
     const sendResponse = (message, details) => {
         _response_object = { message };

@@ -1,6 +1,6 @@
 const RazorpayService = require('../../services/RazorpayService');
 
-module.exports = async function update(request, response) {
+module.exports = function update(request, response) {
     const { account_number, account_type, account_holder_name, IFSC_code } = request.body;
 
     const bankDetails = {account_number, account_type, account_holder_name, IFSC_code}
@@ -10,7 +10,7 @@ module.exports = async function update(request, response) {
         { name: 'account_holder_name', required: true },
         { name: 'IFSC_code', required: true },
     ];
-
+    let responseObject = {};
     // Define input attributes and perform validation
     validateModel.validate(null, inputAttributes, request.body, async function (valid, errors) {
         if (valid) {
@@ -64,7 +64,7 @@ module.exports = async function update(request, response) {
                 return response.status(500).json(error);
             }
         } else {
-            const responseObject = {
+            responseObject = {
                 errors: errors,
                 count: errors.length
             };

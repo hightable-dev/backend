@@ -1,15 +1,13 @@
 require('dotenv').config();
-
+const shortid = require('shortid');
 
 module.exports = {
     tableName: 'hightable_table_status',
     tableAlias: 'table_status',
     attributes: {
-        // type: { type: 'string', isIn: ['standard', 'premium'], required: true },
         table_id: { type: 'number' },
         status: { type: 'number' },
         admin_id: { type: 'number' },
-        // admin_type: { type: 'number'}, changed to user_type
         user_type: { type: 'number' },
         table_creator_id: { type: 'number' },
         last_checkin_via: { type: 'string' },

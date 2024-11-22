@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Media Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        img,
+        video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+
+        input {
+            margin: 10px;
+            padding: 5px;
+            width: 80%;
+        }
+
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .quality-buttons {
+            margin: 20px;
+        }
+
+        .size-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .highlight {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .url-info {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dynamic Media Viewer</h1>
+
+    <h2>Enter Video ID</h2>
+    <input type="text" id="videoIdInput" placeholder="Enter Video ID (e.g., 1252_1)" value="100_1">
+    <button onclick="updateVideoUrls()">Update Video</button>
+
+    <h2>Example Videos</h2>
+    <video id="videoPlayer" controls>
+        <!-- Sources will be generated here -->
+    </video>
+
+    <div class="size-info" id="sizeInfo">
+        <!-- URL and Size information will be displayed here -->
+    </div>
+
+    <div class="quality-buttons" id="qualityButtons">
+        <!-- Buttons will be generated here -->
+    </div>
+
+    <script>
+        const imageResolutions = [
+            { name: 'VerySmall', folder: 'verySmall' },
+            { name: 'Small', folder: 'small' },
+            { name: 'QVGA', folder: 'qvga' },
+            { name: 'Small to medium', folder: 'standardResolution' },
+            { name: 'Low resolution', folder: 'lowResolution' },
+            { name: 'Standard resolution', folder: 'standardResolution' },
+            { name: 'qHD', folder: 'qhd' },
+            { name: 'HD', folder: 'hd' },
+            { name: 'HD Plus', folder: 'hdPlus' },
+            { name: 'Full HD', folder: 'fullHd' }
+        ];
+
+        const videoPlayer = document.getElementById('videoPlayer');
+        const qualityButtonsContainer = document.getElementById('qualityButtons');
+        const videoIdInput = document.getElementById('videoIdInput');
+        const sizeInfo = document.getElementById('sizeInfo');
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return `${bytes} B`;
+            else if (bytes < 1048576) return `${(bytes / 1024).toFixed(0)} KB`;
+            else if (bytes < 1073741824) return `${(bytes / 1048576).toFixed(0)} MB`;
+            else return `${(bytes / 1073741824).toFixed(1)} GB`;
+        }
+
+        function updateVideoUrls() {
+            const videoId = videoIdInput.value;
+            if (!videoId) {
+                alert("Please enter a video ID.");
+                return;
+            }
+
+            // Clear existing sources, buttons, and info
+            videoPlayer.innerHTML = '';
+            qualityButtonsContainer.innerHTML = '';
+            sizeInfo.innerHTML = '';
+
+            imageResolutions.forEach(resolution => {
+                // Create video source elements
+                const sourceElement = document.createElement('source');
+                sourceElement.src = `https://s3.ap-south-1.amazonaws.com/high-table/public/video/tables/${resolution.folder}/video-${videoId}.mp4`;
+                sourceElement.type = 'video/mp4';
+                sourceElement.setAttribute('data-quality', resolution.folder);
+                videoPlayer.appendChild(sourceElement);
+
+                // Create quality buttons
+                const buttonElement = document.createElement('button');
+                buttonElement.textContent = resolution.name;
+                buttonElement.onclick = () => changeQuality(resolution.folder, videoId);
+                qualityButtonsContainer.appendChild(buttonElement);
+            });
+
+            // Load the first source as the default
+            videoPlayer.load();
+        }
+
+        function changeQuality(folder, videoId) {
+            const sources = videoPlayer.getElementsByTagName('source');
+            for (let i = 0; i < sources.length; i++) {
+                if (sources[i].getAttribute('data-quality') === folder) {
+                    videoPlayer.src = sources[i].src;
+                    videoPlayer.load();
+                    videoPlayer.play();
+
+                    // Display video info
+                    const url = sources[i].src;
+                    sizeInfo.innerHTML = `
+                <div class="url-info">
+                    URL: <span class="highlight">${url}</span>
+                </div>
+                <div class="highlight">
+                    Video ID: <span class="highlight">${videoId}</span>
+                </div>
+                <div class="highlight">
+                    Resolution: <span class="highlight">${folder}</span>
+                </div>
+                <div class="quality-buttons" id="qualityButtons">
+                </div>
+                <div class="url-info">Size: Calculating...</div>
+            `;
+
+                    // Display URL link
+                    const urlLink = document.getElementById('urlLink');
+                    urlLink.innerHTML = `
+                <a href="${url}" target="_blank">Click here to open the video in a new tab</a>
+            `;
+
+                    // Fetch and display video size
+                    fetch(url)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            const sizeInMB = formatSize(blob.size);
+                            sizeInfo.querySelector('.url-info').textContent = `Size: ${sizeInMB}`;
+                        })
+                        .catch(error => {
+                            sizeInfo.querySelector('.url-info').textContent = 'Size: Error fetching size';
+                            console.error('Error fetching video size:', error);
+                        });
+                    break;
+                }
+            }
+        }
+
+    </script>
+</body>
+
+</html>

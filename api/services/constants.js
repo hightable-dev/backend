@@ -3,6 +3,7 @@ const common = require('../services/common');
 const DataService = require('./DataService');
 const axios = require('axios');
 
+
 module.exports = {
   DATE_VALIDATIONS: [
     {
@@ -32,7 +33,7 @@ module.exports = {
   ProfileManagerId: (req) => req.user.profile_managers,
   ProfileMemberId: (req) => req.user.profile_members,
   ProfileAdminOrManagerId: (req) => req.user.profile_admin || req.user.profile_managers,
-  DataService: require('./DataService')
+  DataService,
   
 
 };

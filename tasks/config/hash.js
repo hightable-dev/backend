@@ -22,7 +22,8 @@ module.exports = function(grunt) {
         if (!source || !encoding) {
           throw new Error('Consistency violation: Cannot compute unique hash for production .css/.js cache-busting suffix, because `source` and/or `encoding` are falsey-- but they should be truthy strings!  Here they are, respectively:\nsource: '+require('util').inspect(source, {depth:null})+'\nencoding: '+require('util').inspect(encoding, {depth:null}));
         }
-        return require('crypto').createHash('sha1').update(source, encoding).digest('hex');
+        return require('crypto').createHash('sha256').update(source, encoding).digest('hex');
+        // Deep source issue sha1 replace with sha256
       }
     },
     js: {

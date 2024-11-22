@@ -3,65 +3,18 @@
     "tags": [
       "Tables"
     ],
-    "summary": "Retrieve a list of tables based on various filters.",
-    "description": "Use this API to retrieve a list of tables based on various filters..",
-    "operationId": "tablesList",
+    "summary": "Retrieve data of Tables - list",
+    "description": "Use this API to retrieve data of tables - list.",
+    "operationId": "tables/list",
     "requestBody": {
       "content": {
         "application/json": {
           "schema": {
             "type": "object",
-            "properties": {
-              "page": {
-                "description": "Page of the request.",
-                "type": "integer",
-                "example": 1
-              },
-              "limit": {
-                "description": "Limit of the request.",
-                "type": "integer",
-                "example": 10
-              },
-              "search": {
-                "description": "Search of the request.",
-                "type": "string",
-                "example": "searchTerm"
-              },
-              "from_date": {
-                "description": "From_date of the request.",
-                "type": "string",
-                "example": "2024-01-01T00:00:00Z"
-              },
-              "to_date": {
-                "description": "To_date of the request.",
-                "type": "string",
-                "example": "2024-01-31T23:59:59Z"
-              },
-              "category": {
-                "description": "Category of the request.",
-                "type": "integer",
-                "example": 1
-              },
-              "created_by": {
-                "description": "Created_by of the request.",
-                "type": "integer",
-                "example": 123
-              },
-              "type": {
-                "description": "Type of the request.",
-                "type": "integer",
-                "example": 2
-              }
-            },
+            "properties": {},
             "required": [
-              "page",
-              "limit",
-              "search",
-              "from_date",
-              "to_date",
-              "category",
-              "created_by",
-              "type"
+              "0",
+              "1"
             ]
           }
         }
@@ -69,7 +22,7 @@
     },
     "responses": {
       "200": {
-        "description": "Interests retrieved successfully.",
+        "description": "Request for list retrieved successfully.",
         "content": {
           "application/json": {
             "schema": {
@@ -78,11 +31,16 @@
                 "message": {
                   "description": "Success message.",
                   "type": "string",
-                  "example": "Interests retrieved successfully."
+                  "example": "Request for list retrieved successfully."
                 },
                 "meta": {
                   "type": "object",
                   "properties": {
+                    "total": {
+                      "description": "Total of the meta data.",
+                      "type": "number",
+                      "example": 4
+                    },
                     "page": {
                       "description": "Page of the meta data.",
                       "type": "number",
@@ -91,12 +49,41 @@
                     "limit": {
                       "description": "Limit of the meta data.",
                       "type": "number",
-                      "example": 10
+                      "example": 50
                     },
-                    "total": {
-                      "description": "Total of the meta data.",
-                      "type": "number",
-                      "example": 5
+                    "base_url": {
+                      "description": "Base_url of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                        "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                      }
+                    },
+                    "table_photo": {
+                      "description": "Table_photo of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                      }
+                    },
+                    "table_video": {
+                      "description": "Table_video of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                      }
+                    },
+                    "profile_photo": {
+                      "description": "Profile_photo of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                    },
+                    "category_photo": {
+                      "description": "Category_photo of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
                     }
                   }
                 },
@@ -105,35 +92,268 @@
                   "items": {
                     "type": "object",
                     "properties": {
+                      "created_at": {
+                        "description": "Created_at of the item.",
+                        "type": "object",
+                        "example": "2024-11-05T14:08:44.591Z"
+                      },
+                      "updated_at": {
+                        "description": "Updated_at of the item.",
+                        "type": "object",
+                        "example": "2024-11-15T06:50:39.859Z"
+                      },
                       "id": {
                         "description": "Id of the item.",
                         "type": "string",
-                        "example": "2"
+                        "example": "560"
                       },
-                      "name": {
-                        "description": "Name of the item.",
+                      "full_name": {
+                        "description": "Full_name of the item.",
                         "type": "string",
-                        "example": "comedy"
+                        "example": "Arshia  "
                       },
-                      "image": {
-                        "description": "Image of the item.",
+                      "type": {
+                        "description": "Type of the item.",
+                        "type": "number",
+                        "example": 2
+                      },
+                      "media": {
+                        "description": "Media of the item.",
                         "type": "string",
-                        "example": "https://s3.ap-south-1.amazonaws.com/high-table/public/image/interests/interests-image-2.png"
+                        "example": "image-560_1.webp"
                       },
-                      "width": {
-                        "description": "Width of the item.",
-                        "type": "number",
-                        "example": 11
+                      "video": {
+                        "description": "Video of the item.",
+                        "type": "object",
+                        "example": null
                       },
-                      "height": {
-                        "description": "Height of the item.",
+                      "description": {
+                        "description": "Description of the item.",
+                        "type": "string",
+                        "example": "Hey guys\nI’m a model /social worker from Mumbai travelling to Bangalore next week for work. Looking forward to a good meal/ conversation 🌸"
+                      },
+                      "phone": {
+                        "description": "Phone of the item.",
+                        "type": "string",
+                        "example": ""
+                      },
+                      "min_seats": {
+                        "description": "Min_seats of the item.",
                         "type": "number",
-                        "example": 11
+                        "example": 4
+                      },
+                      "max_seats": {
+                        "description": "Max_seats of the item.",
+                        "type": "number",
+                        "example": 6
+                      },
+                      "booked_seats": {
+                        "description": "Booked_seats of the item.",
+                        "type": "number",
+                        "example": 19
+                      },
+                      "booked": {
+                        "description": "Booked of the item.",
+                        "type": "number",
+                        "example": 2
+                      },
+                      "bookmarks": {
+                        "description": "Bookmarks of the item.",
+                        "type": "number",
+                        "example": 8
+                      },
+                      "followers": {
+                        "description": "Followers of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "title": {
+                        "description": "Title of the item.",
+                        "type": "string",
+                        "example": "Newbie in Blr🌸"
+                      },
+                      "price": {
+                        "description": "Price of the item.",
+                        "type": "number",
+                        "example": 500
+                      },
+                      "tags": {
+                        "description": "Tags of the item.",
+                        "type": "string",
+                        "example": "Beginners,Student,Regional"
+                      },
+                      "address": {
+                        "description": "Address of the item.",
+                        "type": "string",
+                        "example": "Cafe Noir Indiranagar, 12th Main Road, HAL 2nd Stage, Appareddipalya, Indiranagar, Bengaluru, Karnataka, India"
+                      },
+                      "city": {
+                        "description": "City of the item.",
+                        "type": "string",
+                        "example": "Bengaluru"
+                      },
+                      "event_date": {
+                        "description": "Event_date of the item.",
+                        "type": "string",
+                        "example": "16-11-2024 16:00"
+                      },
+                      "reviews": {
+                        "description": "Reviews of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "user_type": {
+                        "description": "User_type of the item.",
+                        "type": "number",
+                        "example": 2
                       },
                       "status": {
                         "description": "Status of the item.",
                         "type": "number",
-                        "example": 1
+                        "example": 3
+                      },
+                      "admin_id": {
+                        "description": "Admin_id of the item.",
+                        "type": "number",
+                        "example": 0
+                      },
+                      "event_done_flag": {
+                        "description": "Event_done_flag of the item.",
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "state": {
+                        "description": "State of the item.",
+                        "type": "string",
+                        "example": "Karnataka"
+                      },
+                      "district": {
+                        "description": "District of the item.",
+                        "type": "string",
+                        "example": "Bengaluru Urban"
+                      },
+                      "pincode": {
+                        "description": "Pincode of the item.",
+                        "type": "string",
+                        "example": "560038"
+                      },
+                      "order_by": {
+                        "description": "Order_by of the item.",
+                        "type": "string",
+                        "example": "01"
+                      },
+                      "table_expense": {
+                        "description": "Table_expense of the item.",
+                        "type": "number",
+                        "example": 2
+                      },
+                      "location": {
+                        "description": "Location of the item.",
+                        "type": "object",
+                        "example": {
+                          "lat": 12.9700076,
+                          "lng": 77.6362704
+                        }
+                      },
+                      "inclusion": {
+                        "description": "Inclusion of the item.",
+                        "type": "string",
+                        "example": "One beverage of your choice"
+                      },
+                      "exclusions": {
+                        "description": "Exclusions of the item.",
+                        "type": "string",
+                        "example": ""
+                      },
+                      "format_geo_address": {
+                        "description": "Format_geo_address of the item.",
+                        "type": "string",
+                        "example": "th Main Rd, near Indian Overseas Bank, North, Appareddipalya, Domlur, Bengaluru, Karnataka, India"
+                      },
+                      "category": {
+                        "description": "Category of the item.",
+                        "type": "object",
+                        "example": {
+                          "created_at": "2024-09-18T09:41:23.033Z",
+                          "updated_at": "2024-09-18T09:41:23.033Z",
+                          "id": "7",
+                          "name": "Others",
+                          "image": "",
+                          "width": 50,
+                          "height": 50,
+                          "status": 1,
+                          "orderby": 7
+                        }
+                      },
+                      "created_by": {
+                        "description": "Created_by of the item.",
+                        "type": "number",
+                        "example": 1155
+                      },
+                      "user_profile": {
+                        "description": "User_profile of the item.",
+                        "type": "object",
+                        "example": {
+                          "created_at": "2024-10-23T03:32:58.912Z",
+                          "updated_at": "2024-11-15T03:24:40.738Z",
+                          "id": 1155,
+                          "email": "",
+                          "first_name": "Arshia ",
+                          "last_name": "",
+                          "description": "",
+                          "photo": "members-photo-1155.png",
+                          "phone": "d47f33600d7beade53616e6119d5e883",
+                          "street": "",
+                          "address": "",
+                          "city": "",
+                          "state": "",
+                          "postal_code": "",
+                          "status": 1,
+                          "status_glossary": "",
+                          "about_me": "I’m a 23year old Model/ law student/Scuba diver etc etc rendering my million different interests in life. Looking for great meals,people&conversations",
+                          "one_signal_push_tokens": null,
+                          "tokens": null,
+                          "last_active": null,
+                          "last_checkin_via": "",
+                          "facebook_id": null,
+                          "facebook_data": null,
+                          "linkedin_id": null,
+                          "linkedin_data": null,
+                          "interests": [
+                            1,
+                            5,
+                            26,
+                            8,
+                            12,
+                            13,
+                            18,
+                            30
+                          ],
+                          "followers": 0,
+                          "google_id": null,
+                          "google_data": null,
+                          "otp_session_id": null,
+                          "reviews": null,
+                          "reviews_count": 0,
+                          "linked_account_id": "",
+                          "linked_product_id": "",
+                          "pronoun": "",
+                          "instagram_data": null,
+                          "instagram_link": "https://www.instagram.com/arshiarashidd?igsh=MTNzNXowdWUwaTE4dw==",
+                          "linkedin_link": "",
+                          "x_link": "",
+                          "x_data": null,
+                          "table_count": 4,
+                          "booked": 0,
+                          "age": 23,
+                          "gender": "Female",
+                          "account_details": null,
+                          "profile_completion_status": [
+                            100
+                          ],
+                          "uu_id": "rb5e8IR_mq",
+                          "account": 1508
+                        }
                       }
                     }
                   }
@@ -144,16 +364,89 @@
         }
       },
       "400": {
-        "description": "Bad request"
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
       },
       "401": {
-        "description": "Unauthorized"
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
       },
       "403": {
-        "description": "You don't have permission to perform this action"
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
       },
       "500": {
-        "description": "Internal server error"
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

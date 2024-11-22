@@ -21,7 +21,8 @@ module.exports = {
     return items.filter(item => {
       return columns.some(column => {
         const value = item[column];
-        if (typeof value === 'string' && value.toLowerCase().includes(lowercaseSearchTerm)) {
+        // if (typeof value === 'string' && value.toLowerCase().includes(lowercaseSearchTerm)) {
+        if (value.toLowerCase().includes(lowercaseSearchTerm)) {
           return true;
         }
         return false;

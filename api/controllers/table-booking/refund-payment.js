@@ -4,9 +4,9 @@ const RazorpayService = require('../../services/RazorpayService');
 const idempotencyKeyMap = new Map();
 
 module.exports = async function refundPayment(req, res) {
-    const profileId = req.user.profile_members;
-
-  const { payPending, orederExpired, refundRequest, refundSuccess, paymentSuccess } = paymentStatusCode;
+  // const profileId = req.user.profile_members;
+  // const { payPending, orederExpired, refundRequest, refundSuccess, paymentSuccess } = paymentStatusCode;
+  const { refundRequest, refundSuccess } = UseDataService;
 
   try {
     // const { paymentId } = req.body;
@@ -28,7 +28,7 @@ module.exports = async function refundPayment(req, res) {
       // Check if the idempotency key for this payment ID exists
       if (idempotencyKeyMap.has(payId)) {
         // If idempotency key exists, skip this paymentId
-        console.log(`Refund request is already in progress for payment ID: ${payId}`);
+        console.error(`Refund request is already in progress for payment ID: ${payId}`);
         continue;
       }
 
@@ -60,35 +60,40 @@ module.exports = async function refundPayment(req, res) {
         refundResponses.push(refundResponse);
 
         for (const data of bookings) {
-          const tableDetails = await Tables.findOne({ id: data.table_id });
-          const user = await Users.findOne({ profile_members: data.user_id });
-          // Do something with the user data here
-          await notificationService({
-            senderId: profileId    ,
-            type: 'Refund',
-            message: `Booking not accepted by the host for the ' Table title Here'.`,
-            receiverId: user?.profile_members,
-            followUser: null,
-            tableId: bookingTableId,
-            payOrderId: '',
-            isPaid: false,
-            templateId: 'refund',
-            roomName: 'Refund_',
-            creatorId: profileId,
-            status: 1, //reject
-            pushMsgTitle:`'${tableDetails.title.charAt(0).toUpperCase()}${tableDetails.title.slice(1)}' was cancelled.`,    // Title, Name ...
-            pushMessage: `Refund intitiated for the table '${tableDetails.title.charAt(0).toUpperCase()}${tableDetails.title.slice(1)}'.`
-        });
+          
+          const msg = await UseDataService.messages({tableId : bookingTableId, userId : data.user_id });
 
+          await UseDataService.sendNotification({
+            notification: {
+              senderId: ProfileMemberId(req),
+              type: 'Refund',
+              message: msg?.RefundSuccessMsg,
+              receiverId: data.user_id,
+              followUser: null,
+              tableId: bookingTableId,
+              payOrderId: '',
+              isPaid: true,
+              templateId: 'refundSuccess',
+              roomName: 'Refund_',
+              creatorId: data.user_id,
+              status: 1, // approved
+            },
 
+            pushMessage: {
+              title: 'High Table',
+              // message: msg?.RefundSuccessMsg,
+              tableId : bookingTableId,
+            }
+          });
         }
+
       } catch (error) {
         // Handle errors
         console.error(`Error occurred during refund for payment ID ${payId}:`, error);
-          // Remove the idempotency key from the map in case of error
-          idempotencyKeyMap.delete(payId);
+        // Remove the idempotency key from the map in case of error
+        idempotencyKeyMap.delete(payId);
         return res.status(400).json(error);
-      
+
       }
     }
 

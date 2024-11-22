@@ -51,7 +51,7 @@ module.exports = {
         instagram_link: { type: 'string'},
         linkedin_link: { type: 'string'},
         table_count: { type: 'number'},
-        age: { type: 'integer'},
+        age: { type: 'number'},
         gender: { type: 'string'},
         uu_id: {
             type: 'string'
@@ -63,29 +63,4 @@ module.exports = {
     
     },
   
-    // afterCreate: function (data, callback) {
-    //     console.log("aftercreate",data)
-    //     // user.uu_id = shortid.generate(user);
-    //     // if (user.password) {
-    //     //     bcrypt.hash(user.password, SALT_WORK_FACTOR, function (err, hash) {
-    //     //         user.password = hash;
-    //     //         return callback();
-    //     //     });
-    //     // } else {
-    //     //     return callback();
-    //     // }
-    // },
-    // beforeCreate: function (data, callback) {
-    //     console.log("beforeCreate",data)
-    //     // user.uu_id = shortid.generate(user);
-    //     // if (user.password) {
-    //     //     bcrypt.hash(user.password, SALT_WORK_FACTOR, function (err, hash) {
-    //     //         user.password = hash;
-    //     //         return callback();
-    //     //     });
-    //     // } else {
-    //     //     return callback();
-    //     // }
-    // },
- 
 };

@@ -8,7 +8,7 @@
  *   https://sailsjs.com/docs/concepts/policies
  *   https://sailsjs.com/docs/concepts/policies/access-control-and-permissions
  */
-module.exports = async function (req, res, proceed) {
+module.exports = function (req, res, proceed) {
 
   // If `req.me` is set, then we know that this request originated
   // from a logged-in user.  So we can safely proceed to the next policy--

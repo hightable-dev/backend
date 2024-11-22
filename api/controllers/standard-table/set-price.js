@@ -4,7 +4,7 @@
 
 /* global _, ProfileManagers /sails */
 
-module.exports = async function create(request, response) {
+module.exports = function create(request, response) {
     try {
         const post_request_data = request.body;
         const { price } = post_request_data;

@@ -10,7 +10,7 @@ module.exports = function defineCustomHook(sails) {
     /**
      * Runs when a Sails app loads/lifts.
      */
-    initialize: async function () {
+    initialize: function () {
 
       sails.log.info('Initializing project hook... (`api/hooks/custom/`)');
 
@@ -26,7 +26,7 @@ module.exports = function defineCustomHook(sails) {
         let suffix = '';
         if (_.contains(['silly'], sails.config.log.level)) {
           suffix =
-`
+            `
 > Tip: To exclude sensitive credentials from source control, use:
 > • config/local.js (for local development)
 > • environment variables (for production)
@@ -55,7 +55,7 @@ module.exports = function defineCustomHook(sails) {
         }
 
         sails.log.verbose(
-`Some optional settings have not been configured yet:
+          `Some optional settings have not been configured yet:
 ---------------------------------------------------------------------
 ${problems.join('\n')}
 
@@ -72,7 +72,7 @@ will be disabled and/or hidden in the UI.
 
       // After "sails-hook-organics" finishes initializing, configure Stripe
       // and Sendgrid packs with any available credentials.
-      sails.after('hook:organics:loaded', ()=>{
+      sails.after('hook:organics:loaded', () => {
 
         sails.helpers.stripe.configure({
           secret: sails.config.custom.stripeSecret
@@ -104,9 +104,9 @@ will be disabled and/or hidden in the UI.
       before: {
         '/*': {
           skipAssets: true,
-          fn: async function(req, res, next){
+          fn: async function (req, res, next) {
 
-            var url = require('url');
+            // var url = require('url');
 
             // First, if this is a GET request (and thus potentially a view),
             // attach a couple of guaranteed locals.
@@ -179,7 +179,7 @@ will be disabled and/or hidden in the UI.
             // wipe the user id from the requesting user agent's session,
             // and then send the "unauthorized" response.
             if (!loggedInUser) {
-              sails.log.warn('Somehow, the user record for the logged-in user (`'+req.session.userId+'`) has gone missing....');
+              sails.log.warn('Somehow, the user record for the logged-in user (`' + req.session.userId + '`) has gone missing....');
               delete req.session.userId;
               return res.unauthorized();
             }
@@ -201,19 +201,19 @@ will be disabled and/or hidden in the UI.
             // to the current timestamp.
             //
             // (Note: As an optimization, this is run behind the scenes to avoid adding needless latency.)
-            var MS_TO_BUFFER = 60*1000;
+            var MS_TO_BUFFER = 60 * 1000;
             var now = Date.now();
             if (loggedInUser.lastSeenAt < now - MS_TO_BUFFER) {
-              User.updateOne({id: loggedInUser.id})
-              .set({ lastSeenAt: now })
-              .exec((err)=>{
-                if (err) {
-                  sails.log.error('Background task failed: Could not update user (`'+loggedInUser.id+'`) with a new `lastSeenAt` timestamp.  Error details: '+err.stack);
-                  return;
-                }//•
-                sails.log.verbose('Updated the `lastSeenAt` timestamp for user `'+loggedInUser.id+'`.');
-                // Nothing else to do here.
-              });//_∏_  (Meanwhile...)
+              User.updateOne({ id: loggedInUser.id })
+                .set({ lastSeenAt: now })
+                .exec((err) => {
+                  if (err) {
+                    sails.log.error('Background task failed: Could not update user (`' + loggedInUser.id + '`) with a new `lastSeenAt` timestamp.  Error details: ' + err.stack);
+                    return;
+                  }//•
+                  sails.log.verbose('Updated the `lastSeenAt` timestamp for user `' + loggedInUser.id + '`.');
+                  // Nothing else to do here.
+                });//_∏_  (Meanwhile...)
             }//ﬁ
 
 

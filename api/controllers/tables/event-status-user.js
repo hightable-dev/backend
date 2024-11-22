@@ -9,12 +9,14 @@
 
 const common = require('../../services/common');
 
-module.exports = async function update(request, response) {
-    const { pending, approved, reject, bookingClosed, eventCompleted } = tableStatusCode;
+module.exports = function update(request, response) {
+    // const { pending, approved, reject, bookingClosed, eventCompleted } = tableStatusCode;
+    const { eventCompleted } = UseDataService;
+    const profileId = request.user.profile_members;
+
     try {
         let { table_id, event_done_flag, user_id } = request.body;
         const updateData = { event_done_flag };
-        let _response_object = {};
 
         // Validate input attributes
         const input_attributes = [
@@ -27,46 +29,32 @@ module.exports = async function update(request, response) {
         validateModel.validate(Tables, input_attributes, request.body, async function (valid, errors) {
             if (valid) {
                 try {
-
-                    const checkEveStatus = await EventStatus.findOne({ table_id: table_id, user_id: user_id });
+                    const checkEveStatus = await EventStatus.findOne({ table_id, user_id: profileId });
                     const tableDetails = await Tables.findOne({ id: table_id });
                     if (!checkEveStatus.event_done_flag) {
                         // Update data of the Tables
-                        const updatedEventStatus = await EventStatus.updateOne({ table_id: table_id, user_id: user_id }).set(updateData);
+                        const updatedEventStatus = await EventStatus.updateOne({ table_id: table_id, user_id: profileId }).set(updateData);
                         if (updatedEventStatus) {
-                            await Notifications.create(
-                                {
-                                    // sender: logged_in_user?.profile_members, // table created
-                                    sender: user_id, // table created
-                                    // sender: checkEveStatus.created_by, // table created
-                                    type: "EventAttend",
-                                    message: `Notified to creator`,
-                                    table_id: table_id,
-                                    receiver: tableDetails.created_by
+
+                            await UseDataService.sendNotification({
+                                notification: {
+                                    senderId: profileId,
+                                    type: 'eventCompleteStatus',
+                                    message: request?.user?.first_name ? `'${request?.user?.first_name}' closed session for the table '${tableDetails.title}'` :  `Closed session for the table '${tableDetails.title}'`,
+                                    receiverId:tableDetails.created_by,
+                                    followUser: null,
+                                    tableId: table_id,
+                                    payOrderId: '',
+                                    isPaid: true,
+                                    templateId: 'EventAttend',
+                                    roomName: 'EventAttend_',
+                                    creatorId: tableDetails.created_by,
+                                    status: 1,
                                 },
-                                async function (err, notification) {
-                                    var roomName = 'EventAttend' + notification?.receiver;
-                                    notification.user = notification?.receiver
-                                    socketService.notification(roomName, notification);
-
-                                    var push_data = {
-                                        // title: `${logged_in_user?.first_name} created ${createdTable?.title} table`,
-                                        title: `Thanks for the event ${checkEveStatus.title} `,
-                                        message: checkEveStatus.description,
-                                        player_ids: `user-${user_id}`,
-                                    };
-                                    push_data.data = {
-                                        templateId: 'EventAttend',
-                                        id: table_id,
-
-                                    };
-
-                                    await pushService.sendPush(push_data, function (data, error) {
-
-                                    })
-
+                                pushMessage: {
+                                    title: 'Event Complete',
                                 }
-                            );
+                            });
                         }
 
 

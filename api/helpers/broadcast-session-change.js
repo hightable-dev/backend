@@ -26,7 +26,7 @@ module.exports = {
   },
 
 
-  fn: async function ({ req }) {
+  fn: function ({ req }) {
 
     // If there's no sessionID, we don't need to broadcase a message about the old session.
     if(!req.sessionID) {
@@ -34,7 +34,7 @@ module.exports = {
     }
 
     let roomName = `session${_.deburr(req.sessionID)}`;
-    let messageText = `You have signed out or signed into a different session in another tab or window. Reload the page to refresh your session.`;
+    let messageText = 'You have signed out or signed into a different session in another tab or window. Reload the page to refresh your session.';
     sails.sockets.broadcast(roomName, 'session', { notificationText: messageText }, req);
 
 

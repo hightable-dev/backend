@@ -12,14 +12,12 @@ module.exports = function list(request, response) {
   ];
   const filterCondition = [];
 
-  // console.log
-
-  validateModel.validate(null, input_attributes, { page, limit }, async function (valid, errors) {
+  validateModel.validate(null, input_attributes, { page, limit }, function (valid, errors) {
     if (valid) {
       const pageNumber = parseInt(page) || 1;
       const limitNumber = parseInt(limit) || 10;
       Tags.find()
-        .exec(async (err, items) => {
+        .exec((err, items) => {
           if (err) {
             console.error("Error occurred while fetching items:", err);
             return response.serverError({ error: "Error occurred while fetching items" });

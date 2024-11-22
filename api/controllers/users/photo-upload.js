@@ -7,7 +7,7 @@ module.exports = async function updateFile(request, response) {
   try {
     const ModelPrimary = Users;
     // Extract necessary data from the request
-    const { allParams, _fileparser } = request;
+    const { _fileparser } = request;
  
     // Prepare data for processing
     const insertData = {};
@@ -41,14 +41,13 @@ module.exports = async function updateFile(request, response) {
 
     // Function to handle file upload
     const uploadFiles = async (image, callback) => {
-      try {
         const path = require("path");
         const filename = `${namePrefix}-${fieldName}-${userId}${path.extname(image.filename)}`;
         const filePath = s3Folder;
 
         insertData[fieldName] = filename;
 
-        await fileUpload.S3file(image, filePath, filename, [256, 512], async function (err, done) {
+        await fileUpload.S3file(image, filePath, filename, [256, 512], function (err, done) {
           if (err) {
             err.field = `${fieldName}`;
             throw err;
@@ -58,9 +57,6 @@ module.exports = async function updateFile(request, response) {
             }
           }
         });
-      } catch (err) {
-        throw err;
-      }
     };
 
     // Function to add a record
@@ -100,7 +96,7 @@ module.exports = async function updateFile(request, response) {
             fs.unlink(uploadedFile.fd, () => { });
             throw { field: `${fieldName}`, message: `${fieldName} should be only of type jpg, png or jpeg` };
           }
-          await uploadFiles(uploadedFile, async function (filename) { });
+          await uploadFiles(uploadedFile, async function () { });
         }
         await addRecord(insertData);
       } catch (err) {

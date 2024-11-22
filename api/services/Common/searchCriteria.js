@@ -6,7 +6,7 @@
  * @param {Array<string>} columns - The columns of each item to search within.
  * @returns {Array<Object>} - The filtered array of items where the search term is found in any specified column.
  */
-module.exports = async function (searchTerm, items, columns) {
+module.exports = function (searchTerm, items, columns) {
     if (!Array.isArray(items)) {
         throw new TypeError('Expected items to be an array');
     }

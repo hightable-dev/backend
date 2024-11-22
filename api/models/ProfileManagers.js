@@ -6,6 +6,12 @@
 //  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
 //  */
 
+
+var bcrypt = require('bcryptjs');
+var SALT_WORK_FACTOR = 10;
+
+const shortid = require('shortid');
+
 module.exports = {
     tableName: 'hightable_profile_managers',
     tableAlias: 'profile_managers',
@@ -54,8 +60,8 @@ module.exports = {
     },
        afterCreate: async function (profile, callback) {
             if (profile.id) {
-                await Users.findOne({ id: profile.account }, async function (err, user) {
-                    await Users.update({ id: profile.account }, { profile_managers: profile.id }, async function (err, updated_user) {
+                await Users.findOne({ id: profile.account }, async function () {
+                    await Users.update({ id: profile.account }, { profile_managers: profile.id },function () {
                         return callback();
                     });
                 });

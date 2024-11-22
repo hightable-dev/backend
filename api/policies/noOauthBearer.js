@@ -17,7 +17,7 @@
 
 var passport = require('passport');
 
-module.exports = async function (req, res, next) {
+module.exports = function (req, res, next) {
     if (req.query.access_token && req.query.access_token !== '') {
         passport.authenticate(
             'bearer',

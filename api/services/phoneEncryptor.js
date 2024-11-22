@@ -18,27 +18,26 @@
  */
 
 var crypto = require('crypto');
+require('dotenv').config();
 
-//DO NOT CHANGE THESE KEYS AT ANY COST
-const algorithm = 'aes-256-cbc';
-const cipher_key = 'HOPap4rM9BDhe2pujepyvM5gzPROFILE';
-const cipher_iv = '2636752361276683';
+const algorithm = process.env.PHONE_CRYPTO_ALGORITHM;
+const cipher_key = process.env.PHONE_CRYPTO_CIPHER_KEY;
+const cipher_iv = process.env.PHONE_CRYPTO_CIPHER_IV;
 
 exports.encrypt = function (phone, callback) {
     //Encryption
     let cipher = crypto.createCipheriv(algorithm, cipher_key, cipher_iv);
     let encrypted = cipher.update(phone.toString());
     encrypted = Buffer.concat([encrypted, cipher.final()]);
-    encrypted_text = encrypted.toString('hex');
+    const encrypted_text = encrypted.toString('hex');
     return callback(encrypted_text);
 };
 
 exports.decrypt = function (text, callback) {
-    //Decryption
     let encryptedText = Buffer.from(text, 'hex');
     let decipher = crypto.createDecipheriv(algorithm, cipher_key, cipher_iv);
     let decrypted = decipher.update(encryptedText);
     decrypted = Buffer.concat([decrypted, decipher.final()]);
-    decrypted_text = decrypted.toString();
+    const decrypted_text = decrypted.toString();
     return callback(decrypted_text);
 };

@@ -26,6 +26,7 @@ module.exports = function create(request, response) {
     };
 
     const createUsers = (post_data, message) => {
+        consoel.log("createUsers",{post_data, message})
         Users.create(post_data, async function (err, Users) {
             if (Users) {
                 sendResponse(message, Users);
@@ -39,7 +40,7 @@ module.exports = function create(request, response) {
         });
     }
 
-    validateModel.validate(Users, input_attributes, filtered_post_data, async function (valid, errors) {
+    validateModel.validate(Users, input_attributes, filtered_post_data, function (valid, errors) {
         if (valid) {
             createUsers(filtered_post_data);
         } else {

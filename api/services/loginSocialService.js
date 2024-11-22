@@ -36,10 +36,10 @@ module.exports = function signupSocial(request, response) {
             }
         };
 
-        const createUser = async (post_data, callback) => {
+        const createUser = async (post_data) => {
             const type = filtered_post_data.type;
 
-            var user_input = {
+            let user_input = {
                 user_role: 1,
                 last_active: new Date(),
                 last_checkin_via: type,
@@ -48,20 +48,20 @@ module.exports = function signupSocial(request, response) {
                 types: 2,
 
             };
-            if (type == "facebook") {
+            if (type === "facebook") {
                 user_input.username = [type + '_' + post_data.facebook_id];
                 user_input.facebook_id = post_data.facebook_id;
                 user_input.facebook_data = post_data;
             }
 
-            if (type == "apple") {
+            if (type === "apple") {
                 user_input.username = [type + '_' + post_data.apple_id];
                 user_input.apple_id = type + '_' + post_data.apple_id;
                 user_input.status = "1";
 
 
 
-            } else if (type == "google") {
+            } else if (type === "google") {
                 user_input.username = [type + '_' + post_data.google_id];
                 user_input.google_id = post_data.google_id;
                 user_input.google_data = post_data;
@@ -94,12 +94,14 @@ module.exports = function signupSocial(request, response) {
                 user_input.interests = post_data.interests;
             }
             if (post_data.email) {
-                user_input.handle = post_data.email;
+                // user_input.handle = post_data.email;
+                user_input.email = post_data.email;
             } else if (post_data.phone) {
-                user_input.handle = post_data.phone;
+                // user_input.handle = post_data.phone;
+                user_input.phone = post_data.phone;
             }
 
-            Users.create(user_input, async function (err, user) {
+          await Users.create(user_input, async function (err, user) {
                 if (err) {
                     await errorBuilder.build(err, function (error_obj) {
                         _response_object.errors = error_obj;
@@ -115,12 +117,12 @@ module.exports = function signupSocial(request, response) {
                             reject(err);
                         } else {
                             // Update the profile member id in Users table where column is profile_members
-                            Users.updateOne({ id: user.id }, { profile_members: profileMember.id }, async function (err, updatedUser) {
+                           await Users.updateOne({ id: user.id }, { profile_members: profileMember.id }, async function (err, updatedUser) {
                                 
                                 if (err) {
                                     reject(err);
                                 } else {
-                                    generateToken(updatedUser);
+                                   await generateToken(updatedUser);
                                 }
                             });
                         }
@@ -130,13 +132,17 @@ module.exports = function signupSocial(request, response) {
 
         };
 
-        const updateUser = (user_data, post_data, callback) => {
+        const updateUser = async (user_data, post_data) => {
             const type = filtered_post_data.type;
             var profile_input = {};
             profile_input[type + '_id'] = post_data.id;
             profile_input[type + '_data'] = post_data;
-            Users.update({ id: parseInt(user_data.id) }, profile_input, function (err, updated_user) {
-                generateToken(Array.isArray(updated_user) && updated_user?.length ? updated_user[0] : updated_user);
+            await Users.update({ id: parseInt(user_data.id) }, profile_input,async function (err, updated_user) {
+                if(err){
+                    console.error('Error occured in update user')
+                }
+
+              await  generateToken(Array.isArray(updated_user) && updated_user?.length ? updated_user[0] : updated_user);
             });
         };
 
@@ -160,8 +166,8 @@ module.exports = function signupSocial(request, response) {
                     socialId = post_data.apple_id;
                     break;
                 default:
-                    null;
-                // Handle unknown type
+                    console.warn(`Unknown type: ${type}`);
+                    return; // Or handle as appropriate
             }
             await findExistingSocialUser(type, socialId, async function (err, user) {
                 if (err) {
@@ -228,7 +234,7 @@ module.exports = function signupSocial(request, response) {
         };
 
         const generateToken = async (user) => {
-            RefreshTokens.create({ user_id: user.id, client_id: client.client_id }, function (err, refresh_token) {
+           await RefreshTokens.create({ user_id: user.id, client_id: client.client_id }, function (err, refresh_token) {
 
                 if (err) {
                     _response_object.message = 'Something wrong in generating refresh_token.';
@@ -295,7 +301,6 @@ module.exports = function signupSocial(request, response) {
                             error: 'Failed to fetch LinkedIn profile',
                             details: error
                         }
-
                         // return response.serverError('Failed to fetch LinkedIn profile');
                         return response.serverError(_response_object);
                     }

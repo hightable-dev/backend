@@ -1,137 +1,130 @@
 {
-    "/reviews/give-feedback": {
-        "tags": [
-            "Reviews"
-        ],
-        "summary": "Submit a review for the table",
-        "description": "Submit a review and rating for a table after an event.",
-        "operationId": "reviewsGiveFeedback",
-        "requestBody": {
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "table_id": {
-                                "type": "integer",
-                                "description": "ID of the table being reviewed",
-                                "example": 965
-                            },
-                            "reviews": {
-                                "type": "integer",
-                                "description": "Rating given for the table",
-                                "example": 3
-                            },
-                            "comments": {
-                                "type": "string",
-                                "description": "Additional comments about the table",
-                                "example": "good some 352"
-                            }
-                        },
-                        "required": [
-                            "table_id",
-                            "reviews",
-                            "comments"
-                        ]
-                    }
-                }
-            },
-            "required": true
-        },
-        "responses": {
-            "200": {
-                "description": "Review created successfully.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "type": "string",
-                                    "example": "Reviews created successfully."
-                                },
-                                "reviews": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "1"
-                                        },
-                                        "created_at": {
-                                            "type": "string",
-                                            "format": "date-time",
-                                            "example": "2024-08-10T06:13:35.800Z"
-                                        },
-                                        "updated_at": {
-                                            "type": "string",
-                                            "format": "date-time",
-                                            "example": "2024-08-10T06:13:35.800Z"
-                                        },
-                                        "id": {
-                                            "type": "string",
-                                            "example": "970"
-                                        },
-                                        "reviews": {
-                                            "type": "integer",
-                                            "example": 3
-                                        },
-                                        "comments": {
-                                            "type": "string",
-                                            "example": "good some 352"
-                                        },
-                                        "reviewer_profile_id": {
-                                            "type": "string",
-                                            "example": "723"
-                                        },
-                                        "table_id": {
-                                            "type": "string",
-                                            "example": "965"
-                                        },
-                                        "creator_profile_id": {
-                                            "type": "string",
-                                            "example": "731"
-                                        },
-                                        "user": {
-                                            "type": "integer",
-                                            "example": 731
-                                        }
-                                    },
-                                    "required": [
-                                        "reviews",
-                                        "comments",
-                                        "table_id"
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "400": {
-                "description": "Bad request. Rating already submitted. Cannot update or create.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "type": "string",
-                                    "example": "Rating already submitted. Cannot update or create."
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "401": {
-                "description": "Unauthorized"
-            },
-            "403": {
-                "description": "Forbidden"
-            },
-            "500": {
-                "description": "Internal server error"
-            }
+  "/reviews/give-feedback": {
+    "tags": [
+      "Reviews"
+    ],
+    "summary": "Create a table Reviews - give-feedback",
+    "description": "Use this API to create a table reviews - give-feedback.",
+    "operationId": "reviews/give-feedback",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {},
+            "required": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ]
+          }
         }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Request completed successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Operation completed successfully."
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }

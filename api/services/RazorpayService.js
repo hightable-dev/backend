@@ -44,7 +44,11 @@ async function createTransfer(amount, currency, account, notes) {
   }
 }
 
-async function createRazorpayOrder(amount, title) {
+// function createRazorpayOrder(amount, title) {
+function createRazorpayOrder(data) {
+  const { amount, title, tableId, userId } = data;
+  const receiptId = `Order-${tableId} Receipt-${userId}`;
+
   const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET
@@ -53,12 +57,13 @@ async function createRazorpayOrder(amount, title) {
   const options = {
     amount: amount * 100, // Amount in paise
     currency: 'INR',
-    receipt: title,
+   // receipt: title /* receipt length not more than 40chars. so modified */,
+  //  for recommit
+    receipt: receiptId,
     payment_capture: 1 // Auto capture
   };
-  const test = await razorpay.orders.create(options)
 
-  return await razorpay.orders.create(options);
+  return razorpay.orders.create(options);
 }
 
 // Export Razorpay instance and other necessary functions
@@ -69,67 +74,55 @@ module.exports = {
   createRazorpayOrder,
 
   createAccount: async function (customer) {
-    try {
-      /** These details are required 
-       *  const customer = {
-                    email,
-                    phone,
-                    type: 'route',
-                    legal_business_name: 'High table',
-                    business_type: 'not_yet_registered',
-                    contact_name: `${first_name} ${last_name}`,
-                    profile: {
-                        category: 'others',
-                        subcategory: 'others',
-                        addresses: {
-                            registered: {
-                                street1: street,
-                                street2: address,
-                                city,
-                                state,
-                                postal_code,
-                                country: 'IN'
+    /** These details are required 
+           *  const customer = {
+                        email,
+                        phone,
+                        type: 'route',
+                        legal_business_name: 'High table',
+                        business_type: 'not_yet_registered',
+                        contact_name: `${first_name} ${last_name}`,
+                        profile: {
+                            category: 'others',
+                            subcategory: 'others',
+                            addresses: {
+                                registered: {
+                                    street1: street,
+                                    street2: address,
+                                    city,
+                                    state,
+                                    postal_code,
+                                    country: 'IN'
+                                }
                             }
                         }
-                    }
-                };
-       *
-       * 
-       */
-      const accountCreate = await instance.accounts.create(customer);
+                    };
+           *
+           * 
+           */
 
+    const accountCreate = await instance.accounts.create(customer);
+    return accountCreate;
 
-      return accountCreate;
-    } catch (error) {
-      throw error;
-    }
   },
 
   createProductRequest: async function (accountId) {
-    try {
-      const productRequest = await instance.products.requestProductConfiguration(accountId, {
-        product_name: 'route',
-        tnc_accepted: true
-      });
-      return productRequest;
-    } catch (error) {
-      throw error;
-    }
+    const productRequest = await instance.products.requestProductConfiguration(accountId, {
+      product_name: 'route',
+      tnc_accepted: true
+    });
+    return productRequest;
   },
 
   updateProductRequest: async function (accountId, productId, customer) {
-    try {
-      const productRequest = await instance.products.edit(accountId, productId, {
-        settlements: {
-          account_number: customer.account_number,
-          ifsc_code: customer.IFSC_code,
-          beneficiary_name: customer.account_holder_name
-        },
-        tnc_accepted: true
-      });
-      return productRequest;
-    } catch (error) {
-      throw error;
-    }
+    const productRequest = await instance.products.edit(accountId, productId, {
+      settlements: {
+        account_number: customer.account_number,
+        ifsc_code: customer.IFSC_code,
+        beneficiary_name: customer.account_holder_name
+      },
+      tnc_accepted: true
+    });
+    return productRequest;
   }
 };
