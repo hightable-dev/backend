@@ -11,9 +11,9 @@ module.exports = async function update(request, response) {
     const { standard, premiumn, pending, approved, payPending, paymentSuccess, bookingConfirmationPendingByCreator } = UseDataService;
 
     try {
-        const { id, type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions } = request.body;
+        const { id, type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions, location_details } = request.body;
 
-        const updateData = { type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions };
+        const updateData = { type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions, location_details };
         let _response_object = {};
 
         // Validate input attributes
@@ -40,6 +40,8 @@ module.exports = async function update(request, response) {
             { name: 'table_expense', number: true },
             { name: "inclusion" },
             { name: "exclusions" },
+            { name: "location_details" },
+
         ];
 
         if (UserType(request) === roles.member) {
@@ -60,19 +62,31 @@ module.exports = async function update(request, response) {
             updateData.status = pending;
         }
         if (updateData.location) {
-            await DataService.locationUtils.extractLocationDetails(
-                {
+            try {
+                // Fetch detailed location using the first service
+                const { detailedLocation } = await UseDataService.locationUtils.locationDetails({
                     x: updateData.location.lat,
-                    y: updateData.location.lng
-                }
-            )
-                .then(({ state, city, pincode, formattedAddress, district }) => {
-                    updateData.state = state;
-                    updateData.city = city;
-                    updateData.pincode = pincode;
-                    updateData.district = district;
-                    updateData.format_geo_address = formattedAddress;
+                    y: updateData.location.lng,
                 });
+                updateData.location_details = detailedLocation;
+
+                // Extract location details using the second service
+                const { state, city, pincode, formattedAddress, district } = await UseDataService.locationUtils.extractLocationDetails({
+                    x: updateData.location.lat,
+                    y: updateData.location.lng,
+                });
+
+                // Assign extracted location details to updateData
+                updateData.state = state;
+                updateData.city = city;
+                updateData.pincode = pincode;
+                updateData.format_geo_address = formattedAddress;
+                updateData.district = district;
+
+            } catch (error) {
+                console.error('Error fetching location details:', error);
+                // Handle error accordingly, e.g., set a flag or throw an error
+            }
         }
 
 

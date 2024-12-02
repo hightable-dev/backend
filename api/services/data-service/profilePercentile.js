@@ -58,8 +58,8 @@ module.exports = async function (userData) {
     }
 
     // Log the completion percentage and missing fields
-    console.log("Profile completion percentage updated:", percentage);
-    console.log("Missing fields:", missingFields);
+/*     console.log("Profile completion percentage updated:", percentage);
+    console.log("Missing fields:", missingFields); */
 
     if (updatedProfile?.photo) {
         console.log(updatedProfile.photo, sails.config.custom.s3_bucket_options.profile_photo)

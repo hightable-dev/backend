@@ -1,19 +1,16 @@
 const idempotencyKeyMap = new Map();
 const {
-  payPending,
-  orederExpired,
   refundRequest,
   refundSuccess,
-  paymentSuccess,
 } = paymentStatusCode;
 
 module.exports = async function (data) {
-
+const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ; 
   /**
    * @Param table id required
    * @Param user id required
    * */
-  let status_code ;
+  // let status_code ;
   try {
     const bookings = await TableBooking.find({
       table_id: data.tableId,
@@ -65,30 +62,50 @@ module.exports = async function (data) {
           }
         );
 
+
         // Remove the idempotency key from the map after successful refund
         idempotencyKeyMap.delete(payId);
         await TableBooking.updateOne(
           { payment_id: payId },
           { refund_details: refundResponse, status: refundSuccess }
         );
-        status_code = refundSuccess;
+        // status_code = refundSuccess;
         // Push the refund response to the array
         refundResponses.push(refundResponse);
+        console.log("INITIATEREFUND initiateRefund.js:96", payId)
+
 
         for (const bookingData of bookings) {
+          const refundEmailConole123 = await UseDataService.emailNotification(
+            {
+              // "type": "refundEmailTemplate",
+              type: "refundEmailTemplate",
+              include_email_tokens: [bookingData?.user_info?.email],
+              custom_data: {
+                "user_name": bookingData?.user_info?.first_name,
+                "pay_id": 'paymentDetails?.id',
+                table_title: bookingData?.table_info?.title,
+                reference_id: refundResponse?.id,
+                refund_id: refundResponse?.id,
+                amount: bookingData?.amount
+              }
+            }
+          );
+          console.log('INITIATEREFUND', { refundEmailConole123, refundResponse });
+
           const tableDetails = await Tables.findOne({ id: data.tableId });
           logdata("data of booking-> table details", tableDetails);
 
-          const msg = await UseDataService.messages({tableId: data.tableId, userId : bookingData.user_id });
+          const msg = await UseDataService.messages({ tableId: data.tableId, userId: bookingData.user_id });
 
           await UseDataService.sendNotification({
             notification: {
               senderId: data.userId,
               type: "Refund",
-              message:  msg?.RefundSuccessMsg,
+              message: msg?.RefundSuccessMsg,
               receiverId: bookingData.user_id,
               followUser: null,
-              tableId:  data.tableId,
+              tableId: data.tableId,
               payOrderId: "",
               isPaid: true,
               templateId: "refund",
@@ -100,7 +117,8 @@ module.exports = async function (data) {
             pushMessage: {
               title: "High Table",
               // message:  msg?.RefundSuccessMsg,
-              payOrderId: '',  },
+              payOrderId: '',
+            },
           });
         }
       } catch (error) {
@@ -111,7 +129,7 @@ module.exports = async function (data) {
         );
         // Remove the idempotency key from the map in case of error
         idempotencyKeyMap.delete(payId);
-        
+
         // Ensure creator_id is passed and use the correct bookingData for user_id
         const creator_id = data.userId;  // You may need to assign this value appropriately
 
@@ -119,21 +137,22 @@ module.exports = async function (data) {
           await UseDataService.errorDataCreate({
             table_id: data.tableId,
             booking_id: bookingData.id,  // Correctly referencing bookingData.id
-            booking_details: {payment_id : payId},
-            user_id: bookingData.user_id, 
-            creator_id, 
-            error_type: 123456, 
+            booking_details: { payment_id: payId },
+            user_id: bookingData.user_id,
+            type: refundErr,
+            type_glossary: 'refundErr',
+            creator_id,
+            error_type: 123456,
             error_details: error.message || error // Ensure to store error details as a string
           });
         }
 
-        console.log("=========== 112 112 112 112");
         throw new Error(error);
       }
     }
     return;
   } catch (error) {
-    sails.log("Error Initiate refund",error)
+    sails.log("Error Initiate refund", error)
     // throw new Error("Error fetching bookings: " + error.message);
   }
 };

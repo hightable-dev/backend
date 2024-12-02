@@ -17,7 +17,7 @@ module.exports = async function (data) {
     let findCity = null;
     let wordCount = 0;
     const now = UseDataService.dateHelper(newDate, 'YYYY-MM-DDTHH:mm:ss.SSSZ', 'YYYY-MM-DD HH:mm:ss');
-console.log("ListingCriteria",{newDate,now})
+
     // Add status condition based on userType
     // console.log({ userType, roles });
     switch (userType) {
@@ -37,17 +37,13 @@ console.log("ListingCriteria",{newDate,now})
             criteria.status = { '!=': UseDataService.listingTableStatusNotEqual };
             criteria.event_date = { '>': now } // 
             if (address) {
-
                 const locality = await UseDataService.locationUtils.geocodeLocation(address);
                 const { latitude, longitude } = locality
-
                 const getLocalCity = await UseDataService.locationUtils
                     .extractLocationDetails({
                         x: latitude,
                         y:longitude,
                     })
-
-
                 findByCity = getLocalCity?.city;
                 findByDistrict = getLocalCity?.district.split(' ')[0];
 console.log("LIST BY ADDRESS",{address, latitude, longitude, getLocalCity,findCity})
@@ -77,14 +73,8 @@ console.log("LIST BY ADDRESS",{address, latitude, longitude, getLocalCity,findCi
 
     // Handle date filtering
     if (from_date && to_date) {
-        console.log("80",{from_date,to_date})
-
-        const startDate = UseDataService.dateHelper(from_date,'DD-MM-YYYY ', 'DD-MM-YYYY');
-        // const startDate = moment(from_date, 'DD-MM-YYYY').startOf('day').format('YYYY-MM-DD HH:mm:ss');
-        const endDate = UseDataService.dateHelper(from_date,'DD-MM-YYYY', 'DD-MM-YYYY');
-        console.log("85",{startDate,endDate})
-
-        // const endDate = moment(to_date, 'DD-MM-YYYY').endOf('day').format('YYYY-MM-DD HH:mm:ss');
+        const startDate = moment(from_date, 'DD-MM-YYYY').startOf('day').format('YYYY-MM-DD HH:mm:ss');
+        const endDate = moment(to_date, 'DD-MM-YYYY').endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
         if (!moment(startDate, 'YYYY-MM-DD HH:mm:ss').isValid() || !moment(endDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
             throw new Error("Invalid date format. Please provide the date in DD-MM-YYYY format.");
@@ -95,10 +85,8 @@ console.log("LIST BY ADDRESS",{address, latitude, longitude, getLocalCity,findCi
             '<=': endDate
         };
     } else if (from_date) {
-console.log({from_date})
-
         const startDate = moment(from_date, 'DD-MM-YYYY').startOf('day').format('YYYY-MM-DD HH:mm:ss');
-console.log({startDate})
+
         if (!moment(startDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
             throw new Error("Invalid date format. Please provide the date in DD-MM-YYYY format.");
         }

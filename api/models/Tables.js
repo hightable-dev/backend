@@ -32,9 +32,10 @@ module.exports = {
     pincode: { type: 'string' },
     order_by: { type: 'string' },
     table_expense: { type: 'number' },
+    location_details: { type: 'ref' },
     location: { type: 'json', columnType: 'json' },
-        inclusion: { type: 'string' },
-    exclusions: { type: 'string' },
+        inclusion: { type: 'string', allowNull: true },
+    exclusions: { type: 'string', allowNull: true },
     category: {
       model: 'Interests'
     },

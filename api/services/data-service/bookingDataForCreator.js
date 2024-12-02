@@ -26,7 +26,7 @@ module.exports = async function (data) {
             status: { in: status }
         });
 
-        console.log("BOOKING DATA FOR CREATOR",{tableId,userId,bookings})
+    /*     console.log("BOOKING DATA FOR CREATOR",{tableId,userId,bookings}) */
 
         return bookings ? bookings : [] ;// Return successful response
     } catch (error) {

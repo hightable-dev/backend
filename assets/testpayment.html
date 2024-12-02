@@ -103,7 +103,7 @@
                 paymentErrorElement.innerHTML = "";
 
                 // Post payment capture request
-                fetch('http://localhost:1337/testpayment/capture', {
+              /*  fetch('http://localhost:1337/testpayment/capture', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -125,7 +125,7 @@
                 .catch(error => {
                     console.error('Error capturing payment:', error);
                     paymentSuccessElement.innerHTML += "<br>Error capturing payment.";
-                });
+                }); */
             }
         };
 

@@ -102,7 +102,7 @@ module.exports = async function sendPushNotification(data) {
       if (error) {
         sails.log.error("Push notification error:", error);
       } else {
-        sails.log('Push notification sent successfully:', response);
+        // sails.log('Push notification sent successfully:', response);
       }
     });
 
