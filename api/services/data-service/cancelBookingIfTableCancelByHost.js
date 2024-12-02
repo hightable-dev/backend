@@ -11,7 +11,7 @@ module.exports = async function (id) {
       } // Query condition
     ).set({
       status: cancelled // Set the status to 'cancelled'
-    }).fetch(); // Use .fetch() to return the updated records
+    })
 
     // If no bookings were found, return a message
     if (updatedBookings.length === 0) {

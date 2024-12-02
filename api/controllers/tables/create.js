@@ -3,13 +3,9 @@
  * @author mohan <mohan@studioq.co.in>
  *
  */
-
-/* 
-
 /* global _, Tables, moment, errorBuilder, validateModel */
 
 module.exports = async function create(request, response) {
-
   const {
     standard,
     premium,
@@ -17,8 +13,6 @@ module.exports = async function create(request, response) {
     approved,
   } = UseDataService;
 
-  // byHost: 1,
-  // split: 2
   const post_request_data = request.body;
   let _response_object = {};
   let filtered_post_data = _.pick(post_request_data, [
@@ -49,7 +43,8 @@ module.exports = async function create(request, response) {
     "created_for",
     "table_expense",
     "exclusions",
-    "inclusion"
+    "inclusion",
+    "location_details"
   ]);
   let input_attributes = [
     { name: "type", required: true, number: true },
@@ -67,6 +62,7 @@ module.exports = async function create(request, response) {
     { name: "event_date", required: true },
     { name: "status" },
     { name: "location", required: true },
+    { name: "location_details" },
     { name: "user_type" },
     { name: "event_done_flag" },
     { name: "state" },
@@ -125,22 +121,55 @@ module.exports = async function create(request, response) {
   console.log('GEO DATA 123', { geoData })
 
   if (filtered_post_data.location) {
-    await UseDataService.locationUtils
-      .extractLocationDetails({
+    try {
+      // Fetch detailed location using the first service
+      const { detailedLocation } = await UseDataService.locationUtils.locationDetails({
         x: filtered_post_data.location.lat,
         y: filtered_post_data.location.lng,
-      })
-      .then(({ state, city, pincode, formattedAddress, district }) => {
-        filtered_post_data.state = state;
-        filtered_post_data.city = city;
-        filtered_post_data.pincode = pincode;
-        filtered_post_data.format_geo_address = formattedAddress;
-        filtered_post_data.district = district;
       });
+      filtered_post_data.location_details = detailedLocation;
+
+      // Extract location details using the second service
+      const { state, city, pincode, formattedAddress, district } = await UseDataService.locationUtils.extractLocationDetails({
+        x: filtered_post_data.location.lat,
+        y: filtered_post_data.location.lng,
+      });
+
+      // Assign extracted location details to filtered_post_data
+      filtered_post_data.state = state;
+      filtered_post_data.city = city;
+      filtered_post_data.pincode = pincode;
+      filtered_post_data.format_geo_address = formattedAddress;
+      filtered_post_data.district = district;
+
+    } catch (error) {
+      console.error('Error fetching location details:', error);
+      // Handle error accordingly, e.g., set a flag or throw an error
+    }
   }
-
+  /*   const findNullLocation = await Tables.find({ location_details: null });
+    console.log({ findNullLocation });
+  
+    for (const table of findNullLocation) {
+      if (table.location && table.location.lat && table.location.lng) {
+        try {
+          const { detailedLocation } = await UseDataService.locationUtils.extractLocationDetails({
+            x: table.location.lat,
+            y: table.location.lng,
+          });
+  
+          // Update the table with the new location details
+          await Tables.updateOne({ id: table.id }).set({ location_details: detailedLocation });
+          console.log(`Updated table with ID: ${table.id}`);
+        } catch (error) {
+          console.error(`Error updating location details for table ID: ${table.id}`, error);
+        }
+      } else {
+        console.log(`No valid location data for table ID: ${table.id}`);
+      }
+    }
+   */
   // filtered_post_data.admin_id = adminProfileId;
-
   const sendResponse = async (message, details) => {
     _response_object.message = message;
     _response_object.details = details; // Include details in the response
@@ -216,9 +245,6 @@ module.exports = async function create(request, response) {
                 },
               });
             }
-
-
-
           }
         }
 
@@ -243,7 +269,7 @@ module.exports = async function create(request, response) {
       if (filtered_post_data.category) {
         filtered_post_data.category = parseInt(filtered_post_data.category);
       }
-      console.log("type usertype 242", typeof(UserType(request)), UserType(request))
+      console.log("type usertype 242", typeof (UserType(request)), UserType(request))
       const lastEntry = await StandardTable.find()
         .limit(1)
         .sort([{ created_at: "DESC" }]);

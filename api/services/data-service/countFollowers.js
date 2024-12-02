@@ -24,6 +24,7 @@ const { followerUsers } = UseDataService; // Importing follower status from a da
 
         // Update the profile of the creator with the new follower count
         await ProfileMembers.updateOne({ id: creatorId }, { followers: totalCount });
+        return totalCount;
 
     } catch (error) {
         console.error('Error updating Followers count:', error);

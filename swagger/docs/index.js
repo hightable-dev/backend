@@ -1,3 +1,7 @@
+const tableslistpublic = require('./tables/list-public.json');
+const tableslistpublicSwagger = tableslistpublic['/tables/list-public'];
+const tableslistfeaturetablepublic = require('./tables/list-feature-table-public.json');
+const tableslistfeaturetablepublicSwagger = tableslistfeaturetablepublic['/tables/list-feature-table-public'];
 const reviewsgivefeedback = require('./reviews/give-feedback.json');
 const reviewsgivefeedbackSwagger = reviewsgivefeedback['/reviews/give-feedback'];
 const interestslist = require('./interests/list.json');
@@ -39,8 +43,12 @@ let swaggerRefs = [
     { key: 'tables/my-list', refs: 'tablesmylistSwagger' },
     { key: 'interests/list', refs: 'interestslistSwagger' },
     { key: 'reviews/give-feedback', refs: 'reviewsgivefeedbackSwagger' },
+    { key: 'tables/list-feature-table-public', refs: 'tableslistfeaturetablepublicSwagger' },
+    { key: 'tables/list-public', refs: 'tableslistpublicSwagger' },
 ];
 module.exports = {
+    tableslistpublicSwagger,
+    tableslistfeaturetablepublicSwagger,
     reviewsgivefeedbackSwagger,
     interestslistSwagger,
     tablesmylistSwagger,

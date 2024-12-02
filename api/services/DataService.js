@@ -1,37 +1,42 @@
-const bookingDataForCreator = require("./Common/bookingDataForCreator.js");
-const bookingDataForUser = require("./Common/bookingDataForUser.js");
-const cancelBookingIfTableCancelByHost = require("./Common/cancelBookingIfTableCancelByHost.js");
-const checkBookingByCurrentUser = require("./Common/checkBookingByCurrentUser.js");
-const checkBookingExistForTableAndCurrentUser = require("./Common/checkBookingExistForTableAndCurrentUser.js");
-const checkBookingTableCreatedByCurrentUser = require("./Common/checkBookingTableCreatedByCurrentUser.js");
-const checkTableCreatedByCurrentUser = require("./Common/checkTableCreatedByCurrentUser.js");
-const completedEvent = require("./Common/completedEvent.js");
-const countFollowers = require("./Common/countFollowers.js");
-const countTablesBooked = require("./Common/countTablesBooked.js");
-const countTablesHosted = require("./Common/countTablesHosted.js");
-const dateHelper = require("./Common/dateHelper.js");
-const dateHelperUtc = require("./Common/dateHelperUtc.js");
-const errorDataCreate = require("./Common/errorDataCreate.js");
-const followerData = require("./Common/followerData.js");
-const { geocodeLocation } = require("./Common/locationUtils.js");
-const mapKit = require("./Common/mapKit.js");
-const messages = require("./Common/messages.js");
-const pendingPaymentByUser = require("./Common/pendingPaymentByUser.js");
-const profilePercentile = require("./Common/profilePercentile.js");
-const refundRequestTables = require("./Common/refundRequestTables.js");
-// const phoneCrypto = require("./Common/phoneCrypto.js");
-// const phoneCryptoCopy = require("./Common/phoneCrypto copy.js");
-// const phoneCrypto = require("./Common/phoneCrypto.js");
-// const { decryptPhone, encryptPhone } = require("./Common/phoneCrypto.js");
-// const { decryptPhone, encryptPhone } = require("./Common/phoneEncryption.js");
-const removeFromWishlistAfterTableCancel = require("./Common/removeFromWishlistAfterTableCancel.js");
-const retrieveInterestsName = require("./Common/retrieveInterestsName.js");
-// const tableCreateByAdmin = require("./Common/tableCreateByAdmin.js");
-const tableCreateByManager = require("./Common/tableCreateByManager.js");
-const tableCreateByMember = require("./Common/tableCreateByMember.js");
-const tableListingCriteria = require("./Common/tableListingCriteria.js");
-const tableListingCriteriaWithoutLocation = require("./Common/tableListingCriteriaWithoutLocation.js");
+const bookingDataForCreator = require("./data-service/bookingDataForCreator.js");
+const bookingDataForUser = require("./data-service/bookingDataForUser.js");
+const cancelBookingIfTableCancelByHost = require("./data-service/cancelBookingIfTableCancelByHost.js");
+const checkBookingByCurrentUser = require("./data-service/checkBookingByCurrentUser.js");
+const checkBookingExistForTableAndCurrentUser = require("./data-service/checkBookingExistForTableAndCurrentUser.js");
+const checkBookingTableCreatedByCurrentUser = require("./data-service/checkBookingTableCreatedByCurrentUser.js");
+const checkTableCreatedByCurrentUser = require("./data-service/checkTableCreatedByCurrentUser.js");
+const completedEvent = require("./data-service/completedEvent.js");
+const countFollowers = require("./data-service/countFollowers.js");
+const countTablesBooked = require("./data-service/countTablesBooked.js");
+const countTablesHosted = require("./data-service/countTablesHosted.js");
+const dataCreate = require("./data-service/dataCreate.js");
+const dateHelper = require("./data-service/dateHelper.js");
+const dateHelperUtc = require("./data-service/dateHelperUtc.js");
+const { emailNotification } = require("./data-service/emailService.js");
+const errorDataCreate = require("./data-service/errorDataCreate.js");
+const followerData = require("./data-service/followerData.js");
+const getBookingStatus = require("./data-service/getBookingStatus.js");
+const { geocodeLocation } = require("./data-service/locationUtils.js");
+const mapKit = require("./data-service/mapKit.js");
+const messages = require("./data-service/messages.js");
+const pendingPaymentByUser = require("./data-service/pendingPaymentByUser.js");
+const profilePercentile = require("./data-service/profilePercentile.js");
+const refundRequestTables = require("./data-service/refundRequestTables.js");
+// const phoneCrypto = require("./data-service/phoneCrypto.js");
+// const phoneCryptoCopy = require("./data-service/phoneCrypto copy.js");
+// const phoneCrypto = require("./data-service/phoneCrypto.js");
+// const { decryptPhone, encryptPhone } = require("./data-service/phoneCrypto.js");
+// const { decryptPhone, encryptPhone } = require("./data-service/phoneEncryption.js");
+const removeFromWishlistAfterTableCancel = require("./data-service/removeFromWishlistAfterTableCancel.js");
+const retrieveInterestsName = require("./data-service/retrieveInterestsName.js");
+// const tableCreateByAdmin = require("./data-service/tableCreateByAdmin.js");
+const tableCreateByManager = require("./data-service/tableCreateByManager.js");
+const tableCreateByMember = require("./data-service/tableCreateByMember.js");
+const tableListingCriteria = require("./data-service/tableListingCriteria.js");
+const tableListingCriteriaWithoutLocation = require("./data-service/tableListingCriteriaWithoutLocation.js");
+const tableListingCriteriaWithoutLocationPublic = require("./data-service/tableListingCriteriaWithoutLocationPublic.js");
 const { processSwaggerGeneration } = require("./processSwaggerGenerate.js");
+
 // Payment status
 const {
   payPending,
@@ -173,20 +178,20 @@ module.exports = {
   tablesPhoto,
   listingTableStatus,
   listingTableStatusNotEqual,
-  // formatDate: require("./Common/formateDate.js"),
-  locationUtils: require("./Common/locationUtils.js"),
+  // formatDate: require("./data-service/formateDate.js"),
+  locationUtils: require("./data-service/locationUtils.js"),
   mapKit,
 
   tableListingCriteria,
   tableListingCriteriaWithoutLocation,
-  searchCriteria: require("./Common/searchCriteria.js"),
-  initiateRefund: require("./Common/initiateRefund.js"),
-  paidBooking: require("./Common/paidBooking.js"),
-  updateRecord: require("./Common/updateRecord.js"),
-  sendNotification: require("./Common/sendNotification.js"),
-  findOneRecord: require("./Common/findOneRecord.js"),
-  findRecord: require("./Common/findRecord.js"),
-  processMediaData: require("./Common/processMediaData.js"),
+  searchCriteria: require("./data-service/searchCriteria.js"),
+  initiateRefund: require("./data-service/initiateRefund.js"),
+  paidBooking: require("./data-service/paidBooking.js"),
+  updateRecord: require("./data-service/updateRecord.js"),
+  sendNotification: require("./data-service/sendNotification.js"),
+  findOneRecord: require("./data-service/findOneRecord.js"),
+  findRecord: require("./data-service/findRecord.js"),
+  processMediaData: require("./data-service/processMediaData.js"),
   completedEvent,
   pendingPaymentByUser,
   checkTableCreatedByCurrentUser,
@@ -214,9 +219,10 @@ module.exports = {
   processSwaggerGeneration,
   refundRequestTables,
   errorDataCreate,
-
-
-
+  emailNotification,
+  dataCreate,
+  getBookingStatus,
+  tableListingCriteriaWithoutLocationPublic,
 
   /**
  * Calculates the profile completion percentage based on user data.
@@ -233,11 +239,11 @@ module.exports = {
 
   // tableCreateByAdmin,
   get tableCreateByAdmin() {
-    return require("./Common/tableCreateByAdmin.js");
+    return require("./data-service/tableCreateByAdmin.js");
   },
 
   get phoneCrypto() {
-    return require("./Common/phoneCrypto.js")
+    return require("./data-service/phoneCrypto.js")
   },
 
 };

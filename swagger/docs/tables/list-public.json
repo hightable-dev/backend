@@ -1,11 +1,11 @@
 {
-  "/tables/table-search": {
+  "/tables/list-public": {
     "tags": [
       "Tables"
     ],
-    "summary": "Retrieve data of Tables - table-search",
-    "description": "Use this API to retrieve data of tables - table-search.",
-    "operationId": "tables/table-search",
+    "summary": "Retrieve data of Tables - list-public",
+    "description": "Use this API to retrieve data of tables - list-public.",
+    "operationId": "tables/list-public",
     "requestBody": {
       "content": {
         "application/json": {
@@ -22,7 +22,7 @@
     },
     "responses": {
       "200": {
-        "description": "Request form list retrieved successfully.",
+        "description": "Request for list retrieved successfully.",
         "content": {
           "application/json": {
             "schema": {
@@ -31,7 +31,7 @@
                 "message": {
                   "description": "Success message.",
                   "type": "string",
-                  "example": "Request form list retrieved successfully."
+                  "example": "Request for list retrieved successfully."
                 },
                 "meta": {
                   "type": "object",
@@ -39,7 +39,7 @@
                     "total": {
                       "description": "Total of the meta data.",
                       "type": "number",
-                      "example": 2
+                      "example": 5
                     },
                     "page": {
                       "description": "Page of the meta data.",
@@ -100,7 +100,7 @@
                       "updated_at": {
                         "description": "Updated_at of the item.",
                         "type": "object",
-                        "example": "2024-11-28T07:48:17.975Z"
+                        "example": "2024-11-27T03:50:25.729Z"
                       },
                       "id": {
                         "description": "Id of the item.",
@@ -251,11 +251,20 @@
                         "description": "Location_details of the item.",
                         "type": "object",
                         "example": {
-                          "country": "India",
+                          "country": {
+                            "long_name": "India",
+                            "short_name": "IN"
+                          },
                           "locality": "Puducherry",
-                          "political": "India",
+                          "political": {
+                            "long_name": "India",
+                            "short_name": "IN"
+                          },
                           "postal_code": "605001",
-                          "sublocality_level_1": "White Town",
+                          "administrative_area_level_1": {
+                            "long_name": "Puducherry",
+                            "short_name": "PY"
+                          },
                           "administrative_area_level_3": "Puducherry"
                         }
                       },
@@ -307,7 +316,7 @@
                         "type": "object",
                         "example": {
                           "created_at": "2024-11-14T05:15:50.733Z",
-                          "updated_at": "2024-11-28T08:49:43.854Z",
+                          "updated_at": "2024-11-28T07:00:31.097Z",
                           "id": 1001,
                           "email": "sathish11@gmail.com",
                           "first_name": "Staging user 1",

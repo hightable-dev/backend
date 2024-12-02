@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 module.exports = function list(request, response) {
+  // Recommit changes
   const userType = request.user.types;
   const { payPending, paymentSuccess, bookingConfirmationPendingByCreator, refundRequest, refundSuccess } = UseDataService;
 
@@ -9,11 +10,11 @@ module.exports = function list(request, response) {
   const filtered_query_data = _.pick(request_query, ['page', 'sort', 'limit', 'search', 'status', 'type', 'table_id', 'booking_status']);
   let { page, limit, status, search, type, table_id, booking_status } = filtered_query_data;
   console.log({ request_query })
+
   const input_attributes = [
     { name: 'page', number: true, min: 1 },
     { name: 'limit', number: true, min: 1 },
   ];
-
 
   // Function to send response
   const sendResponse = (items, total) => {
@@ -35,21 +36,10 @@ module.exports = function list(request, response) {
   };
 
   // Function to build criteria for search
-  function buildCriteria(search) {
-    let criteria = {
-      status: { in: [paymentSuccess] },
-    };
+  async function buildCriteria() {
+    let criteria = {};
 
-    /** For Post method query params **/
-
-    /* if (Array.isArray(status) && status.length > 0) {
-        criteria.status = { in: status };
-      } else {
-        criteria.status = { '!=': [0] };  //Filter out status 0 if status array is empty or undefined
-      } 
-    */
-
-    /** For Get method query params **/
+    // Filter based on booking status
     if (UserType(request) === roles.admin) {
       if (booking_status === 'pending') {
         criteria.status = { in: [payPending, bookingConfirmationPendingByCreator] };
@@ -67,42 +57,57 @@ module.exports = function list(request, response) {
     if (table_id) {
       criteria.table_id = table_id;
     }
-    // console.log({userType})
-    /*    if (userType === 2) {
-         console.log({ type })
-         switch (type) {
-           case 'created_by': */
-
-    /*        break;
-         case 'booked_by':
-           criteria.user_id = ProfileMemberId(request);
-           break;
-       }
-     } */
 
     if (UserType(request) === roles.member) {
       criteria.creator_id = ProfileMemberId(request);
+      criteria.status = { in: [paymentSuccess] };
     }
+
+    /* working code   
+     if (search) {
+         const searchValue = search.trim();
+         const lookupFields = ['table_title','reservation_order_id','reservation_pay_id','booking_order_id','booking_pay_id'];
+         const searchVariations = [
+           searchValue.toLowerCase(),
+           _.capitalize(searchValue),
+           searchValue.toUpperCase(),
+         ];
+   
+         const searchCriteria = lookupFields.map((field) => ({
+           or: searchVariations.map((variation) => ({ [field]: { contains: variation } })),
+         }));
+   
+         criteria.or = criteria.or || [];
+         criteria.or.push(...searchCriteria);
+       } */
 
     if (search) {
       const searchValue = search.trim();
-      const lookupFields = ['order_id'];
-      const searchVariations = [
-        searchValue.toLowerCase(),
-        _.capitalize(searchValue),
-        searchValue.toUpperCase(),
-      ];
+      const lookupFields = ['order_id', 'payment_id'];
 
-      const searchCriteria = lookupFields.map((field) => ({
-        or: searchVariations.map((variation) => ({ [field]: { contains: variation } })),
-      }));
+      // Determine whether the field is likely to be a string or a numeric ID
+      const searchVariations = lookupFields.map((field) => {
+        if (['order_id', 'payment_id'].includes(field)) {
+          // For IDs or numbers, don't apply case variations, just search with the value directly
+          return { [field]: { contains: searchValue } };
+        } else {
+          // For text fields, use case variations
+          return {
+            or: [
+              { [field]: { contains: searchValue.toLowerCase() } },
+              { [field]: { contains: _.capitalize(searchValue) } },
+              { [field]: { contains: searchValue.toUpperCase() } }
+            ]
+          };
+        }
+      });
 
+      // Add to the criteria
       criteria.or = criteria.or || [];
-      criteria.or.push(...searchCriteria);
+      criteria.or.push(...searchVariations);
     }
     return criteria;
   }
-
 
   // Validate and process request
   validateModel.validate(null, input_attributes, filtered_query_data, async function (valid, errors) {
@@ -111,57 +116,60 @@ module.exports = function list(request, response) {
         page = parseInt(page) || 1;
         limit = parseInt(limit) || 5;
         const skip = (page - 1) * limit;
-        const criteria = await buildCriteria(status, search);
-        console.log({ criteria })
+        const criteria = await buildCriteria();
+        console.log({ criteria });
+
         // Fetch all items matching criteria
         let items = await TableBooking.find({ where: criteria })
           .sort('created_at DESC')
-          .populate('user_id')
+          .populate('user_id')  // Populate user_id
           .populate('table_id')
+
+        // Transform each item
         await Promise.all(
-          items
-            .map(async item => {
-              if (item.table_id) {
-                // Fetch the category from the table_id if it's not already populated
-                const tableDetails = await Tables.findOne({ id: item.table_id.id })
-                  .populate('category'); // Populate category here
+          items.map(async item => {
+            if (item.table_id) {
+              // Fetch the category from the table_id if it's not already populated
+              const tableDetails = await Tables.findOne({ id: item.table_id.id })
+                .populate('category'); // Populate category here
 
-                // Assign populated category back to item
-                item.table_id.category = tableDetails.category;
+              // Assign populated category back to item
+              item.table_id.category = tableDetails.category;
+            }
+
+            if (UserType(request) === roles.admin) {
+              item.table_details = item.table_id;
+              item.user_details = item.user_id;
+              delete item.table_id;
+              delete item.user_id;
+              if (item.user_details?.photo) {
+                item.user_details.photo = sails.config.custom.s3_bucket_options.profile_photo + item.user_details.photo;
               }
 
-              if (UserType(request) === roles.admin) {
-                item.table_details = item.table_id
-                item.user_details = item.user_id
-                delete item.table_id
-                delete item.user_id
-                if (item.user_details?.photo) {
-                  item.user_details.photo = sails.config.custom.s3_bucket_options.profile_photo + item.user_details.photo;
-                }
+              if (item.user_details?.phone) {
+                await phoneEncryptor.decrypt(item.user_details?.phone, function (decrypted_text) {
+                  item.user_details.phone = decrypted_text;
+                });
+              }
+            }
 
-                if (item.user_details?.phone) {
-                  await phoneEncryptor.decrypt(item.user_details?.phone, function (decrypted_text) {
-                    item.user_details.phone = decrypted_text;
-                  });
-                }
+            if (UserType(request) === roles.manager) {
+              // Additional logic for managers if needed
+            }
+
+            if (UserType(request) === roles.member) {
+              if (item.user_id?.photo) {
+                item.user_id.photo = sails.config.custom.s3_bucket_options.profile_photo + item.user_id.photo;
               }
 
-              if (UserType(request) === roles.manager) {
+              if (item.user_id?.phone) {
+                await phoneEncryptor.decrypt(item.user_id?.phone, function (decrypted_text) {
+                  item.user_id.phone = decrypted_text;
+                });
               }
-
-              if (UserType(request) === roles.member) {
-                if (item.user_id?.photo) {
-                  item.user_id.photo = sails.config.custom.s3_bucket_options.profile_photo + item.user_id.photo;
-                }
-
-                if (item.user_id?.phone) {
-                  await phoneEncryptor.decrypt(item.user_id?.phone, function (decrypted_text) {
-                    item.user_id.phone = decrypted_text;
-                  });
-                }
-              }
-              return item; // Return the transformed item
-            })
+            }
+            return item; // Return the transformed item
+          })
         );
 
         const totalItems = items.length;

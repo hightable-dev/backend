@@ -28,7 +28,7 @@ module.exports = async function (data) {
     const issueCreatedAt = new Date();
     let description, statusCode;
     if (error_details?.error?.description) {
-      description = error_details.error.description;
+      description = error_details.error.description ? error_details.error.description : null;
     }
 
     if (error_details?.statusCode) {

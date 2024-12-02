@@ -2,7 +2,8 @@ const _ = require('lodash');
 const DataService = require('../../services/DataService');
 const moment = require('moment-timezone');
 
-module.exports = function list(request, response) {
+module.exports = async function list(request, response) {
+
   const request_query = request.allParams();
   const filtered_query_data = _.pick(request_query, ['id']);
   const { id } = filtered_query_data;
@@ -146,9 +147,9 @@ module.exports = function list(request, response) {
           item.is_booked = isBooked ? true : false;
           // item.event_on =
           // item.is_booked = isBooked?.status ;
-          item.booking_status = isBookingClosed
-            ? bookingClosed
-            : isBooked ? isBooked.status : false;
+          // item.booking_status = isBookingClosed
+          //   ? bookingClosed
+          //   : isBooked ? isBooked.status : false;
           /* 
             isBooked.status = 11;
             item.order_id = isBooked ?
@@ -162,6 +163,10 @@ module.exports = function list(request, response) {
 
           item.reportedHost = reportedHost ? true : false;
           item.reportedTable = reportedTable ? true : false;
+
+          const checkBookingStatus = await UseDataService.getBookingStatus(request, tableId = item.id);
+          item.booking_status = checkBookingStatus?.tableBookingStatus?.status ?? null;
+          item.booking_close = checkBookingStatus?.tableBookingClose;
 
         }
         sendResponse(item);

@@ -20,7 +20,7 @@ module.exports = (date, inputFormat, outputFormat = 'YYYY-MM-DD HH:mm:ss') => {
   const withoutTimeZone = moment(date, inputFormat).format(outputFormat);
   const withTimeZone = momentTz.tz(date, inputFormat, 'Asia/Kolkata').format(outputFormat);
 
-  console.info({ date, inputFormat, outputFormat, withTimeZone, withoutTimeZone });
+/*   console.info({ date, inputFormat, outputFormat, withTimeZone, withoutTimeZone }); */
 
   return withTimeZone;
 };

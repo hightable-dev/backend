@@ -2,7 +2,7 @@
 module.exports = function list(request, response) {
   const request_query = request.allParams();
   const { type: tableType, status: tableStatus, category, address } = request_query;
-  const userType = UserType(request);
+  // const userType = UserType(request);
   let { page, limit, search } = request_query;
   // for recommit changes
   const filtered_query_data = _.pick(request_query, [
@@ -54,7 +54,7 @@ module.exports = function list(request, response) {
   function buildCriteria() {
     let criteria = {}
     // criteria = UseDataService.tableListingCriteria({ userType, tableType, category, address, tableStatus })
-    criteria = UseDataService.tableListingCriteriaWithoutLocation({ userType, tableType, category, tableStatus })
+    criteria = UseDataService.tableListingCriteriaWithoutLocationPublic({ tableType, category, tableStatus })
     // Handle search functionality
 
 

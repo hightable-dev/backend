@@ -15,7 +15,7 @@ module.exports = async function (data) {
 
     const newDate = new Date();
     const now = await UseDataService.dateHelper(newDate, 'YYYY-MM-DDTHH:mm:ss.SSSZ', 'YYYY-MM-DD HH:mm:ss');
-    console.log("ListingCriteria", { newDate, now })
+   /*  console.log("ListingCriteria", { newDate, now }) */
     // Add status condition based on userType
     // console.log({ userType, roles });
     switch (userType) {

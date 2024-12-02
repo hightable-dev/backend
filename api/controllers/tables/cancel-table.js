@@ -168,7 +168,14 @@ module.exports = async function update(request, response) {
           const updatedBookings = await TableBooking.update({
             table_id: item.table_id,
             payment_id: item.payment_id,
+            status :paymentSuccess
           }).set({ status: refundRequest, status_glossary: "refundRequest" });
+
+          await TableBooking.update({
+            table_id: item.table_id,
+            payment_id: item.payment_id,
+            status :payPending
+          }).set({ status: cancelled, status_glossary: "refundRequest" });
 
 
           result.push({ item, updatedBookings });

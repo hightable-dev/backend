@@ -16,7 +16,10 @@ module.exports = {
     refund_details: { type: "json" },
     event_done_flag: { type: "boolean" },
     // creator_id: { type: "ref" },
-    // event_done_flag: {type : 'ref'}
+    
+    table_info: {type : 'ref'},
+    creator_info: {type : 'ref'},
+    user_info: {type : 'ref'},
     table_id: {
       model: "tables",
       columnName: "table_id",

@@ -98,11 +98,11 @@ module.exports = async function createOrder(req, res) {
         await UseDataService.errorDataCreate({
           table_id: id,
           type: createOrderErr,
-          type_glossary : 'createOrderErr',
+          type_glossary: 'createOrderErr',
           booking_id: null,  // Correctly referencing bookingData.id
           booking_details: {},
-          user_id:profileId,
-          creator_id:created_by,
+          user_id: profileId,
+          creator_id: created_by,
           error_details: error // Ensure to store error details as a string
         });
 
@@ -147,6 +147,32 @@ module.exports = async function createOrder(req, res) {
 
   const createBooking = async (postData) => {
     const { order_id, table_id, user_id, amount, status, expiry_date, expires_at, creator_id, status_glossary } = postData;
+    console.log({postData})
+    let user_info, creator_info;
+
+    if (user_id) {
+      const getProfileInfo = await ProfileMembers.findOne({ id: user_id }).select([
+        'email',
+        'first_name',
+        'last_name',
+      ]);
+      console.log("tempuserid user_id", { user_id })
+
+      user_info = getProfileInfo;
+    }
+    if (creator_id) {
+       const getProfileInfo = await ProfileMembers.findOne({ id: creator_id }).select([
+        'email',
+        'first_name',
+        'last_name',
+      ]);
+      console.log("tempuserid creator_id", { creator_id })
+      creator_info = getProfileInfo;
+    }
+
+    const table_info = await Tables.findOne({id:table_id}).select(['title','event_date'])
+    
+
 
 
     try {
@@ -160,6 +186,9 @@ module.exports = async function createOrder(req, res) {
         expiry_date,
         expires_at,
         creator_id,
+        creator_info,
+        user_info,
+        table_info,
         status_glossary
       })
       // 

@@ -14,8 +14,8 @@ module.exports.bootstrap = async function() {
   // Import dependencies
   var path = require('path');
 
-  const cronJobs = require('../api/services/Common/croneJobs');
-  const jobCompletedEvent = require('../api/services/Common/completedEventCroneJobs');
+  const cronJobs = require('../api/services/data-service/croneJobs');
+  const jobCompletedEvent = require('../api/services/data-service/completedEventCroneJobs');
 
   
   // console.log(cronJobs)

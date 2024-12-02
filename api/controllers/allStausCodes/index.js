@@ -5,7 +5,6 @@ module.exports = function allStatusCodes(request, response) {
           statusCode,
           tableStatusCode,
           paymentStatusCode,
-          // file_path
      }
 
      return response.ok(statusCodesObj)

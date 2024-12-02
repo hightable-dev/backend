@@ -1,29 +1,27 @@
 
 module.exports = function list(request, response) {
+  // const userType = UserType(request);
   const request_query = request.allParams();
-  const { type: tableType, status: tableStatus, category, address } = request_query;
-  const userType = UserType(request);
-  let { page, limit, search } = request_query;
-  // for recommit changes
   const filtered_query_data = _.pick(request_query, [
-    'page', 'sort', 'limit', 'city', 'address', 'category', 'type', 'status', 'search'
+    'address', 'latlng', 'page', 'limit'
   ]);
+  let { page, limit, address } = filtered_query_data;
 
+  console.log({ page, limit, address });
   const input_attributes = [
-    { name: 'page', number: true, min: 1 },
-    { name: 'limit', number: true, min: 1 },
+    { name: 'address'}
   ];
 
-
   let responseObject = {};
-  const sendResponse = (items, totalItems) => {
+  const sendResponse = (items, total) => {
     const pageNum = parseInt(page) || 1;
     const limitNum = parseInt(limit) || 10;
 
     responseObject = {
-      message: 'Request for list retrieved successfully.',
+      message: 'Request form list retrieved successfully.',
       meta: {
-        total: totalItems,
+        count: items.length,
+        total: total,
         page: pageNum,
         limit: limitNum,
         ...sails.config.custom.s3_bucket_options,
@@ -31,14 +29,17 @@ module.exports = function list(request, response) {
       items: items,
     };
 
-    response.ok(responseObject);
+    response.ok(responseObject)
+    /* 
+     Generates the swagger
+    */
+
     process.nextTick(() => {
       const relativePath = SwaggerGenService.getRelativePath(__filename);
-      // const capitalizeFirstLetter = (str) => {
-      //   if (typeof str !== 'string' || str.length === 0) return str;
-      //   return str.charAt(0).toUpperCase() + str.slice(1);
-      // };
-      const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+      const capitalizeFirstLetter = (str) => {
+        if (typeof str !== 'string' || str.length === 0) return str;
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      };
       SwaggerGenService.generateJsonFile({
         key: `/${relativePath}`,
         Tags: capitalizeFirstLetter(relativePath.split('/')[0]),
@@ -49,14 +50,19 @@ module.exports = function list(request, response) {
         response: responseObject
       });
     });
+    return;
   };
 
-  function buildCriteria() {
-    let criteria = {}
-    // criteria = UseDataService.tableListingCriteria({ userType, tableType, category, address, tableStatus })
-    criteria = UseDataService.tableListingCriteriaWithoutLocation({ userType, tableType, category, tableStatus })
-    // Handle search functionality
+  /* 
+   Build criteria 
+   used write logics and used filter data for the response
+  */
 
+  async function buildCriteria() {
+    let criteria = {};
+
+    // criteria = await UseDataService.tableListingCriteria({ userType, address })
+    criteria = await UseDataService.tableListingCriteriaWithoutLocationPublic({})
 
     return criteria;
   }
@@ -65,44 +71,42 @@ module.exports = function list(request, response) {
     if (valid) {
       try {
         page = parseInt(page) || 1;
-        limit = parseInt(limit) || 10;
+        limit = parseInt(limit) || 7;
         const skip = (page - 1) * limit;
-
-        let criteria = await buildCriteria(search);
-        
-        if (search) {
-          const searchValue = search.trim();
-          const lookupFields = ['full_name', 'address', 'title'];
-          const searchVariations = [
-            searchValue.toLowerCase(),
-            _.capitalize(searchValue),
-            searchValue.toUpperCase(),
-          ];
-
-          const searchCriteria = lookupFields.map((field) => ({
-            or: searchVariations.map((variation) => ({ [field]: { contains: variation } })),
-          }));
-
-          criteria.or = criteria.or || [];
-          criteria.or.push(...searchCriteria);
-        }
+        let criteria = await buildCriteria();
 
         // Fetch items and total count in parallel
         let [items, totalItems] = await Promise.all([
           Tables.find({ where: criteria })
-            .sort('event_date ASC')
+            // .sort({ type: -1, booked: -1 })
             .skip(skip)
             .limit(limit)
             .populate('category')
             .populate('user_profile'),
-          Tables.count({ where: criteria })
+          // Tables.count({ where: criteria })
         ]);
 
-        await Promise.all(items.map((item) => {
+        // Rename `created_by` to `user_profile` and process items concurrently
+        // if (address) {
+        //   const addressColumns = ['state', 'city', 'address', 'format_geo_address'];
+        //   items = await DataService.searchCriteria(address, items, addressColumns);
+        // }
+
+
+        await Promise.all(items.map(async (item) => {
           item.media = item?.media ? item.media[0] : 'image-1_1.webp';
           item.video = item?.video ? item.media[0] : null;
           item.event_date = UseDataService.dateHelper(item.event_date, 'YYYY-MM-DD HH:mm', 'DD-MM-YYYY HH:mm');
+          // const checkBookingStatus = await UseDataService.getBookingStatus(request, item.id);
+          // item.booking_status = checkBookingStatus?.tableBookingStatus?.status ?? null;
+          // item.booking_close = checkBookingStatus?.tableBookingClose;
+
         }));
+
+
+
+
+
 
         sendResponse(items, totalItems);
       } catch (error) {

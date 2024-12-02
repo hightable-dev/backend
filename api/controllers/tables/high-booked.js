@@ -63,7 +63,7 @@ module.exports = function list(request, response) {
 
     // criteria = await UseDataService.tableListingCriteria({ userType, address })
     criteria = await UseDataService.tableListingCriteriaWithoutLocation({ userType })
-    
+
     return criteria;
   }
 
@@ -93,11 +93,17 @@ module.exports = function list(request, response) {
         // }
 
 
-        await Promise.all(items.map((item) => {
+        await Promise.all(items.map(async (item) => {
           item.media = item?.media ? item.media[0] : 'image-1_1.webp';
           item.video = item?.video ? item.media[0] : null;
           item.event_date = UseDataService.dateHelper(item.event_date, 'YYYY-MM-DD HH:mm', 'DD-MM-YYYY HH:mm');
+          const checkBookingStatus = await UseDataService.getBookingStatus(request, item.id);
+          item.booking_status = checkBookingStatus?.tableBookingStatus?.status ?? null;
+          item.booking_close = checkBookingStatus?.tableBookingClose;
+
         }));
+
+
 
 
 
