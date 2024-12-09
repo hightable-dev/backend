@@ -26,7 +26,6 @@ module.exports = function updateStatus(request, response) {
     // Find the table with the given ID
     Tables.findOne({ id }).exec((err, table) => {
         if (err) {
-            console.error("Error occurred while finding table:", err);
             return response.serverError({ error: "Error occurred while finding table." });
         }
 
@@ -63,7 +62,6 @@ module.exports = function updateStatus(request, response) {
             .set({ status })
             .exec((err, updatedTable) => {
                 if (err) {
-                    console.error("Error occurred while updating table status:", err);
                     return response.serverError({ error: "Error occurred while updating table status." });
                 }
                 // Create new data in TablesStatus model for commit
@@ -79,7 +77,6 @@ module.exports = function updateStatus(request, response) {
 
                 }).exec(async (err, createdData) => {
                     if (err) {
-                        console.error("Error occurred while creating new data in TablesStatus model:", err);
                         return response.serverError({ error: "Error occurred while creating new data." });
                     }
 
@@ -95,7 +92,6 @@ module.exports = function updateStatus(request, response) {
                     response.ok(_response_object);
                     
                     const msg = await UseDataService.messages({ tableId: id });
-                    console.log({msg,status});
 
                     await UseDataService.sendNotification({
                         notification: {

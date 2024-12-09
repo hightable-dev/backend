@@ -1,0 +1,287 @@
+{
+  "/table-booking/booked-my-tables-user-list": {
+    "tags": [
+      "Table-booking"
+    ],
+    "summary": "Retrieve data of Table-booking - booked-my-tables-user-list",
+    "description": "Use this API to retrieve data of table-booking - booked-my-tables-user-list.",
+    "operationId": "table-booking/booked-my-tables-user-list",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {},
+            "required": [
+              "0",
+              "1"
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Interests retrieved successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Interests retrieved successfully."
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "description": "Page of the meta data.",
+                      "type": "number",
+                      "example": 1
+                    },
+                    "total": {
+                      "description": "Total of the meta data.",
+                      "type": "number",
+                      "example": 2
+                    }
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "Id of the item.",
+                        "type": "string",
+                        "example": "101"
+                      },
+                      "order_id": {
+                        "description": "Order_id of the item.",
+                        "type": "string",
+                        "example": "order_PUAqBWUzOOji3G"
+                      },
+                      "seats": {
+                        "description": "Seats of the item.",
+                        "type": "number",
+                        "example": 1
+                      },
+                      "payment_id": {
+                        "description": "Payment_id of the item.",
+                        "type": "string",
+                        "example": "pay_PUAqoKvEMn5NaD"
+                      },
+                      "amount": {
+                        "description": "Amount of the item.",
+                        "type": "number",
+                        "example": 5
+                      },
+                      "status": {
+                        "description": "Status of the item.",
+                        "type": "number",
+                        "example": 9
+                      },
+
+                      "payment_details": {
+                        "description": "Payment_details of the item.",
+                        "type": "object",
+                        "example": {
+                          "id": "pay_PUAqoKvEMn5NaD",
+                          "entity": "payment",
+                          "amount": 500,
+                          "currency": "INR",
+                          "status": "captured",
+                          "order_id": "order_PUAqBWUzOOji3G",
+                          "invoice_id": null,
+                          "international": false,
+                          "method": "upi",
+                          "amount_refunded": 0,
+                          "refund_status": null,
+                          "captured": true,
+                          "description": null,
+                          "card_id": null,
+                          "bank": null,
+                          "wallet": null,
+                          "vpa": "abc@abc",
+                          "email": "mohan@studioq.co.in",
+                          "contact": "+919988776655",
+                          "notes": [],
+                          "fee": 12,
+                          "tax": 2,
+                          "error_code": null,
+                          "error_description": null,
+                          "error_source": null,
+                          "error_step": null,
+                          "error_reason": null,
+                          "acquirer_data": {
+                            "rrn": "956562031372",
+                            "upi_transaction_id": "744775E59FD9ECDC1BF012339E629443"
+                          },
+                          "created_at": 1733549983,
+                          "upi": {
+                            "vpa": "abc@abc"
+                          }
+                        }
+                      },
+                      "refund_details": {
+                        "description": "Refund_details of the item.",
+                        "type": "object",
+                        "example": null
+                      },
+                      "event_done_flag": {
+                        "description": "Event_done_flag of the item.",
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "table_info": {
+                        "description": "Table_info of the item.",
+                        "type": "object",
+                        "example": {
+                          "id": "1",
+                          "title": "Testing-001",
+                          "event_date": "2024-12-07 08:00"
+                        }
+                      },
+                      "creator_info": {
+                        "description": "Creator_info of the item.",
+                        "type": "object",
+                        "example": {
+                          "id": 1290,
+                          "email": "",
+                          "first_name": "Backend User",
+                          "last_name": ""
+                        }
+                      },
+                      "user_info": {
+                        "description": "User_info of the item.",
+                        "type": "object",
+                        "example": {
+                          "id": 1293,
+                          "email": "",
+                          "first_name": "BackendUser-2",
+                          "last_name": ""
+                        }
+                      },
+                      "remarks": {
+                        "description": "Remarks of the item.",
+                        "type": "object",
+                        "example": null
+                      },
+                      "status_glossary": {
+                        "description": "Status_glossary of the item.",
+                        "type": "string",
+                        "example": "paymentSuccess"
+                      },
+                      "table_id": {
+                        "description": "Table_id of the item.",
+                        "type": "string",
+                        "example": "1"
+                      },
+                      "creator_id": {
+                        "description": "Creator_id of the item.",
+                        "type": "number",
+                        "example": 1290
+                      },
+                      "user_id": {
+                        "description": "User_id of the item.",
+                        "type": "number",
+                        "example": 1293
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

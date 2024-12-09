@@ -1,7 +1,6 @@
 // const { pending, approved, reject, bookingClosed, cancelled } = tableStatusCode;
 
 module.exports = async function (id) {
-  console.log("Processing tableId:", id);
   const {cancelled} = UseDataService ;
   
   try {

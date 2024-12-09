@@ -1,3 +1,11 @@
+const bookmarkcreate = require('./bookmark/create.json');
+const bookmarkcreateSwagger = bookmarkcreate['/bookmark/create'];
+const tagslist = require('./tags/list.json');
+const tagslistSwagger = tagslist['/tags/list'];
+const defaultmedia = require('./default/media.json');
+const defaultmediaSwagger = defaultmedia['//media/smileserver/git/hightable-backend/api/controllers/interests/list.js'];
+const defaulthome = require('./default/home.json');
+const defaulthomeSwagger = defaulthome['//home/studioq/Documents/HighTable/hightable-backend/api/controllers/table-booking/booked-my-tables-user-list.js'];
 const tableslistpublic = require('./tables/list-public.json');
 const tableslistpublicSwagger = tableslistpublic['/tables/list-public'];
 const tableslistfeaturetablepublic = require('./tables/list-feature-table-public.json');
@@ -45,8 +53,16 @@ let swaggerRefs = [
     { key: 'reviews/give-feedback', refs: 'reviewsgivefeedbackSwagger' },
     { key: 'tables/list-feature-table-public', refs: 'tableslistfeaturetablepublicSwagger' },
     { key: 'tables/list-public', refs: 'tableslistpublicSwagger' },
+    { key: '/home/studioq/Documents/HighTable/hightable-backend/api/controllers/table-booking/booked-my-tables-user-list.js', refs: 'defaulthomeSwagger' },
+    { key: '/media/smileserver/git/hightable-backend/api/controllers/interests/list.js', refs: 'defaultmediaSwagger' },
+    { key: 'tags/list', refs: 'tagslistSwagger' },
+    { key: 'bookmark/create', refs: 'bookmarkcreateSwagger' },
 ];
 module.exports = {
+    bookmarkcreateSwagger,
+    tagslistSwagger,
+    defaultmediaSwagger,
+    defaulthomeSwagger,
     tableslistpublicSwagger,
     tableslistfeaturetablepublicSwagger,
     reviewsgivefeedbackSwagger,

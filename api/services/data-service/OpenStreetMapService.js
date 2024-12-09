@@ -15,7 +15,6 @@ const reverseGeocode = async (latitude, longitude) => {
         const data = await response.json();
         return data; // Return the address information
     } catch (error) {
-        console.error('Error:', error);
         throw error; // Re-throw the error for further handling if needed
     }
 };

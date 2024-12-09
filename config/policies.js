@@ -10,15 +10,13 @@
 
 module.exports.policies = {
 
-  'interests/users-interests-list': ['oauthBearer'],
-  'users/list': true,
   'users/create': true,
   'users/update': ['oauthBearer'],
   "users/view": ['oauthBearer'],
   'users/notification-status': true,
   'users/photo-upload': ['oauthBearer'],
   'users/notification': ['oauthBearer'],
-  // 'users/notification-status': ['oauthBearer'],
+  'users/notification-status': ['oauthBearer'],
 
   /************************  Standard Tables ************************/
   'standard-table/set-price': ['oauthBearer', 'isAdmin'],
@@ -58,8 +56,6 @@ module.exports.policies = {
   'table-booking/list-admin': ['oauthBearer', 'isManagerOrAdmin'],
   'table-booking/list': ['oauthBearer'],
   'table-booking/book-table': ['oauthBearer', 'isMember'],
-  'table-booking/booked-list-all': ['oauthBearer'],
-  'table-booking/booked-my-tables': ['oauthBearer'],
   'table-booking/booked-my-tables-user-list': ['oauthBearer'],
   'table-booking/booked-all-my-list': ['oauthBearer'],
   'table-booking/capture-payment': ['oauthBearer'],
@@ -84,22 +80,3 @@ module.exports.policies = {
   'report/create-table': ['oauthBearer'],
 
 };
-
-/*
- 'tables/list-by-members-cateogry': ['oauthBearer'],
- 'users/login-email': true,
- 'users/update': ['oauthBearer'],
- 'payout-host/payment-to-host': ['oauthBearer'],
- 'users/profile': ['oauthBearer'],
- 'manager/list': ['oauthBearer','isAdmin'],
- 'pay-order': ['oauthBearer'],
- 'refund': ['oauthBearer','isAdmin'],
- 'tables/approved-list': ['oauthBearer'],
- 'tables/pending-list': ['oauthBearer', 'isManagerOrAdmin'],
- 'tables/photo-upload': ['oauthBearer'],
- 'tables/approve-table': ['oauthBearer'],
- 'tables/my-tables-list': ['oauthBearer'],
- 'tables/list-amdin': ['oauthBearer','isManagerOrAdmin'],
- 'tables/create-by-admin': ['oauthBearer', 'isManagerOrAdmin'],
-*/
-

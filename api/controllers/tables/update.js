@@ -47,7 +47,7 @@ module.exports = async function update(request, response) {
         if (UserType(request) === roles.member) {
             const checkIsOwnerTable = await Tables.findOne({ id, created_by: ProfileMemberId(request) })
             if (!checkIsOwnerTable) {
-                return response.status(500).json({ error: "You don't have access to edit the table." });
+                return response.serverError({ error: "You don't have access to edit the table." });
             }
         }
 
@@ -84,7 +84,7 @@ module.exports = async function update(request, response) {
                 updateData.district = district;
 
             } catch (error) {
-                console.error('Error fetching location details:', error);
+                throw error ;
                 // Handle error accordingly, e.g., set a flag or throw an error
             }
         }
@@ -119,7 +119,7 @@ module.exports = async function update(request, response) {
                     // If the table is not found, return an appropriate response
 
                     if (!updatedTable) {
-                        return response.status(404).json({ error: 'Table not found' });
+                        return response.notFound({ error: 'Table not found' });
                     }
 
                     // Build and send response with updated details
@@ -153,16 +153,14 @@ module.exports = async function update(request, response) {
                     }
 
                 } catch (error) {
-                    console.error('Error updating table data:', error);
-                    return response.status(500).json({ error: 'Error updating table data' });
+                    return response.serverError({ error: 'Error updating table data' });
                 }
             } else {
-                return response.status(400).json({ errors, count: errors.length });
+                return response.badRequest({ errors, count: errors.length });
             }
         });
     } catch (error) {
-        console.error("Error occurred while updating Tables data:", error);
-        response.status(500).json({ error: "Error occurred while updating Tables data" });
+        response.serverError({ error: "Error occurred while updating Tables data" });
     }
 };
 

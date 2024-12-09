@@ -13,17 +13,9 @@ exports.sendOTP = async function (phone, callback) {
                 secureOptions: crypto.constants.SSL_OP_LEGACY_SERVER_CONNECT,
             }),
         };
-        console.log({config})
-
         const postresponse = await axios.request(config);
-
-        console.log({postresponse})
-
         const responseData = postresponse.data;
-        console.log({responseData})
-
         const parts = responseData.split('|').map(part => part.trim());
-
         const jsonObject = {
             status: parts[0],
             phone_no: parts[0] === 'success' ? parseInt(parts[1]) : phone,
@@ -31,13 +23,11 @@ exports.sendOTP = async function (phone, callback) {
             message: parts[0] === 'success' ? parts[3] : parts[2]
         };
 
-
         // Pass data to the callback function if provided
         if (callback) {
             callback(null, jsonObject);
         }
     } catch (error) {
-        console.error('Error sending OTP:', error);
         // Pass error to the callback function if provided
         if (callback) {
             callback(error, null);
@@ -74,7 +64,6 @@ exports.verifyOTP = async function (phone, otp, callback) {
         }
 
     } catch (error) {
-        console.error('Error sending OTP:', error);
         // Pass error to the callback function if provided
         if (callback) {
             callback(error, null);

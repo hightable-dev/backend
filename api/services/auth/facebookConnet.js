@@ -11,7 +11,7 @@ module.exports = async function fbConnect(req, res) {
     const fbData = await FbService.fetchUserData(token);
 
     // Send success response with the Facebook data
-    return res.status(200).json({
+    return res.ok({
       message: 'Facebook data retrieved successfully',
       data: fbData
     });

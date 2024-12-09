@@ -42,7 +42,7 @@ module.exports = function create(request, response) {
                 await errorBuilder.build(err, function (error_obj) {
                     _response_object.errors = error_obj;
                     _response_object.count = error_obj.length;
-                    return response.status(500).json(_response_object);
+                    return response.serverError(_response_object);
                 });
             }
         });
@@ -54,7 +54,7 @@ module.exports = function create(request, response) {
         } else {
             _response_object.errors = errors;
             _response_object.count = errors.length;
-            return response.status(400).json(_response_object);
+            return response.badRequest(_response_object);
         }
     })
 };

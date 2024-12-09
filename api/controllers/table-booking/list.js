@@ -9,7 +9,6 @@ module.exports = function list(request, response) {
   const request_query = request.allParams();
   const filtered_query_data = _.pick(request_query, ['page', 'sort', 'limit', 'search', 'status', 'type', 'table_id', 'booking_status']);
   let { page, limit, status, search, type, table_id, booking_status } = filtered_query_data;
-  console.log({ request_query })
 
   const input_attributes = [
     { name: 'page', number: true, min: 1 },
@@ -117,8 +116,6 @@ module.exports = function list(request, response) {
         limit = parseInt(limit) || 5;
         const skip = (page - 1) * limit;
         const criteria = await buildCriteria();
-        console.log({ criteria });
-
         // Fetch all items matching criteria
         let items = await TableBooking.find({ where: criteria })
           .sort('created_at DESC')
@@ -147,10 +144,8 @@ module.exports = function list(request, response) {
               }
 
               if (item.user_details?.phone) {
-                await phoneEncryptor.decrypt(item.user_details?.phone, function (decrypted_text) {
-                  item.user_details.phone = decrypted_text;
-                });
-              }
+                  item.user_details.phone = UseDataService.phoneCrypto.decryptPhone(phone);
+               }
             }
 
             if (UserType(request) === roles.manager) {
@@ -163,9 +158,7 @@ module.exports = function list(request, response) {
               }
 
               if (item.user_id?.phone) {
-                await phoneEncryptor.decrypt(item.user_id?.phone, function (decrypted_text) {
-                  item.user_id.phone = decrypted_text;
-                });
+                  item.user_id.phone = UseDataService.phoneCrypto.decryptPhone(phone);
               }
             }
             return item; // Return the transformed item
@@ -177,15 +170,14 @@ module.exports = function list(request, response) {
         const paginatedItems = items.slice(skip, skip + limit);
         sendResponse(paginatedItems, totalItems);
       } catch (error) {
-        console.error('Error retrieving service requests:', error);
-        return response.serverError('Server Error');
+        return response.serverError({ message:'Error fetching booking list', error});
       }
     } else {
       _response_object = {
         errors: errors,
         count: errors.length,
       };
-      return response.status(400).json(_response_object);
+      return response.badRequest(_response_object);
     }
   });
 };

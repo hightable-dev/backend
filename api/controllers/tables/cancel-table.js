@@ -26,9 +26,7 @@ module.exports = async function update(request, response) {
     created_by: ProfileMemberId(request),
   });
   if (!checkIsOwnerTable) {
-    return response
-      .status(500)
-      .json({ error: "You don't have access to cancel the table." });
+    return response.serverError({ error: "You don't have access to cancel the table." });
   }
 
   filtered_post_data.status = cancelled;
@@ -44,7 +42,7 @@ module.exports = async function update(request, response) {
       },
     ];
     _response_object.count = 1;
-    return response.status(400).json(_response_object);
+    return response.badRequest(_response_object);
   }
 
   async function updateCancelTable(id, data, callback) {
@@ -53,7 +51,7 @@ module.exports = async function update(request, response) {
         await errorBuilder.build(err, function (error_obj) {
           _response_object.errors = error_obj;
           _response_object.count = error_obj.length;
-          return response.status(500).json(_response_object);
+          return response.serverError(_response_object);
         });
       } else {
         callback(data);
@@ -71,7 +69,7 @@ module.exports = async function update(request, response) {
         UtilsService.throwIfErrorElseCallback(err, response, 400, () => {
           if (!data) {
             _response_object.message = "No data found with the given id.";
-            return response.status(404).json(_response_object);
+            return response.notFound(_response_object);
           } else {
             if (
               filtered_post_data.status === cancelled &&
@@ -96,7 +94,6 @@ module.exports = async function update(request, response) {
       // details,
     });
 
-    // return(console.log("details",details))
     response.ok(_response_object);
 
     if (bookedList?.length > 0) {
@@ -134,8 +131,6 @@ module.exports = async function update(request, response) {
     await UseDataService.cancelBookingIfTableCancelByHost(details.id);
 
     await requestRefund(bookedList);
-    // .then((result) => console.log("Result:"))
-    // .catch((error) => console.error("Error:"));
 
     process.nextTick(() => {
       const relativePath = SwaggerGenService.getRelativePath(__filename);
@@ -218,12 +213,6 @@ module.exports = async function update(request, response) {
               status: [payPending, paymentSuccess, bookingConfirmationPendingByCreator]
             });
 
-            console.log("CANCELTABLE 219 - bookinglist", {
-              tableId: updatedData[0].id,
-              userId: ProfileMemberId(request),
-              status: [payPending, paymentSuccess, bookingConfirmationPendingByCreator],
-            })
-
             await UseDataService.countTablesHosted(ProfileMemberId(request));
             sendResponse(updatedData[0], bookingList);
           }
@@ -232,7 +221,7 @@ module.exports = async function update(request, response) {
     } else {
       _response_object.errors = errors;
       _response_object.count = errors.length;
-      return response.status(400).json(_response_object);
+      return response.badRequest(_response_object);
     }
   }
   );

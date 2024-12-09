@@ -33,13 +33,13 @@ module.exports = function update(request, response) {
                         const updatedTable = await Tables.updateOne({ id: table_id }).set(updateData);
                         // If the table is not found, return an appropriate response
                         if (!updatedTable) {
-                            return response.status(404).json({ error: 'Table not found' });
+                            return response.notFound({ error: 'Table not found' });
                         }
 
                         // Retrieve all bookings for the updated table
                         const allBookings = await TableBooking.find({ table_id });
                         if (allBookings.length === 0) {
-                            return response.status(400).json({ error: 'No bookings found', message: 'event status updated as complete' });
+                            return response.badRequest({ error: 'No bookings found', message: 'event status updated as complete' });
                         } else {
 
                             const groupedBookings = {};
@@ -99,20 +99,18 @@ module.exports = function update(request, response) {
                             return response.ok({ message: 'Event details updated', details: updatedTable, bookings: allBookings });
                         }
                     } else {
-                        return response.status(400).json({ error: 'Already event completed', message: 'Payment proccessed for the event' });
+                        return response.badRequest({ error: 'Already event completed', message: 'Payment proccessed for the event' });
                     }
 
                 } catch (error) {
-                    console.error('Error updating table data:', error);
-                    return response.status(500).json({ error: 'Error updating table data' });
+                    return response.serverError({ message: 'Error updating table data', error });
                 }
             } else {
-                return response.status(400).json({ errors, count: errors.length });
+                return response.badRequest({ errors, count: errors.length });
             }
         });
 
     } catch (error) {
-        console.error("Error occurred while updating Tables data:", error);
-        response.status(500).json({ error: "Error occurred while updating Tables data" });
+        response.serverError({message : 'Error updating status', error });
     }
 };

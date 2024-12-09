@@ -22,11 +22,10 @@ module.exports = async function findOne(request, response) {
 
       return response.ok(_response_object);
     } else {
-      return response.status(500).json({ error: "Error occurred while fetching data" });
+      return response.serverError({ error: "Error occurred while fetching data" });
     }
 
   } catch (error) {
-    console.error("Error occurred while fetching item:", error);
-    return response.status(500).json({ error: "Error occurred while fetching data" });
+    return response.serverError({ error: "Error occurred while fetching data" });
   }
 };

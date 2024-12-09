@@ -47,7 +47,6 @@ function logError(req, res, startTime, errorDetails) {
   // Read the log file and manage log rotation
   fs.readFile(logFilePath, 'utf8', (err, data) => {
     if (err && err.code !== 'ENOENT') {
-      console.error('Failed to read log file:', err);
       return;
     }
 
@@ -65,7 +64,7 @@ function logError(req, res, startTime, errorDetails) {
     // Write the updated lines back to the log file
     fs.writeFile(logFilePath, lines.join('\n') + '\n', (err) => {
       if (err) {
-        console.error('Failed to write log:', err);
+        throw ('Failed to write log:', err);
       }
     });
   });

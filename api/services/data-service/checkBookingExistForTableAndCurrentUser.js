@@ -34,7 +34,6 @@ module.exports = async function (data) {
       return tableData.length > 0 ? true : null; //
     } else {
       if (!bookingData) {
-        console.error('No data for the booking id.');
         return null;
       }
     }

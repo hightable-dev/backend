@@ -6,37 +6,35 @@ const checkBookingExistForTableAndCurrentUser = require("./data-service/checkBoo
 const checkBookingTableCreatedByCurrentUser = require("./data-service/checkBookingTableCreatedByCurrentUser.js");
 const checkTableCreatedByCurrentUser = require("./data-service/checkTableCreatedByCurrentUser.js");
 const completedEvent = require("./data-service/completedEvent.js");
+const countBookedSeats = require("./data-service/countBookedSeats.js");
 const countFollowers = require("./data-service/countFollowers.js");
 const countTablesBooked = require("./data-service/countTablesBooked.js");
 const countTablesHosted = require("./data-service/countTablesHosted.js");
+const countTablesWishlist = require("./data-service/countTablesWishlist.js");
 const dataCreate = require("./data-service/dataCreate.js");
 const dateHelper = require("./data-service/dateHelper.js");
 const dateHelperUtc = require("./data-service/dateHelperUtc.js");
 const { emailNotification } = require("./data-service/emailService.js");
 const errorDataCreate = require("./data-service/errorDataCreate.js");
+const errorMessages = require("./data-service/errorMessages.js");
 const followerData = require("./data-service/followerData.js");
 const getBookingStatus = require("./data-service/getBookingStatus.js");
 const { geocodeLocation } = require("./data-service/locationUtils.js");
-const mapKit = require("./data-service/mapKit.js");
 const messages = require("./data-service/messages.js");
 const pendingPaymentByUser = require("./data-service/pendingPaymentByUser.js");
 const profilePercentile = require("./data-service/profilePercentile.js");
 const refundRequestTables = require("./data-service/refundRequestTables.js");
-// const phoneCrypto = require("./data-service/phoneCrypto.js");
-// const phoneCryptoCopy = require("./data-service/phoneCrypto copy.js");
-// const phoneCrypto = require("./data-service/phoneCrypto.js");
-// const { decryptPhone, encryptPhone } = require("./data-service/phoneCrypto.js");
-// const { decryptPhone, encryptPhone } = require("./data-service/phoneEncryption.js");
 const removeFromWishlistAfterTableCancel = require("./data-service/removeFromWishlistAfterTableCancel.js");
 const retrieveInterestsName = require("./data-service/retrieveInterestsName.js");
-// const tableCreateByAdmin = require("./data-service/tableCreateByAdmin.js");
+const sendResponseList = require("./data-service/sendResponseList.js");
+const tableCreateByAdmin = require("./data-service/tableCreateByAdmin.js");
 const tableCreateByManager = require("./data-service/tableCreateByManager.js");
 const tableCreateByMember = require("./data-service/tableCreateByMember.js");
 const tableListingCriteria = require("./data-service/tableListingCriteria.js");
 const tableListingCriteriaWithoutLocation = require("./data-service/tableListingCriteriaWithoutLocation.js");
 const tableListingCriteriaWithoutLocationPublic = require("./data-service/tableListingCriteriaWithoutLocationPublic.js");
+const toggleWishListItem = require("./data-service/toggleWishListItem.js");
 const { processSwaggerGeneration } = require("./processSwaggerGenerate.js");
-
 // Payment status
 const {
   payPending,
@@ -113,7 +111,7 @@ const resolution = {
   hdPlus: { width: 1440, height: 810, bitrate: "3M", name: "hdPlus", status: false }, // HD+
   fullHd: { width: 1920, height: 1080, bitrate: "5M", name: "fullHd", status: false }, // Full HD
 };
-
+const expiryMins = 14400;
 const resolutionNames = Object.values(resolution)
   .filter((res) => res.status) // Filter only those where status is true
   .map((res) => res.name); // Extract the name property
@@ -121,6 +119,7 @@ const resolutionNames = Object.values(resolution)
 module.exports = {
 
   /***** Status code ********/
+  expiryMins,
   inactive,
   active,
 
@@ -178,9 +177,9 @@ module.exports = {
   tablesPhoto,
   listingTableStatus,
   listingTableStatusNotEqual,
+  errorMessages,
   // formatDate: require("./data-service/formateDate.js"),
   locationUtils: require("./data-service/locationUtils.js"),
-  mapKit,
 
   tableListingCriteria,
   tableListingCriteriaWithoutLocation,
@@ -200,9 +199,6 @@ module.exports = {
   checkBookingExistForTableAndCurrentUser,
   removeFromWishlistAfterTableCancel,
   cancelBookingIfTableCancelByHost,
-  // decryptPhone,
-  // decryptPhone, // calls multiple times so removed
-  // phoneCrypto,
   retrieveInterestsName,
   countTablesBooked,
   countTablesHosted,
@@ -223,6 +219,11 @@ module.exports = {
   dataCreate,
   getBookingStatus,
   tableListingCriteriaWithoutLocationPublic,
+  sendResponseList,
+  countBookedSeats,
+  tableCreateByAdmin,
+  toggleWishListItem,
+  countTablesWishlist,
 
   /**
  * Calculates the profile completion percentage based on user data.

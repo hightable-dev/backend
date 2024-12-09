@@ -1,6 +1,5 @@
 
 module.exports = async function (data) {
-    console.log({"BOOKINGLISTFORUSER": data});
     const { followerId, userId } = data ;
 
     // Define required fields and their corresponding types

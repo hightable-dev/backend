@@ -71,14 +71,12 @@ const tableData = await Tables.findOne({ id: parseInt(getBookedTable?.table_id) 
             return res.json({ message: 'Payment captured and booking updated successfully', booking: updatedBooking });
         } else {
 
-            return res.status(500).json({ error: 'No matching record found for table_booking_id'});
+            return res.serverError({ error: 'No matching record found for table_booking_id'});
 
         }
 
     } catch (err) {
-        console.error('Capture Payment Error:', err); // Log any errors
-
         // Return an error response
-        return res.status(500).json({ error: 'Could not capture payment or update booking' });
+        return res.serverError({ error: 'Could not capture payment or update booking' });
     }
 };

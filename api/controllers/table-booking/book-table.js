@@ -3,12 +3,12 @@ const moment = require('moment');
 require('dotenv').config();
 
 module.exports = async function createOrder(req, res) {
-  const { payPending, orederExpired, paymentSuccess, bookingConfirmationPendingByCreator, createOrderErr } = UseDataService;
+  const { payPending, orederExpired, paymentSuccess, bookingConfirmationPendingByCreator, createOrderErr,expiryDate  } = UseDataService;
 
   const { id } = req.body;
   let responseObject = {};
 
-  const data = ['order_id', 'table_id', 'user_id', 'seats', 'expiry_date', 'expires_at', 'creator_id', 'status_glossary'];
+  const data = ['order_id', 'table_id', 'user_id', 'seats', 'creator_id', 'status_glossary'];
   const profileId = req.user.profile_members;
   const postRequestData = req.body;
   const seats = 1;
@@ -19,13 +19,10 @@ module.exports = async function createOrder(req, res) {
     { name: 'table_id', required: true },
     { name: 'user_id', required: true },
     { name: 'seats', required: true },
-    { name: 'expiry_date', required: true },
-    { name: 'expires_at', required: true },
     { name: 'creator_id', required: true },
     { name: 'status_glossary' },
   ];
 
-  console.log({ ididididi: id })
   const sendResponse = (details) => {
     responseObject = {
       message: 'Table booked .',
@@ -35,7 +32,6 @@ module.exports = async function createOrder(req, res) {
   };
 
   const handleTableBooking = async () => {
-    await Tables.handleExpiredBookings(id, payPending, orederExpired);
     const isCheckdata = await UseDataService.checkTableCreatedByCurrentUser(
       {
         tableId: id,
@@ -60,7 +56,7 @@ module.exports = async function createOrder(req, res) {
         status: payPending,
       });
 
-      return { error: 'Your booking accept. Please pay to confirm.', statusCode: 400 };
+      return { error: 'Table already booked. Payemnt is pending.', statusCode: 400 };
     } else if (isAlreadyBookedAndSuccess) {
       return { error: 'Table already booked. You cannot book again.', statusCode: 400 };
     }
@@ -94,7 +90,6 @@ module.exports = async function createOrder(req, res) {
         // order = await RazorpayService.createRazorpayOrder(amount, title);
         order = await RazorpayService.createRazorpayOrder({ amount, title, tableId: id, userId: profileId });
       } catch (error) {
-        console.error('Error creating Razorpay order:', error);
         await UseDataService.errorDataCreate({
           table_id: id,
           type: createOrderErr,
@@ -112,8 +107,8 @@ module.exports = async function createOrder(req, res) {
        * Set order Expire Date
        * ExpireDate set to 4 hrs
        */
-      const expiryMins = 14400;
-      const expiryDate = moment().add(expiryMins, 'minutes').toDate(); // Assuming expiry is 5 minutes
+      
+      // const expiryDate = moment().add(expiryMins, 'minutes').toDate(); // Assuming expiry is 5 minutes
 
       filteredPostData = {
         order_id: order.id,
@@ -122,58 +117,36 @@ module.exports = async function createOrder(req, res) {
         seats,
         amount,
         creator_id: created_by,
-        // status: bookingConfirmationPendingByCreator,
         status: payPending,
-        expiry_date: expiryDate,
-        expires_at: expiryMins,
         title
       };
 
       return { success: true };
 
     } catch (error) {
-      console.error('Error inserting data:', error);
       return { error: error, statusCode: 500 };
     }
   };
 
-  const handleError = (error) => {
-    responseObject = {
-      errors: [{ message: error.message }],
-      count: 1
-    };
-    return res.status(500).json(responseObject);
-  };
-
   const createBooking = async (postData) => {
-    const { order_id, table_id, user_id, amount, status, expiry_date, expires_at, creator_id, status_glossary } = postData;
-    console.log({postData})
-    let user_info, creator_info;
-
-    if (user_id) {
-      const getProfileInfo = await ProfileMembers.findOne({ id: user_id }).select([
-        'email',
-        'first_name',
-        'last_name',
-      ]);
-      console.log("tempuserid user_id", { user_id })
-
-      user_info = getProfileInfo;
-    }
-    if (creator_id) {
-       const getProfileInfo = await ProfileMembers.findOne({ id: creator_id }).select([
-        'email',
-        'first_name',
-        'last_name',
-      ]);
-      console.log("tempuserid creator_id", { creator_id })
-      creator_info = getProfileInfo;
-    }
-
-    const table_info = await Tables.findOne({id:table_id}).select(['title','event_date'])
+    const { order_id, table_id, user_id, amount, status, creator_id, status_glossary } = postData;
+    ({ postData })
     
 
+    const ids = [];
+    if (user_id) ids.push(user_id);
+    if (creator_id) ids.push(creator_id);
 
+    if (ids.length > 0) {
+      const profiles = await ProfileMembers.find({
+        id: { in: ids }
+      }).select(['email', 'first_name', 'last_name']);
+
+      if (user_id) user_info = profiles.find(profile => profile.id === user_id);
+      if (creator_id) creator_info = profiles.find(profile => profile.id === creator_id);
+    }
+    
+    const table_info = await Tables.findOne({ id: table_id }).select(['title', 'event_date'])
 
     try {
       const newBooking = await TableBooking.create({
@@ -183,75 +156,39 @@ module.exports = async function createOrder(req, res) {
         seats,
         amount,
         status,
-        expiry_date,
-        expires_at,
         creator_id,
         creator_info,
         user_info,
         table_info,
         status_glossary
       })
-      // 
-      // const msg = await UseDataService.messages({ tableId: table_id, userId: user_id });
-
-
-      /*   
-      This notification removed bcz user directly book and pay
-      without accept or reject by host
-      
-          if (newBooking) {
-              await UseDataService.sendNotification({
-                notification: {
-                  senderId: profileId,
-                  type: 'booking',
-                  message: msg?.BookingRequestMsg,
-                  receiverId: creator_id,
-                  followUser: null,
-                  tableId: id,
-                  payOrderId: filteredPostData.order_id,
-                  isPaid: false,
-                  templateId: 'bookTable',
-                  roomName: 'AcceptBooking_',
-                  creatorId: creator_id,
-                  status: 1, // approved
-                },
-      
-                pushMessage: {
-                  title: title,
-                  payOrderId: filteredPostData.order_id
-                }
-              });
-            } */
 
       sendResponse(newBooking);
     } catch (error) {
-      handleError(error);
+      throw (error);
     }
   };
 
-
-
   const dataInserted = await insertData(null);
-
   if (dataInserted.success) {
     validateModel.validate(Tables, input_attributes, filteredPostData, async (valid, errors) => {
       if (valid) {
         try {
           const isBooked = await Tables.checkPreviousBookings(id, profileId, bookingConfirmationPendingByCreator);
           if (!isBooked) {
-            filteredPostData.status_glossary = "bookingConfirmationPendingByCreator";
+            filteredPostData.status_glossary = "bookingPayPending";
             await createBooking(filteredPostData);
           }
-          await Tables.updateTableSeats(id, payPending, paymentSuccess);
+          await UseDataService.countBookedSeats(id, payPending, paymentSuccess);
         } catch (error) {
-          return handleError(error);
+          throw (error);
         }
       } else {
         responseObject = {
           errors: errors,
           count: errors.length
         };
-        return res.status(400).json(responseObject);
+        return res.badRequest(responseObject);
       }
     });
   } else {

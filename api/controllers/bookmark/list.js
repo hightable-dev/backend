@@ -103,11 +103,10 @@ module.exports = function list(request, response) {
 
         sendResponse(items, totalItems);
       } catch (error) {
-        console.error('Error retrieving tables:', error);
         return response.serverError('Server Error');
       }
     } else {
-      return response.status(400).json({
+      return response.badRequest({
         errors: errors,
         count: errors.length,
       });

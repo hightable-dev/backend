@@ -108,7 +108,7 @@ module.exports = async function updateFile(request, response) {
         }
         await addRecord(insertData);
       } catch (err) {
-        return response.status(400).json(err); // Send error message to client
+        return response.badRequest(err); // Send error message to client
       }
     };
 
@@ -116,9 +116,8 @@ module.exports = async function updateFile(request, response) {
     await validateUploadedFiles();
 
   } catch (err) {
-    console.error(err);
     if (!response.headersSent) {
-      response.status(500).json({ error: 'Internal Server Error' });
+      response.serverError({ error: 'Internal Server Error' });
     }
   }
 };

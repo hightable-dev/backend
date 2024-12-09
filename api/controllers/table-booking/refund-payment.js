@@ -17,7 +17,7 @@ module.exports = async function refundPayment(req, res) {
     const paymentId = bookings.map(booking => booking.payment_id);
     // Check if the paymentId is an array
     if (!Array.isArray(paymentId)) {
-      return res.status(400).json({ error: 'paymentId must be an array' });
+      return res.badRequest({ error: 'paymentId must be an array' });
     }
 
     // Initialize an array to store refund responses for each payment
@@ -28,7 +28,7 @@ module.exports = async function refundPayment(req, res) {
       // Check if the idempotency key for this payment ID exists
       if (idempotencyKeyMap.has(payId)) {
         // If idempotency key exists, skip this paymentId
-        console.error(`Refund request is already in progress for payment ID: ${payId}`);
+        sails.log(`Refund request is already in progress for payment ID: ${payId}`);
         continue;
       }
 
@@ -89,10 +89,9 @@ module.exports = async function refundPayment(req, res) {
 
       } catch (error) {
         // Handle errors
-        console.error(`Error occurred during refund for payment ID ${payId}:`, error);
         // Remove the idempotency key from the map in case of error
         idempotencyKeyMap.delete(payId);
-        return res.status(400).json(error);
+        return res.badRequest(error);
 
       }
     }
@@ -106,7 +105,6 @@ module.exports = async function refundPayment(req, res) {
     }
 
     // Handle errors
-    console.error('Error occurred during refund:', error);
-    return res.status(500).json({ error: error.message });
+    return res.serverError({ error: error.message });
   }
 };

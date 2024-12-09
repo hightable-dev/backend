@@ -33,29 +33,26 @@ module.exports = async function userDestroy(request, response) {
     const updatedTables = await Promise.all(
       findTables.map(async (table) => {
 
-        if (table.id) {
-          try {
-            const bookedList = await paidBooking(table.id);
+          if (table.id) {
+            try {
+              const bookedList = await paidBooking(table.id);
 
-            if (bookedList) {
-              await requestRefund(bookedList)
-                .then((result) => console.log('Refund requested successfully:', result))
-                .catch((error) => console.error('Error requesting refund:', error));
-              await DataService.initiateRefund({
-                userId: profileId,
-                tableId: parseInt(table.id),
-              });
+              if (bookedList) {
+                await requestRefund(bookedList);
+                await DataService.initiateRefund({
+                  userId: profileId,
+                  tableId: parseInt(table.id),
+                });
+              }
+              return await Tables.updateOne({ id: table.id }).set({ status: deletedAccountTables });
+            } catch (error) {
+              errorDetails = error;
+              throw new Error(`Failed to process table with ID ${table.id}`);
+            } 
+            finally {
+              await TableBooking.updateOne({ table_id: table.id, status: paymentSuccess }).set({ status: deletedAccountTables, remarks: errorDetails, status_glossary: "deletedAccountTables" })
             }
-            return await Tables.updateOne({ id: table.id }).set({ status: deletedAccountTables });
-          } catch (error) {
-            errorDetails = error;
-            throw new Error(`Failed to process table with ID ${table.id}`);
-          } 
-          finally {
-            console.log({ finally: 'This will always run' });
-            await TableBooking.updateOne({ table_id: table.id, status: paymentSuccess }).set({ status: deletedAccountTables, remarks: errorDetails, status_glossary: "deletedAccountTables" })
           }
-        }
         return table;
       })
     );
@@ -117,10 +114,9 @@ module.exports = async function userDestroy(request, response) {
     }
 
     _response_object.message = 'Users and associated profile members destroyed successfully.';
-    return response.status(200).json(_response_object);
+    return response.ok(_response_object);
 
   } catch (error) {
-    console.error("Error occurred while destroying users and profile members:", error);
-    return response.status(500).json({ error: "Error occurred while destroying users and profile members." });
+    return response.serverError({ error: "Error occurred while destroying users and profile members." });
   }
 };

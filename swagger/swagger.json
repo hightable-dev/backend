@@ -52,9 +52,6 @@
       "name": "Fb"
     },
     {
-      "name": "LinkedIn"
-    },
-    {
       "name": "index"
     },
     {
@@ -85,9 +82,6 @@
       "name": "list"
     },
     {
-      "name": "booked-list-all"
-    },
-    {
       "name": "booked-my-tables-user-list"
     },
     {
@@ -95,9 +89,6 @@
     },
     {
       "name": "booked-all-my-list"
-    },
-    {
-      "name": "booked-my-tables"
     },
     {
       "name": "book-table"
@@ -1614,10 +1605,6 @@
           "payment_id": {
             "type": "string"
           },
-          "expires_at": {
-            "type": "number",
-            "format": "double"
-          },
           "amount": {
             "type": "number",
             "format": "double"
@@ -1626,7 +1613,6 @@
             "type": "number",
             "format": "double"
           },
-          "expiry_date": {},
           "payment_details": {},
           "refund_details": {},
           "event_done_flag": {
@@ -2114,51 +2100,11 @@
         }
       }
     },
-    "/linkedin-connect": {
-      "get": {
-        "summary": "/linkedin-connect",
-        "tags": [
-          "LinkedIn"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
     "/status-codes": {
       "get": {
         "summary": "/status-codes",
         "tags": [
           "index"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/auth/linkedin": {
-      "get": {
-        "summary": "/auth/linkedin",
-        "tags": [
-          "LinkedIn"
         ],
         "parameters": [],
         "responses": {
@@ -2511,102 +2457,16 @@
     },
     "/tags/list": {
       "get": {
-        "summary": "/tags/list",
+        "summary": "Retrieve data of Tags - list",
+        "description": "Use this API to retrieve data of tags - list.",
+        "operationId": "tags/list",
         "tags": [
           "Tags"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/interests/create": {
-      "post": {
-        "summary": "Create Interests",
-        "description": "Create a new **Interests** record.",
-        "externalDocs": {
-          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
-          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
-        },
-        "tags": [
-          "Interests"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Responds with a JSON dictionary representing the newly created **Interests** instance",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/interests"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation errors; details in JSON response"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        },
-        "requestBody": {
-          "description": "JSON dictionary representing the Interests instance to create.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/interests"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/interests/image-upload": {
-      "post": {
-        "summary": "/interests/image-upload",
-        "tags": [
-          "Interests"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/interests/list": {
-      "get": {
-        "summary": "Retrieve data of Interests - list",
-        "description": "Use this API to retrieve data of interests - list.",
-        "operationId": "interests/list",
-        "tags": [
-          "Interests"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Interests retrieved successfully.",
+            "description": "Tags list",
             "content": {
               "application/json": {
                 "schema": {
@@ -2615,20 +2475,59 @@
                     "message": {
                       "description": "Success message.",
                       "type": "string",
-                      "example": "Interests retrieved successfully."
+                      "example": "Tags list"
                     },
                     "meta": {
                       "type": "object",
                       "properties": {
+                        "total": {
+                          "description": "Total of the meta data.",
+                          "type": "number",
+                          "example": 19
+                        },
                         "page": {
                           "description": "Page of the meta data.",
                           "type": "number",
                           "example": 1
                         },
-                        "total": {
-                          "description": "Total of the meta data.",
+                        "limit": {
+                          "description": "Limit of the meta data.",
                           "type": "number",
-                          "example": 7
+                          "example": 10
+                        },
+                        "base_url": {
+                          "description": "Base_url of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                            "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                          }
+                        },
+                        "table_photo": {
+                          "description": "Table_photo of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                          }
+                        },
+                        "table_video": {
+                          "description": "Table_video of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                          }
+                        },
+                        "profile_photo": {
+                          "description": "Profile_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                        },
+                        "category_photo": {
+                          "description": "Category_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
                         }
                       }
                     },
@@ -2639,38 +2538,13 @@
                         "properties": {
                           "id": {
                             "description": "Id of the item.",
-                            "type": "string",
-                            "example": "1"
-                          },
-                          "name": {
-                            "description": "Name of the item.",
-                            "type": "string",
-                            "example": "Travel"
-                          },
-                          "image": {
-                            "description": "Image of the item.",
-                            "type": "string",
-                            "example": ""
-                          },
-                          "width": {
-                            "description": "Width of the item.",
-                            "type": "number",
-                            "example": 50
-                          },
-                          "height": {
-                            "description": "Height of the item.",
-                            "type": "number",
-                            "example": 50
-                          },
-                          "status": {
-                            "description": "Status of the item.",
                             "type": "number",
                             "example": 1
                           },
-                          "orderby": {
-                            "description": "Orderby of the item.",
-                            "type": "number",
-                            "example": 1
+                          "tags": {
+                            "description": "Tags of the item.",
+                            "type": "string",
+                            "example": "Beginners"
                           }
                         }
                       }
@@ -2773,7 +2647,8 @@
                 "type": "object",
                 "properties": {},
                 "required": [
-                  "0"
+                  "0",
+                  "1"
                 ]
               }
             }
@@ -2781,9 +2656,55 @@
         }
       }
     },
-    "/interests/category-available": {
-      "get": {
-        "summary": "/interests/category-available",
+    "/interests/create": {
+      "post": {
+        "summary": "Create Interests",
+        "description": "Create a new **Interests** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "tags": [
+          "Interests"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the newly created **Interests** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/interests"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON dictionary representing the Interests instance to create.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/interests"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/interests/image-upload": {
+      "post": {
+        "summary": "/interests/image-upload",
         "tags": [
           "Interests"
         ],
@@ -2801,22 +2722,151 @@
         }
       }
     },
-    "/interests/users-interests-list": {
+    "/interests/list": {
       "get": {
-        "summary": "/interests/users-interests-list",
+        "summary": "Retrieve data of Interests - list",
+        "description": "Use this API to retrieve data of interests - list.",
+        "operationId": "interests/list",
         "tags": [
           "Interests"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
+            "description": "No Items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "No Items"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "description": "Total of the meta data.",
+                          "type": "number",
+                          "example": 7
+                        },
+                        "page": {
+                          "description": "Page of the meta data.",
+                          "type": "number",
+                          "example": 5
+                        },
+                        "limit": {
+                          "description": "Limit of the meta data.",
+                          "type": "number",
+                          "example": 10
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [
+                  "0",
+                  "1"
+                ]
+              }
+            }
           }
         }
       }
@@ -2872,7 +2922,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Request for list retrieved successfully.",
+            "description": "Tables list",
             "content": {
               "application/json": {
                 "schema": {
@@ -2881,7 +2931,7 @@
                     "message": {
                       "description": "Success message.",
                       "type": "string",
-                      "example": "Request for list retrieved successfully."
+                      "example": "Tables list"
                     },
                     "meta": {
                       "type": "object",
@@ -2889,7 +2939,7 @@
                         "total": {
                           "description": "Total of the meta data.",
                           "type": "number",
-                          "example": 5
+                          "example": 0
                         },
                         "page": {
                           "description": "Page of the meta data.",
@@ -2934,286 +2984,6 @@
                           "description": "Category_photo of the meta data.",
                           "type": "string",
                           "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
-                        }
-                      }
-                    },
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "created_at": {
-                            "description": "Created_at of the item.",
-                            "type": "object",
-                            "example": "2024-11-27T03:44:32.863Z"
-                          },
-                          "updated_at": {
-                            "description": "Updated_at of the item.",
-                            "type": "object",
-                            "example": "2024-11-28T07:48:17.975Z"
-                          },
-                          "id": {
-                            "description": "Id of the item.",
-                            "type": "string",
-                            "example": "643"
-                          },
-                          "full_name": {
-                            "description": "Full_name of the item.",
-                            "type": "string",
-                            "example": "Staging user 1 "
-                          },
-                          "type": {
-                            "description": "Type of the item.",
-                            "type": "number",
-                            "example": 2
-                          },
-                          "media": {
-                            "description": "Media of the item.",
-                            "type": "string",
-                            "example": "image-643_1.webp"
-                          },
-                          "video": {
-                            "description": "Video of the item.",
-                            "type": "object",
-                            "example": null
-                          },
-                          "description": {
-                            "description": "Description of the item.",
-                            "type": "string",
-                            "example": "Test"
-                          },
-                          "phone": {
-                            "description": "Phone of the item.",
-                            "type": "string",
-                            "example": ""
-                          },
-                          "min_seats": {
-                            "description": "Min_seats of the item.",
-                            "type": "number",
-                            "example": 4
-                          },
-                          "max_seats": {
-                            "description": "Max_seats of the item.",
-                            "type": "number",
-                            "example": 4
-                          },
-                          "booked_seats": {
-                            "description": "Booked_seats of the item.",
-                            "type": "number",
-                            "example": 1
-                          },
-                          "booked": {
-                            "description": "Booked of the item.",
-                            "type": "number",
-                            "example": 1
-                          },
-                          "bookmarks": {
-                            "description": "Bookmarks of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "followers": {
-                            "description": "Followers of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "title": {
-                            "description": "Title of the item.",
-                            "type": "string",
-                            "example": "Test 123"
-                          },
-                          "price": {
-                            "description": "Price of the item.",
-                            "type": "number",
-                            "example": 564
-                          },
-                          "tags": {
-                            "description": "Tags of the item.",
-                            "type": "string",
-                            "example": "Corporate"
-                          },
-                          "address": {
-                            "description": "Address of the item.",
-                            "type": "string",
-                            "example": "Puducherry Beach, White Town, Puducherry, India"
-                          },
-                          "city": {
-                            "description": "City of the item.",
-                            "type": "string",
-                            "example": "Puducherry"
-                          },
-                          "event_date": {
-                            "description": "Event_date of the item.",
-                            "type": "string",
-                            "example": "28-11-2024 18:30"
-                          },
-                          "reviews": {
-                            "description": "Reviews of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "user_type": {
-                            "description": "User_type of the item.",
-                            "type": "number",
-                            "example": 2
-                          },
-                          "status": {
-                            "description": "Status of the item.",
-                            "type": "number",
-                            "example": 3
-                          },
-                          "admin_id": {
-                            "description": "Admin_id of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "event_done_flag": {
-                            "description": "Event_done_flag of the item.",
-                            "type": "boolean",
-                            "example": false
-                          },
-                          "state": {
-                            "description": "State of the item.",
-                            "type": "string",
-                            "example": "Puducherry"
-                          },
-                          "district": {
-                            "description": "District of the item.",
-                            "type": "string",
-                            "example": "Puducherry"
-                          },
-                          "pincode": {
-                            "description": "Pincode of the item.",
-                            "type": "string",
-                            "example": "605001"
-                          },
-                          "order_by": {
-                            "description": "Order_by of the item.",
-                            "type": "string",
-                            "example": ""
-                          },
-                          "table_expense": {
-                            "description": "Table_expense of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "location_details": {
-                            "description": "Location_details of the item.",
-                            "type": "object",
-                            "example": {
-                              "country": "India",
-                              "locality": "Puducherry",
-                              "political": "India",
-                              "postal_code": "605001",
-                              "sublocality_level_1": "White Town",
-                              "administrative_area_level_3": "Puducherry"
-                            }
-                          },
-                          "location": {
-                            "description": "Location of the item.",
-                            "type": "object",
-                            "example": {
-                              "lat": 11.9353019,
-                              "lng": 79.8364573
-                            }
-                          },
-                          "inclusion": {
-                            "description": "Inclusion of the item.",
-                            "type": "string",
-                            "example": "Test"
-                          },
-                          "exclusions": {
-                            "description": "Exclusions of the item.",
-                            "type": "string",
-                            "example": "Test"
-                          },
-                          "format_geo_address": {
-                            "description": "Format_geo_address of the item.",
-                            "type": "string",
-                            "example": "c, Goubert Ave, White Town, Puducherry, India"
-                          },
-                          "category": {
-                            "description": "Category of the item.",
-                            "type": "object",
-                            "example": {
-                              "created_at": "2024-09-18T09:41:14.192Z",
-                              "updated_at": "2024-09-18T09:41:14.192Z",
-                              "id": "5",
-                              "name": "Books/Movies",
-                              "image": "",
-                              "width": 50,
-                              "height": 50,
-                              "status": 1,
-                              "orderby": 5
-                            }
-                          },
-                          "created_by": {
-                            "description": "Created_by of the item.",
-                            "type": "number",
-                            "example": 1001
-                          },
-                          "user_profile": {
-                            "description": "User_profile of the item.",
-                            "type": "object",
-                            "example": {
-                              "created_at": "2024-11-14T05:15:50.733Z",
-                              "updated_at": "2024-11-28T08:49:38.571Z",
-                              "id": 1001,
-                              "email": "sathish11@gmail.com",
-                              "first_name": "Staging user 1",
-                              "last_name": "",
-                              "description": "",
-                              "photo": "",
-                              "phone": "98fbee56bb61192c8bdb5d11401a4992",
-                              "street": "",
-                              "address": "",
-                              "city": "",
-                              "state": "",
-                              "postal_code": "",
-                              "status": 1,
-                              "status_glossary": "",
-                              "about_me": "",
-                              "one_signal_push_tokens": null,
-                              "tokens": null,
-                              "last_active": null,
-                              "last_checkin_via": "",
-                              "facebook_id": null,
-                              "facebook_data": {
-                                "facebook_id": "122133156758193230",
-                                "first_name": "Anil",
-                                "last_name": "Shetty",
-                                "email": "hightableai@yahoo.com",
-                                "picture": "https://scontent.xx.fbcdn.net/v/t1.30497-1/84628273_176159830277856_972693363922829312_n.jpg?stp=c379.0.1290.1290a_dst-jpg_s960x960&_nc_cat=1&ccb=1-7&_nc_sid=7565cd&_nc_ohc=6q_7bTxgtc8Q7kNvgESfxtW&_nc_zt=24&_nc_ht=scontent.xx&edm=AP4hL3IEAAAA&_nc_gid=A6M6aujpkcmND2nxvKMk85U&oh=00_AYDVrwi74855Qd3befLHmC0bePgivJeSNzstxSv-fSkvxw&oe=67625AD9"
-                              },
-                              "linkedin_id": null,
-                              "linkedin_data": null,
-                              "interests": null,
-                              "followers": 0,
-                              "google_id": null,
-                              "google_data": null,
-                              "otp_session_id": null,
-                              "reviews": 1,
-                              "reviews_count": 3,
-                              "linked_account_id": "",
-                              "linked_product_id": "",
-                              "pronoun": "",
-                              "instagram_data": null,
-                              "instagram_link": "",
-                              "linkedin_link": "",
-                              "x_link": "",
-                              "x_data": null,
-                              "table_count": 16,
-                              "booked": 2,
-                              "age": 0,
-                              "gender": "",
-                              "account_details": null,
-                              "profile_completion_status": [
-                                40
-                              ],
-                              "uu_id": "MiBapPzz22",
-                              "account": 111
-                            }
-                          }
                         }
                       }
                     }
@@ -3352,12 +3122,12 @@
                         "count": {
                           "description": "Count of the meta data.",
                           "type": "number",
-                          "example": 6
+                          "example": 2
                         },
                         "total": {
                           "description": "Total of the meta data.",
                           "type": "number",
-                          "example": 6
+                          "example": 2
                         },
                         "page": {
                           "description": "Page of the meta data.",
@@ -3413,22 +3183,22 @@
                           "created_at": {
                             "description": "Created_at of the item.",
                             "type": "object",
-                            "example": "2024-11-22T12:14:13.919Z"
+                            "example": "2024-12-07T06:23:41.021Z"
                           },
                           "updated_at": {
                             "description": "Updated_at of the item.",
                             "type": "object",
-                            "example": "2024-11-22T12:46:51.788Z"
+                            "example": "2024-12-08T05:30:00.590Z"
                           },
                           "id": {
                             "description": "Id of the item.",
                             "type": "string",
-                            "example": "635"
+                            "example": "2"
                           },
                           "full_name": {
                             "description": "Full_name of the item.",
                             "type": "string",
-                            "example": "Staging user 3 "
+                            "example": "Backend User "
                           },
                           "type": {
                             "description": "Type of the item.",
@@ -3437,8 +3207,8 @@
                           },
                           "media": {
                             "description": "Media of the item.",
-                            "type": "string",
-                            "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/image-635_1.webp"
+                            "type": "object",
+                            "example": null
                           },
                           "video": {
                             "description": "Video of the item.",
@@ -3448,7 +3218,7 @@
                           "description": {
                             "description": "Description of the item.",
                             "type": "string",
-                            "example": "Test"
+                            "example": "Understand how blockchain can impact large enterprises."
                           },
                           "phone": {
                             "description": "Phone of the item.",
@@ -3458,22 +3228,22 @@
                           "min_seats": {
                             "description": "Min_seats of the item.",
                             "type": "number",
-                            "example": 4
+                            "example": 5
                           },
                           "max_seats": {
                             "description": "Max_seats of the item.",
                             "type": "number",
-                            "example": 4
+                            "example": 5
                           },
                           "booked_seats": {
                             "description": "Booked_seats of the item.",
                             "type": "number",
-                            "example": 4
+                            "example": 0
                           },
                           "booked": {
                             "description": "Booked of the item.",
                             "type": "number",
-                            "example": 4
+                            "example": 0
                           },
                           "bookmarks": {
                             "description": "Bookmarks of the item.",
@@ -3488,32 +3258,32 @@
                           "title": {
                             "description": "Title of the item.",
                             "type": "string",
-                            "example": "Demo table 04"
+                            "example": "Testing-002"
                           },
                           "price": {
                             "description": "Price of the item.",
                             "type": "number",
-                            "example": 545
+                            "example": 5
                           },
                           "tags": {
                             "description": "Tags of the item.",
                             "type": "string",
-                            "example": "Celebrity"
+                            "example": "Experts"
                           },
                           "address": {
                             "description": "Address of the item.",
                             "type": "string",
-                            "example": "Chennai International Airport (MAA), Airport Road, Meenambakkam, Chennai, Tamil Nadu, India"
+                            "example": "Brahma Brews, 24th Main Road, Achappa Layout, Ramaiah Garden, JP Nagar 7th Phase, J. P. Nagar, Bengaluru, Karnataka, India"
                           },
                           "city": {
                             "description": "City of the item.",
                             "type": "string",
-                            "example": "Chennai"
+                            "example": "Bengaluru"
                           },
                           "event_date": {
                             "description": "Event_date of the item.",
                             "type": "string",
-                            "example": "22-11-2024 18:16"
+                            "example": "08-12-2024 13:00"
                           },
                           "reviews": {
                             "description": "Reviews of the item.",
@@ -3528,7 +3298,7 @@
                           "status": {
                             "description": "Status of the item.",
                             "type": "number",
-                            "example": 8
+                            "example": 34
                           },
                           "admin_id": {
                             "description": "Admin_id of the item.",
@@ -3538,22 +3308,22 @@
                           "event_done_flag": {
                             "description": "Event_done_flag of the item.",
                             "type": "boolean",
-                            "example": true
+                            "example": false
                           },
                           "state": {
                             "description": "State of the item.",
                             "type": "string",
-                            "example": "Tamil Nadu"
+                            "example": "Karnataka"
                           },
                           "district": {
                             "description": "District of the item.",
                             "type": "string",
-                            "example": ""
+                            "example": "Bengaluru Urban"
                           },
                           "pincode": {
                             "description": "Pincode of the item.",
                             "type": "string",
-                            "example": "600027"
+                            "example": "560078"
                           },
                           "order_by": {
                             "description": "Order_by of the item.",
@@ -3563,71 +3333,60 @@
                           "table_expense": {
                             "description": "Table_expense of the item.",
                             "type": "number",
-                            "example": 0
+                            "example": 1
                           },
                           "location_details": {
                             "description": "Location_details of the item.",
                             "type": "object",
                             "example": {
-                              "country": {
-                                "long_name": "India",
-                                "short_name": "IN"
-                              },
-                              "locality": "Chennai",
-                              "postal_code": "600027",
-                              "administrative_area_level_1": {
-                                "long_name": "Tamil Nadu",
-                                "short_name": "TN"
-                              }
+                              "country": "India",
+                              "locality": "Bengaluru",
+                              "political": "India",
+                              "postal_code": "560078",
+                              "sublocality_level_1": "7",
+                              "sublocality_level_2": "JP Nagar 7th Phase",
+                              "sublocality_level_3": "Silver Oak Layout",
+                              "administrative_area_level_2": "Bangalore Division",
+                              "administrative_area_level_3": "Bengaluru Urban"
                             }
                           },
                           "location": {
                             "description": "Location of the item.",
                             "type": "object",
                             "example": {
-                              "lat": 12.9939595,
-                              "lng": 80.1706653
+                              "lat": 12.8933351,
+                              "lng": 77.5864716
                             }
                           },
                           "inclusion": {
                             "description": "Inclusion of the item.",
-                            "type": "string",
-                            "example": "rer"
+                            "type": "object",
+                            "example": null
                           },
                           "exclusions": {
                             "description": "Exclusions of the item.",
-                            "type": "string",
-                            "example": "rere"
+                            "type": "object",
+                            "example": null
                           },
                           "format_geo_address": {
                             "description": "Format_geo_address of the item.",
                             "type": "string",
-                            "example": "Chennai International Airport (MAA), Airport Rd, Meenambakkam, Chennai, Tamil Nadu, India"
+                            "example": "Achappa Layout, Silver Oak Layout, JP Nagar th Phase, Bengaluru, Karnataka, India"
                           },
                           "category": {
                             "description": "Category of the item.",
                             "type": "object",
-                            "example": {
-                              "created_at": "2024-09-18T09:41:23.033Z",
-                              "updated_at": "2024-09-18T09:41:23.033Z",
-                              "id": "7",
-                              "name": "Others",
-                              "image": "",
-                              "width": 50,
-                              "height": 50,
-                              "status": 1,
-                              "orderby": 7
-                            }
+                            "example": null
                           },
                           "created_by": {
                             "description": "Created_by of the item.",
                             "type": "number",
-                            "example": 1003
+                            "example": 1290
                           },
                           "user_profile": {
                             "description": "User_profile of the item.",
                             "type": "number",
-                            "example": 1003
+                            "example": 1290
                           }
                         }
                       }
@@ -3767,7 +3526,7 @@
                         "count": {
                           "description": "Count of the meta data.",
                           "type": "number",
-                          "example": 5
+                          "example": 0
                         },
                         "total": {
                           "description": "Total of the meta data.",
@@ -3816,289 +3575,6 @@
                           "description": "Category_photo of the meta data.",
                           "type": "string",
                           "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
-                        }
-                      }
-                    },
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "created_at": {
-                            "description": "Created_at of the item.",
-                            "type": "object",
-                            "example": "2024-11-14T11:00:00.386Z"
-                          },
-                          "updated_at": {
-                            "description": "Updated_at of the item.",
-                            "type": "object",
-                            "example": "2024-11-28T07:48:10.726Z"
-                          },
-                          "id": {
-                            "description": "Id of the item.",
-                            "type": "string",
-                            "example": "588"
-                          },
-                          "full_name": {
-                            "description": "Full_name of the item.",
-                            "type": "string",
-                            "example": "Staging user 1 "
-                          },
-                          "type": {
-                            "description": "Type of the item.",
-                            "type": "number",
-                            "example": 2
-                          },
-                          "media": {
-                            "description": "Media of the item.",
-                            "type": "string",
-                            "example": "image-1_1.webp"
-                          },
-                          "video": {
-                            "description": "Video of the item.",
-                            "type": "object",
-                            "example": null
-                          },
-                          "description": {
-                            "description": "Description of the item.",
-                            "type": "string",
-                            "example": "Understand how blockchain can impact large enterprises."
-                          },
-                          "phone": {
-                            "description": "Phone of the item.",
-                            "type": "string",
-                            "example": ""
-                          },
-                          "min_seats": {
-                            "description": "Min_seats of the item.",
-                            "type": "number",
-                            "example": 5
-                          },
-                          "max_seats": {
-                            "description": "Max_seats of the item.",
-                            "type": "number",
-                            "example": 5
-                          },
-                          "booked_seats": {
-                            "description": "Booked_seats of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "booked": {
-                            "description": "Booked of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "bookmarks": {
-                            "description": "Bookmarks of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "followers": {
-                            "description": "Followers of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "title": {
-                            "description": "Title of the item.",
-                            "type": "string",
-                            "example": "Table Dec 06"
-                          },
-                          "price": {
-                            "description": "Price of the item.",
-                            "type": "number",
-                            "example": 201
-                          },
-                          "tags": {
-                            "description": "Tags of the item.",
-                            "type": "string",
-                            "example": "Experts"
-                          },
-                          "address": {
-                            "description": "Address of the item.",
-                            "type": "string",
-                            "example": "Whitefield, Bengaluru"
-                          },
-                          "city": {
-                            "description": "City of the item.",
-                            "type": "string",
-                            "example": "Bengaluru"
-                          },
-                          "event_date": {
-                            "description": "Event_date of the item.",
-                            "type": "string",
-                            "example": "06-12-2024 08:00"
-                          },
-                          "reviews": {
-                            "description": "Reviews of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "user_type": {
-                            "description": "User_type of the item.",
-                            "type": "number",
-                            "example": 2
-                          },
-                          "status": {
-                            "description": "Status of the item.",
-                            "type": "number",
-                            "example": 3
-                          },
-                          "admin_id": {
-                            "description": "Admin_id of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "event_done_flag": {
-                            "description": "Event_done_flag of the item.",
-                            "type": "boolean",
-                            "example": false
-                          },
-                          "state": {
-                            "description": "State of the item.",
-                            "type": "string",
-                            "example": "Karnataka"
-                          },
-                          "district": {
-                            "description": "District of the item.",
-                            "type": "string",
-                            "example": "Bengaluru Urban"
-                          },
-                          "pincode": {
-                            "description": "Pincode of the item.",
-                            "type": "string",
-                            "example": "560002"
-                          },
-                          "order_by": {
-                            "description": "Order_by of the item.",
-                            "type": "string",
-                            "example": "01"
-                          },
-                          "table_expense": {
-                            "description": "Table_expense of the item.",
-                            "type": "number",
-                            "example": 1
-                          },
-                          "location_details": {
-                            "description": "Location_details of the item.",
-                            "type": "object",
-                            "example": {
-                              "country": "India",
-                              "locality": "Bengaluru",
-                              "political": "India",
-                              "postal_code": "560002",
-                              "sublocality_level_1": "Ashok Nagar",
-                              "sublocality_level_2": "D' Souza Layout",
-                              "sublocality_level_3": "KG Halli",
-                              "administrative_area_level_2": "Bangalore Division",
-                              "administrative_area_level_3": "Bengaluru Urban"
-                            }
-                          },
-                          "location": {
-                            "description": "Location of the item.",
-                            "type": "object",
-                            "example": {
-                              "lat": 12.9716,
-                              "lng": 77.5946
-                            }
-                          },
-                          "inclusion": {
-                            "description": "Inclusion of the item.",
-                            "type": "string",
-                            "example": ""
-                          },
-                          "exclusions": {
-                            "description": "Exclusions of the item.",
-                            "type": "string",
-                            "example": ""
-                          },
-                          "format_geo_address": {
-                            "description": "Format_geo_address of the item.",
-                            "type": "string",
-                            "example": "KG Halli, D' Souza Layout, Ashok Nagar, Bengaluru, Karnataka, India"
-                          },
-                          "category": {
-                            "description": "Category of the item.",
-                            "type": "object",
-                            "example": null
-                          },
-                          "created_by": {
-                            "description": "Created_by of the item.",
-                            "type": "number",
-                            "example": 1001
-                          },
-                          "user_profile": {
-                            "description": "User_profile of the item.",
-                            "type": "object",
-                            "example": {
-                              "created_at": "2024-11-14T05:15:50.733Z",
-                              "updated_at": "2024-11-28T08:49:43.420Z",
-                              "id": 1001,
-                              "email": "sathish11@gmail.com",
-                              "first_name": "Staging user 1",
-                              "last_name": "",
-                              "description": "",
-                              "photo": "",
-                              "phone": "98fbee56bb61192c8bdb5d11401a4992",
-                              "street": "",
-                              "address": "",
-                              "city": "",
-                              "state": "",
-                              "postal_code": "",
-                              "status": 1,
-                              "status_glossary": "",
-                              "about_me": "",
-                              "one_signal_push_tokens": null,
-                              "tokens": null,
-                              "last_active": null,
-                              "last_checkin_via": "",
-                              "facebook_id": null,
-                              "facebook_data": {
-                                "facebook_id": "122133156758193230",
-                                "first_name": "Anil",
-                                "last_name": "Shetty",
-                                "email": "hightableai@yahoo.com",
-                                "picture": "https://scontent.xx.fbcdn.net/v/t1.30497-1/84628273_176159830277856_972693363922829312_n.jpg?stp=c379.0.1290.1290a_dst-jpg_s960x960&_nc_cat=1&ccb=1-7&_nc_sid=7565cd&_nc_ohc=6q_7bTxgtc8Q7kNvgESfxtW&_nc_zt=24&_nc_ht=scontent.xx&edm=AP4hL3IEAAAA&_nc_gid=A6M6aujpkcmND2nxvKMk85U&oh=00_AYDVrwi74855Qd3befLHmC0bePgivJeSNzstxSv-fSkvxw&oe=67625AD9"
-                              },
-                              "linkedin_id": null,
-                              "linkedin_data": null,
-                              "interests": null,
-                              "followers": 0,
-                              "google_id": null,
-                              "google_data": null,
-                              "otp_session_id": null,
-                              "reviews": 1,
-                              "reviews_count": 3,
-                              "linked_account_id": "",
-                              "linked_product_id": "",
-                              "pronoun": "",
-                              "instagram_data": null,
-                              "instagram_link": "",
-                              "linkedin_link": "",
-                              "x_link": "",
-                              "x_data": null,
-                              "table_count": 16,
-                              "booked": 2,
-                              "age": 0,
-                              "gender": "",
-                              "account_details": null,
-                              "profile_completion_status": [
-                                40
-                              ],
-                              "uu_id": "MiBapPzz22",
-                              "account": 111
-                            }
-                          },
-                          "booking_status": {
-                            "description": "Booking_status of the item.",
-                            "type": "object",
-                            "example": null
-                          },
-                          "booking_close": {
-                            "description": "Booking_close of the item.",
-                            "type": "boolean",
-                            "example": false
-                          }
                         }
                       }
                     }
@@ -4391,7 +3867,7 @@
                         "total": {
                           "description": "Total of the meta data.",
                           "type": "number",
-                          "example": 4
+                          "example": 0
                         },
                         "page": {
                           "description": "Page of the meta data.",
@@ -4436,286 +3912,6 @@
                           "description": "Category_photo of the meta data.",
                           "type": "string",
                           "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
-                        }
-                      }
-                    },
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "created_at": {
-                            "description": "Created_at of the item.",
-                            "type": "object",
-                            "example": "2024-11-27T03:44:32.863Z"
-                          },
-                          "updated_at": {
-                            "description": "Updated_at of the item.",
-                            "type": "object",
-                            "example": "2024-11-28T07:48:17.975Z"
-                          },
-                          "id": {
-                            "description": "Id of the item.",
-                            "type": "string",
-                            "example": "643"
-                          },
-                          "full_name": {
-                            "description": "Full_name of the item.",
-                            "type": "string",
-                            "example": "Staging user 1 "
-                          },
-                          "type": {
-                            "description": "Type of the item.",
-                            "type": "number",
-                            "example": 2
-                          },
-                          "media": {
-                            "description": "Media of the item.",
-                            "type": "string",
-                            "example": "image-643_1.webp"
-                          },
-                          "video": {
-                            "description": "Video of the item.",
-                            "type": "object",
-                            "example": null
-                          },
-                          "description": {
-                            "description": "Description of the item.",
-                            "type": "string",
-                            "example": "Test"
-                          },
-                          "phone": {
-                            "description": "Phone of the item.",
-                            "type": "string",
-                            "example": ""
-                          },
-                          "min_seats": {
-                            "description": "Min_seats of the item.",
-                            "type": "number",
-                            "example": 4
-                          },
-                          "max_seats": {
-                            "description": "Max_seats of the item.",
-                            "type": "number",
-                            "example": 4
-                          },
-                          "booked_seats": {
-                            "description": "Booked_seats of the item.",
-                            "type": "number",
-                            "example": 1
-                          },
-                          "booked": {
-                            "description": "Booked of the item.",
-                            "type": "number",
-                            "example": 1
-                          },
-                          "bookmarks": {
-                            "description": "Bookmarks of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "followers": {
-                            "description": "Followers of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "title": {
-                            "description": "Title of the item.",
-                            "type": "string",
-                            "example": "Test 123"
-                          },
-                          "price": {
-                            "description": "Price of the item.",
-                            "type": "number",
-                            "example": 564
-                          },
-                          "tags": {
-                            "description": "Tags of the item.",
-                            "type": "string",
-                            "example": "Corporate"
-                          },
-                          "address": {
-                            "description": "Address of the item.",
-                            "type": "string",
-                            "example": "Puducherry Beach, White Town, Puducherry, India"
-                          },
-                          "city": {
-                            "description": "City of the item.",
-                            "type": "string",
-                            "example": "Puducherry"
-                          },
-                          "event_date": {
-                            "description": "Event_date of the item.",
-                            "type": "string",
-                            "example": "28-11-2024 18:30"
-                          },
-                          "reviews": {
-                            "description": "Reviews of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "user_type": {
-                            "description": "User_type of the item.",
-                            "type": "number",
-                            "example": 2
-                          },
-                          "status": {
-                            "description": "Status of the item.",
-                            "type": "number",
-                            "example": 3
-                          },
-                          "admin_id": {
-                            "description": "Admin_id of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "event_done_flag": {
-                            "description": "Event_done_flag of the item.",
-                            "type": "boolean",
-                            "example": false
-                          },
-                          "state": {
-                            "description": "State of the item.",
-                            "type": "string",
-                            "example": "Puducherry"
-                          },
-                          "district": {
-                            "description": "District of the item.",
-                            "type": "string",
-                            "example": "Puducherry"
-                          },
-                          "pincode": {
-                            "description": "Pincode of the item.",
-                            "type": "string",
-                            "example": "605001"
-                          },
-                          "order_by": {
-                            "description": "Order_by of the item.",
-                            "type": "string",
-                            "example": ""
-                          },
-                          "table_expense": {
-                            "description": "Table_expense of the item.",
-                            "type": "number",
-                            "example": 0
-                          },
-                          "location_details": {
-                            "description": "Location_details of the item.",
-                            "type": "object",
-                            "example": {
-                              "country": "India",
-                              "locality": "Puducherry",
-                              "political": "India",
-                              "postal_code": "605001",
-                              "sublocality_level_1": "White Town",
-                              "administrative_area_level_3": "Puducherry"
-                            }
-                          },
-                          "location": {
-                            "description": "Location of the item.",
-                            "type": "object",
-                            "example": {
-                              "lat": 11.9353019,
-                              "lng": 79.8364573
-                            }
-                          },
-                          "inclusion": {
-                            "description": "Inclusion of the item.",
-                            "type": "string",
-                            "example": "Test"
-                          },
-                          "exclusions": {
-                            "description": "Exclusions of the item.",
-                            "type": "string",
-                            "example": "Test"
-                          },
-                          "format_geo_address": {
-                            "description": "Format_geo_address of the item.",
-                            "type": "string",
-                            "example": "c, Goubert Ave, White Town, Puducherry, India"
-                          },
-                          "category": {
-                            "description": "Category of the item.",
-                            "type": "object",
-                            "example": {
-                              "created_at": "2024-09-18T09:41:14.192Z",
-                              "updated_at": "2024-09-18T09:41:14.192Z",
-                              "id": "5",
-                              "name": "Books/Movies",
-                              "image": "",
-                              "width": 50,
-                              "height": 50,
-                              "status": 1,
-                              "orderby": 5
-                            }
-                          },
-                          "created_by": {
-                            "description": "Created_by of the item.",
-                            "type": "number",
-                            "example": 1001
-                          },
-                          "user_profile": {
-                            "description": "User_profile of the item.",
-                            "type": "object",
-                            "example": {
-                              "created_at": "2024-11-14T05:15:50.733Z",
-                              "updated_at": "2024-11-28T08:49:43.657Z",
-                              "id": 1001,
-                              "email": "sathish11@gmail.com",
-                              "first_name": "Staging user 1",
-                              "last_name": "",
-                              "description": "",
-                              "photo": "",
-                              "phone": "98fbee56bb61192c8bdb5d11401a4992",
-                              "street": "",
-                              "address": "",
-                              "city": "",
-                              "state": "",
-                              "postal_code": "",
-                              "status": 1,
-                              "status_glossary": "",
-                              "about_me": "",
-                              "one_signal_push_tokens": null,
-                              "tokens": null,
-                              "last_active": null,
-                              "last_checkin_via": "",
-                              "facebook_id": null,
-                              "facebook_data": {
-                                "facebook_id": "122133156758193230",
-                                "first_name": "Anil",
-                                "last_name": "Shetty",
-                                "email": "hightableai@yahoo.com",
-                                "picture": "https://scontent.xx.fbcdn.net/v/t1.30497-1/84628273_176159830277856_972693363922829312_n.jpg?stp=c379.0.1290.1290a_dst-jpg_s960x960&_nc_cat=1&ccb=1-7&_nc_sid=7565cd&_nc_ohc=6q_7bTxgtc8Q7kNvgESfxtW&_nc_zt=24&_nc_ht=scontent.xx&edm=AP4hL3IEAAAA&_nc_gid=A6M6aujpkcmND2nxvKMk85U&oh=00_AYDVrwi74855Qd3befLHmC0bePgivJeSNzstxSv-fSkvxw&oe=67625AD9"
-                              },
-                              "linkedin_id": null,
-                              "linkedin_data": null,
-                              "interests": null,
-                              "followers": 0,
-                              "google_id": null,
-                              "google_data": null,
-                              "otp_session_id": null,
-                              "reviews": 1,
-                              "reviews_count": 3,
-                              "linked_account_id": "",
-                              "linked_product_id": "",
-                              "pronoun": "",
-                              "instagram_data": null,
-                              "instagram_link": "",
-                              "linkedin_link": "",
-                              "x_link": "",
-                              "x_data": null,
-                              "table_count": 16,
-                              "booked": 2,
-                              "age": 0,
-                              "gender": "",
-                              "account_details": null,
-                              "profile_completion_status": [
-                                40
-                              ],
-                              "uu_id": "MiBapPzz22",
-                              "account": 111
-                            }
-                          }
                         }
                       }
                     }
@@ -4881,7 +4077,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Table created successfully.",
+            "description": "Data created successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4890,18 +4086,13 @@
                     "message": {
                       "description": "Success message.",
                       "type": "string",
-                      "example": "Table created successfully."
+                      "example": "Data created successfully."
                     },
                     "details": {
                       "type": "object",
                       "properties": {
                         "thumbnail": {
                           "description": "Thumbnail of the details.",
-                          "type": "object",
-                          "example": null
-                        },
-                        "event_date2": {
-                          "description": "Event_date2 of the details.",
                           "type": "object",
                           "example": null
                         },
@@ -4923,22 +4114,22 @@
                         "created_at": {
                           "description": "Created_at of the details.",
                           "type": "object",
-                          "example": "2024-11-28T07:45:49.261Z"
+                          "example": "2024-12-09T14:15:18.578Z"
                         },
                         "updated_at": {
                           "description": "Updated_at of the details.",
                           "type": "object",
-                          "example": "2024-11-28T07:45:49.261Z"
+                          "example": "2024-12-09T14:15:18.578Z"
                         },
                         "id": {
                           "description": "Id of the details.",
                           "type": "string",
-                          "example": "694"
+                          "example": "903"
                         },
                         "full_name": {
                           "description": "Full_name of the details.",
                           "type": "string",
-                          "example": "Staging user 1 "
+                          "example": "Backend User "
                         },
                         "type": {
                           "description": "Type of the details.",
@@ -4998,12 +4189,12 @@
                         "title": {
                           "description": "Title of the details.",
                           "type": "string",
-                          "example": "Email Notification for booking"
+                          "example": "Testing Date-002"
                         },
                         "price": {
                           "description": "Price of the details.",
                           "type": "number",
-                          "example": 30000
+                          "example": 5
                         },
                         "tags": {
                           "description": "Tags of the details.",
@@ -5013,17 +4204,17 @@
                         "address": {
                           "description": "Address of the details.",
                           "type": "string",
-                          "example": "Whitefield, Bengaluru"
+                          "example": "Brahma Brews, 24th Main Road, Achappa Layout, Ramaiah Garden, JP Nagar 7th Phase, J. P. Nagar, Bengaluru, Karnataka, India"
                         },
                         "city": {
                           "description": "City of the details.",
                           "type": "string",
-                          "example": "Kalapet"
+                          "example": "JP Nagar 7th Phase"
                         },
                         "event_date": {
                           "description": "Event_date of the details.",
                           "type": "string",
-                          "example": "2024-10-07 08:00"
+                          "example": "2024-12-10 13:00"
                         },
                         "reviews": {
                           "description": "Reviews of the details.",
@@ -5033,7 +4224,7 @@
                         "user_type": {
                           "description": "User_type of the details.",
                           "type": "number",
-                          "example": 2
+                          "example": 12313
                         },
                         "status": {
                           "description": "Status of the details.",
@@ -5053,17 +4244,17 @@
                         "state": {
                           "description": "State of the details.",
                           "type": "string",
-                          "example": "Puducherry"
+                          "example": "Bengaluru Urban"
                         },
                         "district": {
                           "description": "District of the details.",
                           "type": "string",
-                          "example": "Puducherry"
+                          "example": "Bengaluru"
                         },
                         "pincode": {
                           "description": "Pincode of the details.",
                           "type": "string",
-                          "example": "605014"
+                          "example": "560078"
                         },
                         "order_by": {
                           "description": "Order_by of the details.",
@@ -5080,19 +4271,22 @@
                           "type": "object",
                           "example": {
                             "country": "India",
-                            "locality": "Kalapet",
+                            "locality": "Bengaluru",
                             "political": "India",
-                            "postal_code": "605014",
-                            "sublocality_level_2": "Chinna Kalapet",
-                            "administrative_area_level_3": "Puducherry"
+                            "postal_code": "560078",
+                            "sublocality_level_1": "7",
+                            "sublocality_level_2": "JP Nagar 7th Phase",
+                            "sublocality_level_3": "Silver Oak Layout",
+                            "administrative_area_level_2": "Bangalore Division",
+                            "administrative_area_level_3": "Bengaluru Urban"
                           }
                         },
                         "location": {
                           "description": "Location of the details.",
                           "type": "object",
                           "example": {
-                            "lat": 12.0182619,
-                            "lng": 79.8568461
+                            "lat": 12.8933351,
+                            "lng": 77.5864716
                           }
                         },
                         "inclusion": {
@@ -5108,7 +4302,7 @@
                         "format_geo_address": {
                           "description": "Format_geo_address of the details.",
                           "type": "string",
-                          "example": "P/Tsunami quarters Pillai chavadi, Pondicherry University, Chinna Kalapet, Kalapet, Puducherry, India"
+                          "example": ""
                         },
                         "category": {
                           "description": "Category of the details.",
@@ -5118,12 +4312,12 @@
                         "created_by": {
                           "description": "Created_by of the details.",
                           "type": "number",
-                          "example": 1001
+                          "example": 1290
                         },
                         "user_profile": {
                           "description": "User_profile of the details.",
                           "type": "number",
-                          "example": 1001
+                          "example": 1290
                         }
                       }
                     }
@@ -6502,26 +5696,6 @@
         }
       }
     },
-    "/table-booking/booked-list-all": {
-      "get": {
-        "summary": "/table-booking/booked-list-all",
-        "tags": [
-          "booked-list-all"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
     "/table-booking/booked-my-tables-user-list": {
       "get": {
         "summary": "/table-booking/booked-my-tables-user-list",
@@ -6567,26 +5741,6 @@
         "summary": "/table-booking/booked-all-my-list",
         "tags": [
           "booked-all-my-list"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/table-booking/booked-my-tables": {
-      "get": {
-        "summary": "/table-booking/booked-my-tables",
-        "tags": [
-          "booked-my-tables"
         ],
         "parameters": [],
         "responses": {
@@ -6815,20 +5969,173 @@
     },
     "/bookmark/create": {
       "post": {
-        "summary": "/bookmark/create",
+        "summary": "Create a table Bookmark - create",
+        "description": "Use this API to create a table bookmark - create.",
+        "operationId": "bookmark/create",
         "tags": [
-          "create"
+          "Bookmark"
         ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The requested resource"
+            "description": "Data created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Success message.",
+                      "type": "string",
+                      "example": "Data created successfully."
+                    },
+                    "details": {
+                      "type": "object",
+                      "properties": {
+                        "status_glossary": {
+                          "description": "Status_glossary of the details.",
+                          "type": "object",
+                          "example": null
+                        },
+                        "created_at": {
+                          "description": "Created_at of the details.",
+                          "type": "object",
+                          "example": "2024-12-09T10:24:10.211Z"
+                        },
+                        "updated_at": {
+                          "description": "Updated_at of the details.",
+                          "type": "object",
+                          "example": "2024-12-09T10:24:10.211Z"
+                        },
+                        "id": {
+                          "description": "Id of the details.",
+                          "type": "string",
+                          "example": "276"
+                        },
+                        "status": {
+                          "description": "Status of the details.",
+                          "type": "number",
+                          "example": 22
+                        },
+                        "table_id": {
+                          "description": "Table_id of the details.",
+                          "type": "string",
+                          "example": "11"
+                        },
+                        "creator_profile_id": {
+                          "description": "Creator_profile_id of the details.",
+                          "type": "number",
+                          "example": 1293
+                        },
+                        "user_id": {
+                          "description": "User_id of the details.",
+                          "type": "number",
+                          "example": 1293
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "You don't have permission to perform this action"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Resource not found"
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [
+                  "0"
+                ]
+              }
+            }
           }
         }
       }
@@ -7293,46 +6600,6 @@
         "summary": "/users/login-otp",
         "tags": [
           "Users"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/auth/linkedin/callback": {
-      "get": {
-        "summary": "/auth/linkedin/callback",
-        "tags": [
-          "LinkedIn"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/auth/linkedin/profile": {
-      "post": {
-        "summary": "/auth/linkedin/profile",
-        "tags": [
-          "LinkedIn"
         ],
         "parameters": [],
         "responses": {

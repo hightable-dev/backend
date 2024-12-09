@@ -51,23 +51,20 @@ module.exports = async function list(request, response) {
         }
 
         if (item?.user_profile?.phone) {
-          await phoneEncryptor.decrypt(item?.user_profile?.phone, function (decrypted_text) {
-            item.user_profile.phone = decrypted_text;
-          });
+          item.user_profile.phone = UseDataService.phoneCrypto.decryptPhone(item?.user_profile?.phone)
+        }
+        if (item?.event_date) {
+          item.event_date = UseDataService.dateHelper(
+            item?.event_date,
+            "YYYY-MM-DD HH:mm",
+            "DD-MM-YYYY HH:mm"
+            
+          );
         }
 
         item.creator_details = item.user_profile;
         delete item.user_profile;
 
-        // Process the item (media, video, user profile photo)
-        if (item.event_date) {
-          item.event_date = UseDataService.dateHelper(
-            item.event_date,
-            "YYYY-MM-DDTHH:mm:ss.SSSZ",
-            "DD-MM-YYYY HH:mm"
-          );
-
-        }
         item.media = item.media?.length > 0 ? item.media[0] : null;
         item.video = item.video?.length > 0 ? item.video[0] : null;
 
@@ -103,9 +100,6 @@ module.exports = async function list(request, response) {
             .sort('created_at DESC')  // Assuming 'createdAt' exists, sorting by most recent
             .limit(1);  // Limiting the result to just one (latest entry)
           isBooked = isBooked[0];
-          console.log("Last Booking Entry:", isBooked);
-
-
           const isEventStatusByUser = await EventStatus.findOne({
             user_id: ProfileMemberId(request),
             table_id: item.id
@@ -121,7 +115,6 @@ module.exports = async function list(request, response) {
 
           //           // const eventDate = moment(item.event_date, "DD-MM-YYYY HH:mm").toDate(); // Parse event_date correctly
           //           const eventDate = moment(item.event_date, "YYYY-MM-DD HH:mm").utcOffset("+05:30").toDate();
-          // console.log("========",{now,eventDate})
           //           item.event_expired = now < eventDate;
           // item.event_expired2 = now > eventDate;
 
@@ -140,7 +133,6 @@ module.exports = async function list(request, response) {
           eventDate = moment.utc(eventDate).tz("Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
           eventDate = moment.tz(eventDate, "DD-MM-YYYY HH:mm").toDate();
 
-          console.log("EVENTSTATUS", { now, eventDate });
           item.event_expired = now > eventDate;
           item.is_bookmark = is_bookmark;
           item.is_review = is_review;
@@ -174,11 +166,10 @@ module.exports = async function list(request, response) {
         // DataService.completedEvent()
 
       } catch (error) {
-        console.error('Error retrieving service requests:', error);
         return response.serverError('Server Error');
       }
     } else {
-      return response.status(400).json({
+      return response.badRequest({
         errors: errors,
         count: errors.length,
       });

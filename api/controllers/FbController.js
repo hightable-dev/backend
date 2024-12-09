@@ -1,5 +1,3 @@
-const facebookConnet = require("../services/auth/facebookConnet");
-
 
 module.exports = {
     fbConnect: async function fbConnect(req, res) {
@@ -10,7 +8,7 @@ module.exports = {
             // Call the service to get Facebook data
             const fbData = await FbService.fetchUserData(token);
             // Send success response with the Facebook data
-            return res.status(200).json({
+            return res.ok({
                 message: 'Facebook data retrieved successfully',
                 data: fbData
             });

@@ -16,13 +16,13 @@ module.exports = async function findOne(request, response) {
 
     // Check if user exists
     if (!specificUsers) {
-      return response.status(400).json({ error: 'User not found' }); // Customize error message here
+      return response.badRequest({ error: 'User not found' }); // Customize error message here
     }
 
     const getPercentileData = await UseDataService.profilePercentile(specificUsers);
 
     if (getPercentileData > 100) {
-      return response.status(400).json({ error: `Profile completion percentage cannot exceed 100. Calculated percentage: ${getPercentileData}` });
+      return response.badRequest({ error: `Profile completion percentage cannot exceed 100. Calculated percentage: ${getPercentileData}` });
     }
 
     if (specificUsers?.interests) {
@@ -42,7 +42,6 @@ module.exports = async function findOne(request, response) {
 
     return response.ok(_response_object);
   } catch (error) {
-    console.error("Error occurred while fetching user:", error);
-    return response.status(500).json({ error: "Error occurred while fetching user" });
+    throw new Error("Error occurred while fetching user");
   }
 }

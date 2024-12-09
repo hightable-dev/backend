@@ -98,6 +98,4 @@ function getRandomInt(min, max) {
   }
   
   // Generate and log a single event
-  const singleEventData = generateSingleEventData();
-  console.log(JSON.stringify(singleEventData, null, 2));
-  
+  const singleEventData = generateSingleEventData();  

@@ -55,16 +55,6 @@ module.exports = {
 
   },
 
-  handleExpiredBookings: async function (tableId, payPending, orederExpired) {
-    const expiredBookings = await TableBooking.find({
-      where: { table_id: tableId, status: payPending, expiry_date: { '<': new Date() } }
-    });
-
-    for (const booking of expiredBookings) {
-      await TableBooking.updateOne({ id: booking.id }).set({ status: orederExpired });
-    }
-  },
-
   handleBooking: async function (tableId, payPending, orederExpired) {
     const data = await Tables.findOne({
       where: { id: tableId }
@@ -84,16 +74,6 @@ module.exports = {
     }
   },
 
-  checkAvailableSeats: async function (tableId, seats, maxSeats, bookedSeats, payPending, paymentSuccess) {
-    const totalBookedSeats = await TableBooking.sum('seats').where({
-      table_id: tableId,
-      status: [payPending, paymentSuccess]
-    }) + seats;
-
-    if (totalBookedSeats > maxSeats) {
-      throw new Error(`Not enough available seats. Available seats: ${maxSeats - bookedSeats}`);
-    }
-  },
 
   checkPreviousBookings: async function (tableId, userId, status) {
     const data =  await TableBooking.findOne({ table_id: tableId, user_id: userId, status: status });
@@ -101,12 +81,4 @@ module.exports = {
 
   },
 
-  updateTableSeats: async function (tableId, paymentSuccess) {
-    const confirmedBookedSeats = await TableBooking.sum('seats').where({
-      table_id: tableId,
-      status: [paymentSuccess]
-    });
-
-    await Tables.updateOne({ id: tableId }).set({ booked_seats: confirmedBookedSeats });
-  },
 };

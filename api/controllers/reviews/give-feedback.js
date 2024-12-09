@@ -16,18 +16,18 @@ module.exports = function reviews(request, response) {
             // Check if the table_id exists in the Tables model
             const table = await Tables.findOne({ id: filtered_post_data.table_id });
             if (!table) {
-                return response.status(404).json({ message: "Table not found." });
+                return response.notFound({ message: "Table not found." });
             }
 
             // Check if the table is active (status !== 0)
             if (table.status === 0) {
-                return response.status(400).json({ message: "Table is not active." });
+                return response.badRequest({ message: "Table is not active." });
             }
 
             // Get the creator_profile_id from the Tables model where id matches table_id
             const creatorProfileId = await Tables.findOne({ id: filtered_post_data.table_id }).select(['created_by']);
             if (!creatorProfileId) {
-                return response.status(404).json({ message: "Creator profile ID not found." });
+                return response.notFound({ message: "Creator profile ID not found." });
             }
             filtered_post_data.creator_profile_id = creatorProfileId.created_by;
             filtered_post_data.reviewer_profile_id = profileId;
@@ -35,7 +35,7 @@ module.exports = function reviews(request, response) {
             // Check if the review already exists for the reviewer_profile_id and table_id combination
             const existingReviews = await Reviews.findOne({ reviewer_profile_id: filtered_post_data.reviewer_profile_id, table_id: filtered_post_data.table_id });
             if (existingReviews) {
-                return response.status(400).json({ message: "Rating already submitted. Cannot update or create." });
+                return response.badRequest({ message: "Rating already submitted. Cannot update or create." });
             }
 
             // Create new reviews
@@ -92,7 +92,6 @@ module.exports = function reviews(request, response) {
 
             return
         } catch (err) {
-            console.error('Error creating Reviews:', err);
             return response.serverError(err);
         }
     };
@@ -113,13 +112,13 @@ module.exports = function reviews(request, response) {
             await ProfileMembers.updateOne({ id: parseInt(newReviews.creator_profile_id) }).set({ reviews: avgCreatorReview, reviews_count: tableReviewsCount });
             // await CreatorReviews.updateOrCreate({ creator_profile_id: newReviews.creator_profile_id }, { creator_profile_id: newReviews.
         } catch (err) {
-            console.error('Error updating reviews count:', err);
+            throw new Error ('Error updating reviews count:', err);
         }
     };
 
     validateModel.validate(Reviews, input_attributes, filtered_post_data, async (valid, errors) => {
         if (!valid) {
-            return response.status(400).json({ errors, count: errors.length });
+            return response.badRequest({ errors, count: errors.length });
         }
         await createOrUpdateReviews();
     });

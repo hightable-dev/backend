@@ -20,7 +20,7 @@ module.exports = function (req, res, next) {
     var grantType = post_params.grant_type;
     if (!grantType) {
         _response_object.message = 'grant_type field is missing.';
-        return res.status(400).json(_response_object);
+        return res.badRequest(_response_object);
     }
     else {
         // Handle password and authorization code grant type
@@ -29,12 +29,12 @@ module.exports = function (req, res, next) {
             var client_id = post_params.client_id;
             if (!client_id) {
                 _response_object.message = 'client_id field is missing.';
-                return res.status(400).json(_response_object);
+                return res.badRequest(_response_object);
             } else {
                 // Make sure client is trusted
                 Clients.findOne({ client_id: client_id }, function (err, client) {
                     if (err) {
-                        return res.status(500).json(err.message);
+                        return res.serverError(err.message);
                     }
                     else {
                         if (!client) {

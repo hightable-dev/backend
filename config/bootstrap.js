@@ -17,9 +17,6 @@ module.exports.bootstrap = async function() {
   const cronJobs = require('../api/services/data-service/croneJobs');
   const jobCompletedEvent = require('../api/services/data-service/completedEventCroneJobs');
 
-  
-  // console.log(cronJobs)
-
   // This bootstrap version indicates what version of fake data we're dealing with here.
   var HARD_CODED_DATA_VERSION = 0;
 

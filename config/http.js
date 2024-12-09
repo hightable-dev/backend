@@ -74,11 +74,7 @@ module.exports.http = {
         res.end = function (...args) {
           const duration = performance.now() - start;
           const bytes = Buffer.byteLength(args[0] || '', 'utf8');
-          
-          // console.log(`Request: ${req.method} ${req.originalUrl}`);
-          // console.log(`Duration: ${duration.toFixed(2)} ms`);
-          // console.log(`Response Size: ${bytes} bytes`);
-          
+
           originalEnd.apply(res, args);
         };
 
@@ -117,7 +113,10 @@ module.exports.http = {
       'www',
       'favicon',
       'swagger',
+      'errorHandler',
     ],
+
+    errorHandler: require('../api/middleware/error-handler'),
 
     /***************************************************************************
     *                                                                          *

@@ -16,8 +16,6 @@ module.exports = async function (creatorId) {
     
 const { followerUsers } = UseDataService; // Importing follower status from a data service
 
-    console.log("Follower count", { followerUsers, creatorId });
-
     try {
         // Count the total number of followers for the creator based on the status
         const totalCount = await Followers.count({ creator_profile_id: creatorId, status: followerUsers });
@@ -27,7 +25,6 @@ const { followerUsers } = UseDataService; // Importing follower status from a da
         return totalCount;
 
     } catch (error) {
-        console.error('Error updating Followers count:', error);
         throw error; // Optional: Re-throw the error if you want it to propagate
     }
 }

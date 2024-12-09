@@ -1,86 +1,94 @@
 /**
- * @author mohan <mohan@studioq.co.in>
+ * @author mohan
+ * <mohan@studioq.co.in>
  */
-
-/* global _, ProfileManagers /sails */
+/* global _, ProfileManagers, sails */
 const _ = require('lodash');
 
-module.exports = function list(request, response) {
-  try {
-    var _response_object = {};
+module.exports = async function list(request, response) {
+  const {errorMessages} = UseDataService;
 
-    const request_query = request.allParams();
-    const filtered_query_data = _.pick(request_query, ['page', 'limit']);
-    const filterData = ["payment_details", "created_at", "updated_at"]; // Specify fields to filter
-    // for commit changes 
-    var input_attributes = [
+  try {
+    const requestQuery = request.allParams();
+    const validFields = ['page', 'limit'];
+    const filteredQueryData = _.pickBy(requestQuery, (value, key) => validFields.includes(key) && _.identity(value));
+
+    // Check for invalid keys
+    const invalidParams = _.difference(Object.keys(requestQuery), validFields);
+    if (invalidParams.length > 0) {
+      // Throw an error for invalid parameters
+      throw ({
+        status: errorMessages.badRequest,
+        message:`Invalid parameters passed - ${invalidParams.join(', ')}`
+      });
+    }
+
+    // Exclude fields from the results
+    const excludeFields = ['created_at', 'updated_at'];
+
+    // Input validation schema
+    const inputAttributes = [
       { name: 'page', number: true, min: 1 },
-      // { name: 'limit', number: true, min: 1 }
+      { name: 'limit', number: true, min: 1 },
     ];
 
-    validateModel.validate(null, input_attributes, filtered_query_data, async function (valid, errors) {
-      if (valid) {
-        const page = parseInt(filtered_query_data.page) || 1;
-        // Fetch interests with pagination
-        const interests = await Interests.find()
-          .sort('orderby ASC')
+    // Define the function to build the criteria based on the filtered data
+    async function buildCriteria() {
+      let criteria = {};
 
-        let filteredItems = interests;
-        filteredItems = common.filterDataItems(filteredItems, filterData);
+      return criteria;
+    }
 
-        for (const item of filteredItems) {
-          try {
+    // Validate inputs
+    await validateModel.validate(Interests, inputAttributes, filteredQueryData, async (valid, errors) => {
+      if (!valid) {
+        // Handle validation errors
+        return response.badRequest({
+          errors,
+          count: errors.length,
+        });
+      }
 
-            if (item.image) {
-              item.image = sails.config.custom.filePath.interests + item.image;
-            }
-          } catch (error) {
-            console.error("Error finding user or category details:", error);
-          }
-        }
+      const page = parseInt(filteredQueryData.page) || 1;
+      const limit = parseInt(filteredQueryData.limit) || 10;
+      const skip = (page - 1) * limit;
 
-        // Send response
-        _response_object.message = 'Interests retrieved successfully.';
-        _response_object.meta = {
-          page: page,
-          // limit: limit,
-          total: interests.length
-        };
+      try {
+        // Build the dynamic criteria based on the filtered data
+        let criteria = await buildCriteria(filteredQueryData);
 
-        _response_object.items = interests;
-        response.ok(_response_object);
+        // Fetch the paginated list and count based on the criteria
+        const [items, totalItems] = await Promise.all([
+          Interests.find()
+            .where(criteria)
+            .skip(skip)
+            .limit(limit)
+            .omit(excludeFields),
+          Interests.count().where(criteria),
+        ]);
 
-        //  process.nextTick(() => {
-        //   const relativePath = SwaggerGenService.getRelativePath(__filename);
-        //   const capitalizeFirstLetter = (str) => {
-        //     if (typeof str !== 'string' || str.length === 0) return str;
-        //     return str.charAt(0).toUpperCase() + str.slice(1);
-        //   };
-        //   SwaggerGenService.generateJsonFile({
-        //     key: `/${relativePath}`,
-        //     Tags: capitalizeFirstLetter(relativePath.split('/')[0]),
-        //     Description: `Retrieve data of ${capitalizeFirstLetter(relativePath.split('/')[0])} - ${relativePath.split('/')[1]}` ,
-        //     body: {},
-        //     params: { page: 1, limit: 10 },
-        //     required_data: input_attributes,
-        //     response: _response_object
-        //   });
-        // });
-        process.nextTick(() => {
-          const relativePath = SwaggerGenService.getRelativePath(__filename);
-          UseDataService.processSwaggerGeneration({ relativePath, inputAttributes :input_attributes, responseObject: _response_object });
-
+        // Send paginated response
+        await UseDataService.sendResponseList({
+          items,
+          totalItems,
+          page,
+          limit,
+          response,
+          inputAttributes,
+          filePath:  SwaggerGenService.getRelativePath(__filename),
+          message: 'Interests list',
         });
 
-        return;
-      } else {
-        _response_object.errors = errors;
-        _response_object.count = errors.length;
-        return response.status(400).json(_response_object);
+      } catch (e) {
+        // Handle errors while fetching data
+        return response.serverError({
+          ...UseDataService.errorMessages.fetchInterest,
+          error: e.message,
+        });
       }
     });
+
   } catch (error) {
-    console.error("Error occurred while fetching interests:", error);
-    return response.status(500).json({ error: "Error occurred while fetching interests" });
+    throw error;
   }
-}
+};

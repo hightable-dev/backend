@@ -1,4 +1,3 @@
-// console.log('testing services')
 module.exports = async function (data, updateTable) {
     const { tableId, userId } = data;
 

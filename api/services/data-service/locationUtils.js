@@ -4,7 +4,6 @@ const apiKey = process.env.GOOGLE_API_KEY
 
 module.exports = {
   locationDetails: async function (data) {
-    console.log('dataxy', data)
     const { x, y } = data;
     try {
       const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${x},${y}&key=${apiKey}`);
@@ -49,39 +48,30 @@ module.exports = {
             detailedLocation.administrative_area_level_3 = component.long_name; // Official name (if available)
           }
           if (component.types.includes('administrative_area_level_2')) {
-            // console.log("administrative_area_level_2", true, component)
             detailedLocation.administrative_area_level_2 = component.long_name
           }
           if (component.types.includes('country')) {
-            // console.log("country", true, component)
             detailedLocation.country = component.long_name
           }
 
           if (component.types.includes('postal_code')) {
-            // console.log("postal_code", true, component)
             detailedLocation.postal_code = component.long_name
           }
           if (component.types.includes('formatted_address')) {
-            // console.log("formatted_address", true, component)
             detailedLocation.formatted_address = component.long_name
           }
         }
-        // const testGeo = await this.geoCodeLocation("P/Tsunami quarters Pillai chavadi, Pondicherry University, Chinna Kalapet, Kalapet, Puducherry, India")
-        // console.log({ testGeo })
         return { detailedLocation };
 
       } else {
-        console.error('Error fetching location details:', data.error_message || 'Unknown error');
         return { state: '', city: '', pincode: '' }; // Return default values or handle error as per your application logic
       }
     } catch (error) {
-      console.error('Error fetching location details:', error);
       return { state: '', city: '', pincode: '' }; // Return default values or handle error as per your application logic
     }
   },
 
   extractLocationDetails: async function (data) {
-    console.log('dataxy', data)
     const { x, y } = data;
     try {
       const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${x},${y}&key=${apiKey}`);
@@ -110,11 +100,8 @@ module.exports = {
         let officialName = '';
         let district = '';
         let village = '';
-        // console.log("addressComponents:::", JSON.stringify(addressComponents, null, 2));
 
         for (const component of addressComponents) {
-          // console.log("addressComponents:::component", JSON.stringify(component, null, 2));
-          // console.log("addressComponents:::component", JSON.stringify(component.types, null, 2));
 
           if (component.types.includes('administrative_area_level_1')) {
             state = component.long_name;
@@ -129,19 +116,17 @@ module.exports = {
             officialName = component.long_name; // Official name (if available)
           }
           if (component.types.includes('administrative_area_level_3')) {
-            // console.log("administrative_area_level_3", true, component)
             district = component.long_name
           }
         }
 
         return { state, city, pincode, formattedAddress, officialName, village, district };
       } else {
-        console.error('Error fetching location details:', data.error_message || 'Unknown error');
         return { state: '', city: '', pincode: '' }; // Return default values or handle error as per your application logic
       }
     } catch (error) {
-      console.error('Error fetching location details:', error);
-      return { state: '', city: '', pincode: '' }; // Return default values or handle error as per your application logic
+      sails.log('Error fetching location details:', error);
+     
     }
   },
 
@@ -156,12 +141,9 @@ module.exports = {
       }
 
       const data = await response.json();
-      // console.log('Raw Geocoding Response:', JSON.stringify(data, null, 2));
-
       // Check if we have results
       if (data.status === "OK" && data.results.length > 0) {
         const addressComponents = data.results[0].address_components;
-
         // Extract and format into the desired location_details format
         const locationDetails = {
           country: extractComponent(addressComponents, "country"),
@@ -177,11 +159,10 @@ module.exports = {
 
         return locationDetails; // Return formatted location details
       } else {
-        console.log('No results found for the specified location.');
         return null; // Return null if no results
       }
     } catch (error) {
-      console.error('Error:', error);
+
       return null; // Return null on error
     }
   },
@@ -204,11 +185,9 @@ module.exports = {
         const { lat, lng } = geometry.location;
         return { latitude: lat, longitude: lng }; // Return coordinates
       } else {
-        console.log('No results found for the specified location.');
         return { latitude: null, longitude: null }; // Return null if no results
       }
     } catch (error) {
-      console.error('Error:', error);
       return { latitude: null, longitude: null }; // Return null on error
     };
   },

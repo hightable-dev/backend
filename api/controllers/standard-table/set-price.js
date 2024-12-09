@@ -11,7 +11,7 @@ module.exports = function create(request, response) {
 
         // Check if all required fields are present
         // if (!table_type || !price || !admin_id || !admin_type) {
-        //     return response.status(400).json({ error: "Missing required fields." });
+        //     return response.badRequest({ error: "Missing required fields." });
         // }
 
         // Validate the model
@@ -35,7 +35,7 @@ module.exports = function create(request, response) {
                 if (lastEntry.length > 0) {
                     // Compare the last entry's table_type and price with the new data
                     if (lastEntry[0].table_type === tableType.standard && lastEntry[0].price === price) {
-                        return response.status(400).json({ message: "Previous data has the same price and table type." });
+                        return response.badRequest({ message: "Previous data has the same price and table type." });
                     }
                 }
 
@@ -47,11 +47,10 @@ module.exports = function create(request, response) {
             } else {
                 _response_object.errors = errors;
                 _response_object.count = errors.length;
-                return response.status(400).json(_response_object);
+                return response.badRequest(_response_object);
             }
         });
     } catch (error) {
-        console.error(error);
-        return response.status(500).json({ error: "An error occurred while creating data." });
+        return response.serverError({ error: "An error occurred while creating data." });
     }
 };

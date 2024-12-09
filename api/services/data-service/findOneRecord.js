@@ -6,7 +6,6 @@
  * @returns {Promise<Object|null>} - A promise that resolves to the found record or null if no record is found.
  */
 module.exports = async function (data) {
-    console.log(data)
     // Ensure the model exists
     const model = sails.models[data.modelName.toLowerCase()];
     if (!model) {

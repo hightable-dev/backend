@@ -7,7 +7,6 @@ module.exports = function list(request, response) {
   ]);
   let { page, limit, address } = filtered_query_data;
 
-  console.log({ page, limit, address });
   const input_attributes = [
     { name: 'address', required: true }
   ];
@@ -86,13 +85,6 @@ module.exports = function list(request, response) {
           // Tables.count({ where: criteria })
         ]);
 
-        // Rename `created_by` to `user_profile` and process items concurrently
-        // if (address) {
-        //   const addressColumns = ['state', 'city', 'address', 'format_geo_address'];
-        //   items = await DataService.searchCriteria(address, items, addressColumns);
-        // }
-
-
         await Promise.all(items.map(async (item) => {
           item.media = item?.media ? item.media[0] : 'image-1_1.webp';
           item.video = item?.video ? item.media[0] : null;
@@ -102,19 +94,12 @@ module.exports = function list(request, response) {
           item.booking_close = checkBookingStatus?.tableBookingClose;
 
         }));
-
-
-
-
-
-
         sendResponse(items, totalItems);
       } catch (error) {
-        console.error('Error retrieving service requests:', error);
-        return response.serverError('Server Error');
+        return response.serverError({message:'Server Error',error});
       }
     } else {
-      return response.status(400).json({
+      return response.badRequest({
         errors: errors,
         count: errors.length,
       });

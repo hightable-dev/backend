@@ -1,115 +1,172 @@
 {
-    "/bookmark/create": {
-        "tags": [
-            "Bookmark"
-        ],
-        "summary": "Add or remove from Wishlists",
-        "description": "Use this API to add or remove from wishlist.",
-        "operationId": "BookmarkCreate",
-        "requestBody": {
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "table_id": {
-                                "description": "Unique identifier of the table.",
-                                "type": "integer",
-                                "example": 964
-                            }
-                        },
-                        "required": [
-                            "table_id"
-                        ]
-                    }
-                }
-            }
-        },
-        "responses": {
-            "200": {
-                "description": "Bookmarks updated successfully.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "description": "Confirmation message.",
-                                    "type": "string",
-                                    "example": "Bookmarks updated."
-                                },
-                                "details": {
-                                    "type": "object",
-                                    "properties": {
-                                        "created_at": {
-                                            "description": "Timestamp when the bookmark was created.",
-                                            "type": "string",
-                                            "format": "date-time",
-                                            "example": "2024-08-09T11:04:47.379Z"
-                                        },
-                                        "updated_at": {
-                                            "description": "Timestamp when the bookmark was last updated.",
-                                            "type": "string",
-                                            "format": "date-time",
-                                            "example": "2024-08-09T11:04:47.379Z"
-                                        },
-                                        "id": {
-                                            "description": "Unique identifier of the bookmark.",
-                                            "type": "string",
-                                            "example": "59"
-                                        },
-                                        "status": {
-                                            "description": "Status of the bookmark.",
-                                            "type": "integer",
-                                            "example": 13
-                                        },
-                                        "creator_profile_id": {
-                                            "description": "Profile ID of the creator of the bookmark.",
-                                            "type": "integer",
-                                            "example": 740
-                                        },
-                                        "table_id": {
-                                            "description": "Unique identifier of the table associated with the bookmark.",
-                                            "type": "integer",
-                                            "example": 964
-                                        },
-                                        "user_id": {
-                                            "description": "Unique identifier of the user who created the bookmark.",
-                                            "type": "integer",
-                                            "example": 730
-                                        }
-                                    },
-                                    "required": [
-                                        "created_at",
-                                        "updated_at",
-                                        "id",
-                                        "status",
-                                        "creator_profile_id",
-                                        "table_id",
-                                        "user_id"
-                                    ]
-                                }
-                            },
-                            "required": [
-                                "message",
-                                "details"
-                            ]
-                        }
-                    }
-                }
-            },
-            "400": {
-                "description": "Bad request"
-            },
-            "401": {
-                "description": "Unauthorized"
-            },
-            "403": {
-                "description": "You don't have permission to perform this action"
-            },
-            "500": {
-                "description": "Internal server error"
-            }
+  "/bookmark/create": {
+    "tags": [
+      "Bookmark"
+    ],
+    "summary": "Create a table Bookmark - create",
+    "description": "Use this API to create a table bookmark - create.",
+    "operationId": "bookmark/create",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {},
+            "required": [
+              "0"
+            ]
+          }
         }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Data created successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Success message.",
+                  "type": "string",
+                  "example": "Data created successfully."
+                },
+                "details": {
+                  "type": "object",
+                  "properties": {
+                    "status_glossary": {
+                      "description": "Status_glossary of the details.",
+                      "type": "object",
+                      "example": null
+                    },
+                    "created_at": {
+                      "description": "Created_at of the details.",
+                      "type": "object",
+                      "example": "2024-12-09T10:24:10.211Z"
+                    },
+                    "updated_at": {
+                      "description": "Updated_at of the details.",
+                      "type": "object",
+                      "example": "2024-12-09T10:24:10.211Z"
+                    },
+                    "id": {
+                      "description": "Id of the details.",
+                      "type": "string",
+                      "example": "276"
+                    },
+                    "status": {
+                      "description": "Status of the details.",
+                      "type": "number",
+                      "example": 22
+                    },
+                    "table_id": {
+                      "description": "Table_id of the details.",
+                      "type": "string",
+                      "example": "11"
+                    },
+                    "creator_profile_id": {
+                      "description": "Creator_profile_id of the details.",
+                      "type": "number",
+                      "example": 1293
+                    },
+                    "user_id": {
+                      "description": "User_id of the details.",
+                      "type": "number",
+                      "example": 1293
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "You don't have permission to perform this action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message.",
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }

@@ -27,8 +27,7 @@ module.exports = function list(request, response) {
         .sort([{ created_at: 'DESC' }])
         .exec((err, tables) => {
           if (err) {
-            console.error("Error occurred while fetching tables:", err);
-            return response.serverError({ error: "Error occurred while fetching tables" });
+            return response.serverError({ message: "Error occurred while fetching tables", error: err });
           }
   
           const paginateItems = common.paginateData(tables, pageNumber, limitNumber);
