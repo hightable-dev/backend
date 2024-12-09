@@ -79,7 +79,6 @@ module.exports = function list(request, response) {
       item.video = mediaData.video || null;
 
     } catch (error) {
-      console.error("Error processing item media:", error);
       throw error;
     }
   }
@@ -110,8 +109,7 @@ module.exports = function list(request, response) {
 
         sendResponse(items, totalItems);
       } catch (error) {
-        console.error('Error retrieving service requests:', error);
-        return response.serverError('Server Error');
+        return response.serverError('Server Error',error);
       }
 
     } else {

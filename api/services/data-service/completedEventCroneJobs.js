@@ -19,9 +19,6 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    console.log(`Current time: ${hours}:${minutes}:${seconds}`);
-
-    console.log('Running completed event check...');
 
     const { payPending, paymentSuccess, eventStatusPending, approved, autoCancelledMinSeatsNotBooked, bookingClosed, refundRequest } = UseDataService;
 
@@ -99,7 +96,6 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
             // Loop through each booking and process it
             for (const booking of tableData) {
                 let { id: tableId, event_date: eventDate, title, created_by } = booking;
-                console.log({ tableId, eventDate, title, created_by })
                 tableData.push({
                     table_id: tableId,
                     event_date: eventDate,
@@ -113,7 +109,6 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
                  * Check Event complete and sends notification to host
                  *---------------------- */
 
-                // console.log({ checkTimeNow })
                 if (checkTimeNow.eventDateTimestampEqualNow) {
 
                     await Tables.update({ id: tableId })
@@ -147,20 +142,16 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
             return tableData;
 
         } else {
-            console.log('No tableData found.');
             return [];
         };
 
     } catch (error) {
-        console.error('Error executing cron job:', error);
+        throw err ;
     };
 }, {
     scheduled: true,
     timezone: "Asia/Kolkata" // Specify the timezone for IST
 });
-
-// Log the job setup
-console.log('Cron job scheduled to run every minute');
 
 // Start the cron job
 jobCompletedEvent.start();

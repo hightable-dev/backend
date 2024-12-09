@@ -45,23 +45,21 @@ module.exports = async function update(request, response) {
 
           // If the table is not found, return an appropriate response
           if (!updatedTable) {
-            return response.status(404).json({ error: 'Table not found' });
+            return response.notFound({ error: 'Table not found' });
           }
 
           // Build and send response with updated details
           _response_object.message = 'Booking cancelled.';
           return response.ok({ message: 'Table data updated successfully', details: updatedTable });
         } catch (error) {
-          console.error('Error updating table data:', error);
-          return response.status(500).json({ error: 'Error updating table data' });
+          return response.serverError({ error: 'Error updating table data' });
         }
       } else {
-        return response.status(400).json({ errors, count: errors.length });
+        return response.badRequest({ errors, count: errors.length });
       }
     });
   } catch (error) {
-    console.error("Error occurred while updating Tables data:", error);
-    response.status(500).json({ error: "Error occurred while updating Tables data" });
+    response.serverError({ error: "Error occurred while updating Tables data" });
   }
 };
 

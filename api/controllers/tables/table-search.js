@@ -54,33 +54,6 @@ module.exports = function list(request, response) {
 
     let criteria = {}
     criteria = await UseDataService.tableListingCriteria({ userType, category, address, from_date, to_date })
-    console.log({ criteria })
-
-    // if (address) {
-    //   const locality = await UseDataService.locationUtils.geocodeLocation(address);
-    //   const { latitude, longitude } = locality
-    //   const getLocalCity = await UseDataService.locationUtils
-    //     .extractLocationDetails({
-    //       x: latitude,
-    //       y: longitude,
-    //     })
-    //   findByCity = getLocalCity?.city;
-    //   findByDistrict = getLocalCity?.district.split(' ')[0];
-    //   console.log("LIST BY ADDRESS", { address, latitude, longitude, getLocalCity, findCity })
-
-    //   // findCity = findCity[0];
-    //   // console.log({ address, findCity })
-    //   wordCount = _.size(_.split(_.replace(address.split(',')[0], /[^a-zA-Z\s]/g, ''), ' '));
-    //   criteria = {
-    //     ...criteria,
-    //     ...(wordCount > 1 ? { address: address ? { contains: address } : null } : { district: findByDistrict ? { contains: findByDistrict } : null })
-    //   };
-
-    // } else {
-    //   criteria = {
-    //     address: address ? { contains: address } : null,
-    //   }
-    // }
 
     return criteria;
   }
@@ -116,7 +89,6 @@ module.exports = function list(request, response) {
 
         sendResponse(items, itemsCount);
       } catch (error) {
-        console.error('Error retrieving service requests:', error);
         return response.serverError('Server Error');
       }
     } else {
@@ -124,7 +96,7 @@ module.exports = function list(request, response) {
         errors: errors,
         count: errors.length,
       };
-      return response.status(400).json(responseObject);
+      return response.badRequest(responseObject);
     }
   });
 };

@@ -29,7 +29,6 @@ const onesignal_app_auth_key = process.env.onesignal_api_key;
 const onesignal_app_id = process.env.onesignal_app_id;
 
 async function sendPush(data, callback) {
-  // console.log("pushservice data ", data);
   try {
     const datas = await axios.post(
       "https://onesignal.com/api/v1/notifications",
@@ -52,7 +51,6 @@ async function sendPush(data, callback) {
 
     callback(datas, null);
   } catch (error) {
-    console.error("Error sending notification:", error);
     callback(null, error);
   }
 }

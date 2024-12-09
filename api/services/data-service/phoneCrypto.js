@@ -17,16 +17,13 @@ module.exports = (() => {
          * @return {String} - Encrypted text in hex format
          */
         encryptPhone(phone) {
-            console.log(algorithm);
-
             try {
                 let cipher = crypto.createCipheriv(algorithm, cipher_key, cipher_iv);
                 let encrypted = cipher.update(phone.toString());
                 encrypted = Buffer.concat([encrypted, cipher.final()]);
                 return encrypted.toString('hex');
             } catch (err) {
-                console.error("Encryption failed: ", err);
-                throw new Error("Failed to encrypt phone number.");
+                throw new Error({message:"Failed to encrypt phone number.", error:err});
             }
         },
 
@@ -44,8 +41,7 @@ module.exports = (() => {
                 decrypted = Buffer.concat([decrypted, decipher.final()]);
                 return decrypted.toString();
             } catch (err) {
-                console.error("Decryption failed: ", err);
-                throw new Error("Failed to decrypt the phone number.");
+                throw new Error("Failed to decrypt the phone number.", err);
             }
         }
     };

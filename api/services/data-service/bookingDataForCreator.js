@@ -1,5 +1,4 @@
 module.exports = async function (data) {
-    console.log("paidBookings tableId", data);
     const { tableId, userId, status } = data;
 
     // Define required fields and their corresponding variable names
@@ -15,7 +14,6 @@ module.exports = async function (data) {
     // If any fields are missing, log an error and return a response
     if (missingFields.length > 0) {
         const errorMessage = `Missing required fields: ${missingFields.join(', ')}`;
-        console.error(errorMessage); // Log the error
         return { success: false, error: errorMessage }; // Return structured error response
     }
 
@@ -26,12 +24,9 @@ module.exports = async function (data) {
             status: { in: status }
         });
 
-    /*     console.log("BOOKING DATA FOR CREATOR",{tableId,userId,bookings}) */
-
         return bookings ? bookings : [] ;// Return successful response
     } catch (error) {
         const errorMessage = "Error fetching bookings For: " + error.message;
-        console.error(errorMessage); // Log the error
         return { success: false, error: errorMessage }; // Return structured error response
     }
 };

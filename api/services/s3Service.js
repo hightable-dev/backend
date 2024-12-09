@@ -79,7 +79,6 @@ async function resizeAndUploadPhoto(data, filePath, filename, sizes, callback, a
         await Promise.all(uploadPromises);
         callback(null, 'All images uploaded successfully');
     } catch (err) {
-        console.error('Error in resizeAndUploadPhoto:', err);
         callback(err);
     }
 }
@@ -114,13 +113,11 @@ async function resizeAndUploadVideo(file, filePath, filename, sizes, callback) {
                     .audioCodec('aac')
                     .on('end', resolve)
                     .on('error', (err) => {
-                        console.error('ffmpeg error:', err);
                         reject(err);
                     })
                     .save(tempFilePath);  // Save to a temporary location
             });
 
-            console.log('Attempting to save resized video to:', tempFilePath);
 
             // Upload the video to S3
             const uploadParams = {
@@ -138,7 +135,6 @@ async function resizeAndUploadVideo(file, filePath, filename, sizes, callback) {
         await Promise.all(uploadPromises);
         callback(null, 'All videos uploaded successfully');
     } catch (err) {
-        console.error('Error in resizeAndUploadVideo:', err);
         callback(err);
     }
 }
@@ -147,7 +143,6 @@ async function resizeAndUploadVideo(file, filePath, filename, sizes, callback) {
 exports.S3file = function (file, filePath, filename, sizes, callback, res) {
     fs.readFile(file.fd, async (err, data) => {
         if (err) {
-            console.error(`Error reading file ${filename}:`, err);
             return callback(err);
         }
 
@@ -166,7 +161,6 @@ exports.S3file = function (file, filePath, filename, sizes, callback, res) {
                 Body: data
             };
             await s3.putObject(uploadParams).promise();
-            // console.log(`Successfully uploaded ${filename}`);
             callback(null, 'File uploaded successfully');
         }
     });
@@ -181,6 +175,5 @@ exports.deleteFromS3 = async function (photoKeys, callback) {
         }
     };
     await s3.deleteObjects(params).promise();
-    // console.log('Successfully deleted files:', photoKeys);
     callback(null, 'Files deleted successfully');
 };

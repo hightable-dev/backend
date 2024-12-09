@@ -6,7 +6,6 @@ const minute = 0; // 20 minutes past the hour
 
 // Schedule the task to run daily at 7:20 PM
 const job = cron.schedule(`${minute} ${hour} * * *`, async () => {
-    console.log('Running daily profile completion calculation...');
 
     try {
         const users = await ProfileMembers.find({
@@ -14,7 +13,6 @@ const job = cron.schedule(`${minute} ${hour} * * *`, async () => {
         });
 
         for (const item of users) {
-            console.log({ id: item.id })
             await UseDataService.sendNotification({
                 notification: {
                     senderId: item.id,  // Corrected `itme` to `item`
@@ -35,14 +33,9 @@ const job = cron.schedule(`${minute} ${hour} * * *`, async () => {
                 }
             });
         }
-       /*  // Loop through each user to calculate profile completion
-        for (const user of users) {
-            const result = await UseDataService.calculateProfileCompletion(user)
-            // const result = calculateProfileCompletion(user);
-            console.log('Daily profile completion result for user:', result);
-        } */
+      
     } catch (error) {
-        console.error('Error executing daily cron job:', error);
+        throw new Error (error);
     }
 },
     {
@@ -51,9 +44,6 @@ const job = cron.schedule(`${minute} ${hour} * * *`, async () => {
     }
 
 );
-
-// Log the job setup
-console.log(`Cron job scheduled for daily execution at ${hour}:${minute}`);
 
 // Start the job
 job.start();
@@ -79,7 +69,6 @@ module.exports = {
    Format the time as HH:mm:ss
    const currentTime = `${hours}:${minutes}:${seconds}`;
    console.clear(); // Clear the console before logging the new time
-   console.log(currentTime); // Log the current time
  }
  // Call the function every second to display current time
  setInterval(displayCurrentTime, 1000); // Log the time every second

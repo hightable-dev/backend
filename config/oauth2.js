@@ -123,7 +123,7 @@ server.exchange(oauth2orize.exchange.password(async function (client, username, 
                     }
                 } catch (error) {
                     // Handle any errors
-                    console.error('Error verifying OTP and logging in:', error);
+                    sails.log('Error verifying OTP and logging in:', error);
                 }
             }
             

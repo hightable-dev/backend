@@ -23,7 +23,6 @@ module.exports = async function (request, response) {
     async function insertFilteredPostData() {
         keysToPick = input_attributes.map(attr => attr.name);
         filtered_post_data = _.pick(post_request_data, keysToPick);
-        console.log({ post_request_data });
 
         if (!isFollowed) {
             filtered_post_data.follower_profile_id = ProfileMemberId(request)
@@ -38,11 +37,10 @@ module.exports = async function (request, response) {
             }
 
             const updateItems = await Followers.updateOne({ id: isFollowed.id }).set({ ...updatedData });
-            console.log({ updateItems })
             const followMsg = 'User followed'
             const unFollowMsg = 'User UnFollowed'
 
-            return response.status(200).json({ message: updateItems.status === 14 ? followMsg : unFollowMsg, details: updateItems });
+            return response.ok({ message: updateItems.status === 14 ? followMsg : unFollowMsg, details: updateItems });
         }
     };
 
@@ -59,7 +57,7 @@ module.exports = async function (request, response) {
             },
         );
     } catch (error) {
-        return response.status(500).json({ error: error.message });
+        return response.serverError({ error: error.message });
     } finally {
         try {
             await UseDataService.countFollowers(creator_profile_id);

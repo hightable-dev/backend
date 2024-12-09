@@ -32,15 +32,6 @@ module.exports = function create(request, response) {
         return response.ok(_response_object);
     };
 
-    let handleError = (error) => {
-        console.error(error);
-        const _response_object = {
-            errors: [{ message: error.message }],
-            count: 1
-        };
-        return response.status(500).json(_response_object);
-    };
-
     const createUser = async (post_data) => {
         try {
             // Check if the username (email) already exists
@@ -51,7 +42,7 @@ module.exports = function create(request, response) {
                     errors: [{ message: "Username (email) already exists." }],
                     count: 1
                 };
-                return response.status(400).json(_response_object);
+                return response.badRequest(_response_object);
             }
             const user_input = {
                 username: [post_data.email],
@@ -66,20 +57,12 @@ module.exports = function create(request, response) {
 
             const user = await Users.create(user_input);
 
-            // if (filtered_post_keys.includes('phone')) {
-            //     Insert_post_data.encrypted_phone = Insert_post_data.phone;
-            //     const encrypted_text = await phoneEncryptor.encrypt(Insert_post_data.phone);
-            //     Insert_post_data.phone = encrypted_text;
-            // } else {
-            //     Insert_post_data.phone = null;
-            // }
-
             Insert_post_data.account = user.id;
             const profile = await ProfileManagers.create(Insert_post_data);
 
             sendResponse(profile);
         } catch (error) {
-            handleError(error);
+            throw (error);
         }
     };
 
@@ -100,7 +83,7 @@ module.exports = function create(request, response) {
                 errors: errors,
                 count: errors.length
             };
-            return response.status(400).json(_response_object);
+            return response.badRequest(_response_object);
         }
     });
 };

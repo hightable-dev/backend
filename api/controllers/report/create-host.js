@@ -19,13 +19,12 @@ module.exports = async function createReportHost(req, res) {
     const checkReportExist = await ReportHost.findOne({ user_id: ProfileMemberId(req), table_id: filteredPostData.table_id })
 
     if (checkReportExist) {
-       return res.status(500).json({ error: "You already complaint to this host.", statusCode: 400 });
+       return res.serverError({ error: "You already complaint to this host.", statusCode: 400 });
     }
 
     const insertData = async () => {
         let tableData;
         try {
-            console.log({ tableId: filteredPostData.table_id, table_id })
             if (filteredPostData?.table_id) {
                 tableData = await Tables.findOne({
                     id: filteredPostData.table_id,
@@ -48,19 +47,13 @@ module.exports = async function createReportHost(req, res) {
         }
     };
 
-    const handleError = (error) => {
-        responseObject = {
-            errors: [{ message: error.message, error }],
-        };
-        return res.status(500).json(responseObject);
-    };
 
     const createData = async (postData) => {
         try {
             const newData = await ReportHost.create({ ...postData });
             sendResponse(newData);
         } catch (error) {
-            handleError(error);
+            thrw (error);
         }
     };
 

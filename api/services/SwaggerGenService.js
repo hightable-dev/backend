@@ -35,7 +35,7 @@ module.exports = {
             ensureSwaggerDocsRequire(targetFile, '../swagger/docs/index.js');
 
         } catch (err) {
-            console.error('Error creating file:', err);
+            throw err;
         }
     } else {
         // Ensure the require statement is added to the target file if it already exists
@@ -49,8 +49,7 @@ const updateRouteWithSwaggerReference =  (actionValue, swaggerVariable) => {
     try {
         routesContent =  fs.readFileSync(routesPath, 'utf8');
     } catch (err) {
-        console.error('Error reading routes.js:', err);
-        return;
+        throw err;
     }
 
     // Define a regex to match the route object with the specified action
@@ -78,7 +77,7 @@ const updateRouteWithSwaggerReference =  (actionValue, swaggerVariable) => {
     try {
         fs.writeFileSync(routesPath, updatedRoutesContent, 'utf8');
     } catch (err) {
-        console.error('Error updating routes.js:', err);
+        throw ('Error updating routes.js:', err);
     }
 };
 
@@ -99,15 +98,13 @@ function ensureSwaggerDocsRequire(targetFilePath, swaggerDocsFilePath) {
     // Check if the swagger docs file exists
     fs.access(swaggerDocsPath, fs.constants.F_OK, (err) => {
         if (err) {
-            console.error(`File does not exist at ${swaggerDocsPath}. Please ensure the file is created.`);
-            return;
+              throw new Error (`File does not exist at ${swaggerDocsPath}. Please ensure the file is created.`);
         }
 
         // Read the target file content
         fs.readFile(absoluteTargetFilePath, 'utf8', (readErr, data) => {
             if (readErr) {
-                console.error(`Error reading the file ${absoluteTargetFilePath}: ${readErr.message}`);
-                return;
+                 throw new Error (`Error reading the file ${absoluteTargetFilePath}: ${readErr.message}`);
             }
 
             // Check if the swaggerDocs variable is already declared
@@ -122,8 +119,7 @@ function ensureSwaggerDocsRequire(targetFilePath, swaggerDocsFilePath) {
                 // Add require line to the top of the target file
                 fs.writeFile(absoluteTargetFilePath, requireLine + data, 'utf8', (writeErr) => {
                     if (writeErr) {
-                        console.error(`Error writing to the file ${absoluteTargetFilePath}: ${writeErr.message}`);
-                        return;
+                         throw new Error (`Error writing to the file ${absoluteTargetFilePath}: ${writeErr.message}`);
                     }
                     // console.log(`Require line for swagger docs added to ${absoluteTargetFilePath}`);
                 });
@@ -153,7 +149,7 @@ const checkIfExportExists = (variableName) => {
         const exportStatement = `const ${variableName} = require('./`;
         return indexContent.includes(exportStatement);
     } catch (err) {
-        console.error('Error reading index.js:', err);
+         throw new Error ('Error reading index.js:', err);
         return false;
     }
 };
@@ -171,8 +167,7 @@ const generateJsonFile = (data) => {
         try {
             fs.mkdirSync(folderPath, { recursive: true });
         } catch (err) {
-            console.error('Error creating folder:', err);
-            return;
+             throw new Error ('Error creating folder:', err);
         }
     }
 
@@ -433,7 +428,7 @@ const generateJsonFile = (data) => {
     try {
         fs.writeFileSync(filePath, JSON.stringify(jsonStructure, null, 2), 'utf8');
     } catch (err) {
-        console.error('Error writing file:', err);
+        throw err ;
     }
 
     // Dynamically update swagger/docs/index.js

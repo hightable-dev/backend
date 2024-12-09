@@ -1,111 +1,89 @@
-/**
- * @author mohan <mohan@studioq.co.in>
- */
-
-/* global _, ProfileManagers /sails */
-
 module.exports = async function (request, response) {
-    const { bookmarkTable } = UseDataService;
-    const ModelPrimary = BookMarks;
-    const ModelSecond = Tables;
-    const setStatus = sails.config.custom.statusCode.active; //set default value
+    let keysToPick, filtered_post_data, input_attributes, payload_attributes, wishlistMessage;
+    const { bookmarkTable, active } = UseDataService;
     const post_request_data = request.body;
     const { table_id: tableId } = post_request_data;
 
-    let _response_object = {};
-    const msg = "Bookmarks";
-    const filtered_post_data = _.pick(post_request_data, ['user_id', 'table_id']);
+    let newData = null;
 
-    const input_attributes = [
-        { name: 'user_id' },
-        { name: 'table_id', required: true }
+    input_attributes = [
+        { name: 'table_id', required: true },
+
     ];
+    payload_attributes = [
+        ...input_attributes,
+        { name: 'user_id', required: true },
+        { name: 'creator_profile_id', required: true },
+        { name: 'status', required: true }
+    ]
+    if (tableId) {
+        /* Check table created by user */
+        const isCheckdata = await UseDataService.checkTableCreatedByCurrentUser({
+            tableId,
+            userId: ProfileMemberId(request)
+        });
 
-    /* Check table created by user */
-    const isCheckdata = await UseDataService.checkTableCreatedByCurrentUser({
-        tableId,
-        userId: ProfileMemberId(request)
-    })
+        const checkWishListExist = await UseDataService.toggleWishListItem({
+            tableId,
+            userId: ProfileMemberId(request)
+        });
 
-    if (isCheckdata) {
-        return response.status(400).json({ error: 'You cannot add to wishlist for your table.' });
+        if (checkWishListExist) {
+            if (checkWishListExist?.status === bookmarkTable) {
+                wishlistMessage = 'Bookmark removed.'
+                checkWishListExist.status = active;
+            } else {
+                wishlistMessage = 'Bookmark Added.'
+                checkWishListExist.status = bookmarkTable;
+            }
+            const toggleWihslist = await BookMarks.updateOne({ id: checkWishListExist.id }, checkWishListExist);
+            await UseDataService.countTablesWishlist(tableId);
+
+            return response.status(200).json({ message: wishlistMessage, details: toggleWihslist });
+        };
+
+
+        if (isCheckdata) {
+            if (!response.headersSent) {
+               throw ({ status:500, message:'You cannot add to wishlist for your table.'});
+
+            }
+        };
+    };
+    // Filter data function
+    async function insertFilteredPostData() {
+        keysToPick = payload_attributes.map((attr) => attr.name);
+        filtered_post_data = _.pick(post_request_data, keysToPick);
+        filtered_post_data.status = bookmarkTable;
+        filtered_post_data.user_id = ProfileMemberId(request);
+        filtered_post_data.creator_profile_id = ProfileMemberId(request);
+
+        return filtered_post_data;
     }
 
-    const sendResponse = (message, details) => {
-        _response_object = { message };
-        if (details) _response_object.details = details;
-        response.ok(_response_object);
-    };
+    try {
+        // Prepare data
+        await insertFilteredPostData();
 
-    validateModel.validate(ModelPrimary, input_attributes, filtered_post_data, async function (valid, errors) {
-        if (valid) {
-            try {
-                // Find the table to get the creator_profile_id
-                const table = await ModelSecond.findOne({ id: tableId });
-                if (!table) {
-                    return response.status(404).json({ error: 'Table not found' });
-                }
-                const createdBy = table.created_by;
-
-                // const items = await ModelPrimary.findOne({ user_id: profileId, table_id: tableId, creator_profile_id: createdBy });
-                const items = await ModelPrimary.findOne({ user_id: ProfileMemberId(request), table_id: tableId, creator_profile_id: createdBy });
-
-                if (!items) {
-                    // ModelPrimary does not exist, create new
-                    const dataToCreate = {
-                        // user_id: profileId,
-                        user_id: ProfileMemberId(request),
-                        table_id: +tableId,
-                        creator_profile_id: +createdBy,
-                        status: +bookmarkTable // set status initially to 13
-                    };
-
-                    const newData = await ModelPrimary.create(dataToCreate);
-                    sendResponse(`${msg} created successfully.`, newData);
-
-                    await updateCount(); // Update bookmarks count for tables
-
-                } else {
-                    // ModelPrimary exists, update
-                    const updatedData = { ...items };
-                    // if status as string will convert to number
-                    const updateStatusCode = parseInt(items.status);
-
-                    if (updateStatusCode === +setStatus) {
-                        updatedData.status = +bookmarkTable; // Update status to bookmarkTable if it's currently 1
-
-                    } else if (updateStatusCode === +bookmarkTable) {
-                        updatedData.status = +setStatus; // Update status to 1 if it's currently bookmarkTable
-                    }
-
-                    const updateItems = await ModelPrimary.updateOne({ id: items.id }, updatedData);
-                    sendResponse(`${msg} updated .`, updateItems);
-                    await updateCount(); // Update bookmarks count for tables
-                }
-            } catch (error) {
-                console.error(`Error creating or updating ${msg}:`, error);
-                _response_object = { error };
-                return response.serverError(_response_object);
-            }
-
-            async function updateCount() {
-                try {
-                    //this used to conver id string to number
-                    const updateId = parseInt(tableId)
-
-                    // Count table_id where status === bookmarkTable
-                    const totalCount = await ModelPrimary.count({ table_id: +updateId, status: +bookmarkTable });
-
-                    await ModelSecond.updateOne({ id: +updateId }, { bookmarks: totalCount });
-
-                } catch (error) {
-                    console.error(`Error updating ${msg} count:`, error);
-                }
-            }
-        } else {
-            _response_object.errors = errors;
-            _response_object.count = errors.length;
-            return response.serverError(_response_object);
+        newData = await UseDataService.dataCreate(request, response, {
+            modelName: BookMarks,
+            inputAttributes: input_attributes,
+            payloadData: payload_attributes,
+            postData: filtered_post_data,
+            path: SwaggerGenService.getRelativePath(__filename),
+        });
+    } catch (error) {
+        // Handle errors
+        if (!response.headersSent) {
+           throw ( error);
         }
-    })
+
+    } finally {
+        // Log in finally block
+        await UseDataService.countTablesWishlist(tableId);
+        if (newData) {
+            sails.log('await UseDataService.countTablesWishlist(tableId)', newData);
+
+        }
+    }
 };

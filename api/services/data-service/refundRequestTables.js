@@ -1,5 +1,4 @@
  module.exports =  async function (data) {
-  console.log("refundRequestTables 22222222222222222",{data});
     if (data && Array.isArray(data)) {
       const result = [];
 
@@ -19,7 +18,6 @@
             tableId: parseInt(item.table_id),
           });
         } else {
-          console.warn("mapBookedData - table_id not found for item:", item);
           continue; // Skip to the next item if table_id is not present
         }
       }

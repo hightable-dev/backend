@@ -64,7 +64,7 @@ exports.notification = async function (roomName, notificationData) {
       // io.sockets.in(roomName).emit(`notification_${notificationData?.user}`, count);
     });
   } catch (error) {
-    console.error("Error while emitting notification:", error);
+    throw error ;
   }
 };
 

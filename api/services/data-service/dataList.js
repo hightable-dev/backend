@@ -57,7 +57,7 @@ module.exports = async function create(request, response, data) {
 
           // Ensure no duplicate responses
           if (!response.headersSent) {
-            return response.status(500).json(_response_object);
+            return response.serverError(_response_object);
           }
         });
       }
@@ -78,7 +78,7 @@ module.exports = async function create(request, response, data) {
 
         // Ensure no duplicate responses
         if (!response.headersSent) {
-          return response.status(400).json(_response_object);
+          return response.badRequest(_response_object);
         }
       }
     }

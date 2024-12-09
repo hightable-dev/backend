@@ -34,7 +34,7 @@ module.exports = async function updateFile(request, response) {
 
         const checkIsOwnerTable = await Tables.findOne({id :tableId, created_by:ProfileMemberId(request) })
         if(!checkIsOwnerTable){
-            return response.status(500).json({ error: "You don't have access to the table for update." });
+            return response.serverError({ error: "You don't have access to the table for update." });
         }
 
         const parseTableId = parseInt(tableId);
@@ -96,14 +96,12 @@ module.exports = async function updateFile(request, response) {
 
                 await fileUploadService.S3file(file, settings.filePath, filename, settings.options, (err, done) => {
                     if (err) {
-                        console.error(`Error uploading ${filename}:`, err);
                         throw err;
                     } else if (done) {
                         return filename;
                     }
                 });
             } catch (err) {
-                console.error('Upload error:', err);
                 throw err;
             }
         };
@@ -113,7 +111,6 @@ module.exports = async function updateFile(request, response) {
                 const updatedRecordDetails = await Tables.update({ id: parseTableId }, postData);
                 sendResponse(updatedRecordDetails);
             } catch (err) {
-                console.error('Error updating record:', err);
                 throw err;
             }
         };
@@ -148,9 +145,8 @@ module.exports = async function updateFile(request, response) {
 
                 await addRecord(insertData);
             } catch (err) {
-                console.error(err);
                 if (!response.headersSent) {
-                    response.status(400).json({
+                    response.badRequest({
                         param_type: type,
                         accepted_fields: Object.keys(insertData),
                         field: err.field,
@@ -178,9 +174,8 @@ module.exports = async function updateFile(request, response) {
         await validateUploadedFiles();
 
     } catch (err) {
-        console.error(err);
         if (!response.headersSent) {
-            response.status(500).json({ error: 'Internal Server Error' });
+            response.serverError({ error: 'Internal Server Error' });
         }
     }
 };

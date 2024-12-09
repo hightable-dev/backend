@@ -19,7 +19,6 @@ class LinkedInService {
 
         } catch (error) {
             // Enhanced error handling
-            console.error('Error fetching LinkedIn profile:', error.response ? error.response.data : error.message);
             throw new Error('Failed to fetch LinkedIn profile');
         }
     }

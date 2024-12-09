@@ -30,9 +30,6 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
       // Check if the idempotency key for this payment ID exists
       if (idempotencyKeyMap.has(payId)) {
         // If idempotency key exists, skip this paymentId
-        console.log(
-          `Refund request is already in progress for payment ID: ${payId}`
-        );
         continue;
       }
 
@@ -69,12 +66,7 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
           { payment_id: payId },
           { refund_details: refundResponse, status: refundSuccess }
         );
-        // status_code = refundSuccess;
-        // Push the refund response to the array
         refundResponses.push(refundResponse);
-        console.log("INITIATEREFUND initiateRefund.js:96", payId)
-
-
         for (const bookingData of bookings) {
           const refundEmailConole123 = await UseDataService.emailNotification(
             {
@@ -91,10 +83,8 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
               }
             }
           );
-          console.log('INITIATEREFUND', { refundEmailConole123, refundResponse });
 
           const tableDetails = await Tables.findOne({ id: data.tableId });
-          logdata("data of booking-> table details", tableDetails);
 
           const msg = await UseDataService.messages({ tableId: data.tableId, userId: bookingData.user_id });
 
@@ -123,7 +113,7 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
         }
       } catch (error) {
         // Handle errors
-        console.error(
+        sails.log(
           `Error occurred during refund for payment ID ${payId}:`,
           error
         );

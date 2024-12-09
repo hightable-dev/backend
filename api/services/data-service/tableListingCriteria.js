@@ -3,7 +3,6 @@ const _ = require('lodash');
 const moment = require('moment'); // Ensure moment.js is required if you're using it
 
 module.exports = async function (data) {
-    // console.log("TABLE LISTING CRITERIA", data)
     let criteria = {};
     const { userType, tableType, category, address, from_date, to_date } = data;
 
@@ -19,7 +18,6 @@ module.exports = async function (data) {
     const now = UseDataService.dateHelper(newDate, 'YYYY-MM-DDTHH:mm:ss.SSSZ', 'YYYY-MM-DD HH:mm:ss');
 
     // Add status condition based on userType
-    // console.log({ userType, roles });
     switch (userType) {
         case roles.admin:
             if(tableStatus){
@@ -33,7 +31,6 @@ module.exports = async function (data) {
             break;
 
         case roles.member:
-            // console.log("-----------------roles.member", roles.member)
             criteria.status = { '!=': UseDataService.listingTableStatusNotEqual };
             criteria.event_date = { '>': now } // 
             if (address) {
@@ -44,12 +41,8 @@ module.exports = async function (data) {
                         x: latitude,
                         y:longitude,
                     })
-                findByCity = getLocalCity?.city;
+                findCity = getLocalCity?.city;
                 findByDistrict = getLocalCity?.district.split(' ')[0];
-console.log("LIST BY ADDRESS",{address, latitude, longitude, getLocalCity,findCity})
-
-                // findCity = findCity[0];
-                // console.log({ address, findCity })
                 wordCount = _.size(_.split(_.replace(address.split(',')[0], /[^a-zA-Z\s]/g, ''), ' '));
                 criteria = {
                     ...criteria,
@@ -61,15 +54,10 @@ console.log("LIST BY ADDRESS",{address, latitude, longitude, getLocalCity,findCi
                     address: address ? { contains: address } : null,
                 }
             }
-
-            // console.log("tablelistingcritereia", { criteria })
-
             break;
-
         default:
         // criteria// Default case
     }
-
 
     // Handle date filtering
     if (from_date && to_date) {

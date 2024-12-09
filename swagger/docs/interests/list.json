@@ -13,7 +13,8 @@
             "type": "object",
             "properties": {},
             "required": [
-              "0"
+              "0",
+              "1"
             ]
           }
         }
@@ -21,7 +22,7 @@
     },
     "responses": {
       "200": {
-        "description": "Interests retrieved successfully.",
+        "description": "No Items",
         "content": {
           "application/json": {
             "schema": {
@@ -30,63 +31,25 @@
                 "message": {
                   "description": "Success message.",
                   "type": "string",
-                  "example": "Interests retrieved successfully."
+                  "example": "No Items"
                 },
                 "meta": {
                   "type": "object",
                   "properties": {
-                    "page": {
-                      "description": "Page of the meta data.",
-                      "type": "number",
-                      "example": 1
-                    },
                     "total": {
                       "description": "Total of the meta data.",
                       "type": "number",
                       "example": 7
-                    }
-                  }
-                },
-                "items": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "description": "Id of the item.",
-                        "type": "string",
-                        "example": "1"
-                      },
-                      "name": {
-                        "description": "Name of the item.",
-                        "type": "string",
-                        "example": "Travel"
-                      },
-                      "image": {
-                        "description": "Image of the item.",
-                        "type": "string",
-                        "example": ""
-                      },
-                      "width": {
-                        "description": "Width of the item.",
-                        "type": "number",
-                        "example": 50
-                      },
-                      "height": {
-                        "description": "Height of the item.",
-                        "type": "number",
-                        "example": 50
-                      },
-                      "status": {
-                        "description": "Status of the item.",
-                        "type": "number",
-                        "example": 1
-                      },
-                      "orderby": {
-                        "description": "Orderby of the item.",
-                        "type": "number",
-                        "example": 1
-                      }
+                    },
+                    "page": {
+                      "description": "Page of the meta data.",
+                      "type": "number",
+                      "example": 5
+                    },
+                    "limit": {
+                      "description": "Limit of the meta data.",
+                      "type": "number",
+                      "example": 10
                     }
                   }
                 }

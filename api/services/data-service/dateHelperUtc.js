@@ -50,7 +50,6 @@ module.exports = (date, inputFormat = 'YYYY-MM-DD HH:mm', outputFormat = 'YYYY-M
     eventDateTimestampLessThanNow,
   };
 // Prints the resuts
-  // console.log({ checkingReultsDateObj })
 
 /* ============= Checking dates input and output after converting =============== End === */
 

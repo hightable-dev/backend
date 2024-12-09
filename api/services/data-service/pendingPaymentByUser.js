@@ -1,8 +1,6 @@
 const { payPending, bookingConfirmationPendingByCreator } = paymentStatusCode;
 
 module.exports = async function (data) {
-  
-  console.log("paidBookings tableId", data, "status", payPending);
   const { tableId, userId } = data;
 
   // Define required fields and their corresponding variable names

@@ -4,7 +4,6 @@ module.exports = function list(request, response) {
   const request_query = request.allParams();
   const filtered_query_data = _.pick(request_query, ['id']);
   const { id } = filtered_query_data;
-  console.log({ userType: UserType(request), roles })
   const input_attributes = [
     { name: 'id', number: true, min: 1 },
   ];
@@ -66,11 +65,10 @@ module.exports = function list(request, response) {
         sendResponse(item);
 
       } catch (error) {
-        console.error('Error retrieving service requests:', error);
         return response.serverError('Server Error');
       }
     } else {
-      return response.status(400).json({
+      return response.badRequest({
         errors: errors,
         count: errors.length,
       });

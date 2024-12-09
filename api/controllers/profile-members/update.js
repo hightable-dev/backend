@@ -48,9 +48,7 @@ module.exports = function update(request, response) {
 
                     // Encrypt the phone number before updating
                     if (phone && phone.trim() !== '' ) {
-                        // await phoneEncryptor.encrypt(phone, function (encryptedPhone) {
-                        //     updateData.phone = encryptedPhone;
-                        // });
+                      
                         updateData.phone = UseDataService.phoneCrypto.encryptPhone(phone);
                     }
 
@@ -60,20 +58,18 @@ module.exports = function update(request, response) {
                     const getPercentileData = await UseDataService.profilePercentile(updatedUser);
 
                     if (getPercentileData > 100) {
-                        return response.status(500).json({ error: `Profile completion percentage cannot exceed 100. Calculated percentage: ${getPercentileData}` });
+                        return response.serverError({ error: `Profile completion percentage cannot exceed 100. Calculated percentage: ${getPercentileData}` });
                     }
 
                     return response.ok({ message: 'Profile member data updated successfully', data: getPercentileData.updatedProfile });
                 } catch (error) {
-                    console.error('Error updating profile member:', error);
                     return response.serverError(error);
                 }
             } else {
-                return response.status(400).json({ errors, count: errors.length });
+                return response.badRequest({ errors, count: errors.length });
             }
         });
     } catch (error) {
-        console.error('Error updating profile member:', error);
         return response.serverError(error);
     }
 };

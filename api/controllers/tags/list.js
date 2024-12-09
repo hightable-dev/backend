@@ -1,62 +1,97 @@
-const moment = require('moment');
+/**
+ * @author mohan
+ * <mohan@studioq.co.in>
+ */
+/* global _, ProfileManagers, sails */
+const _ = require('lodash');
 
-module.exports = function list(request, response) {
-  const request_query = request.allParams();
-  let _response_object;
-  const filterData = ["created_at", "updated_at"]; // Specify fields to filter
+module.exports = async function list(request, response) {
+  const {errorMessages} = UseDataService;
 
-  const { page, limit } = request_query;
-  const input_attributes = [
-    { name: 'page', number: true, min: 1 },
-    { name: 'limit', number: true, min: 1 }
-  ];
-  const filterCondition = [];
+  try {
+    const requestQuery = request.allParams();
+    const validFields = ['page', 'limit'];
 
-  validateModel.validate(null, input_attributes, { page, limit }, function (valid, errors) {
-    if (valid) {
-      const pageNumber = parseInt(page) || 1;
-      const limitNumber = parseInt(limit) || 10;
-      Tags.find()
-        .exec((err, items) => {
-          if (err) {
-            console.error("Error occurred while fetching items:", err);
-            return response.serverError({ error: "Error occurred while fetching items" });
-          }
+    const filteredQueryData = _.pickBy(requestQuery, (value, key) => validFields.includes(key) && _.identity(value));
 
-          let filteredItems = items;
-          // Apply filter conditions 
-          filteredItems = common.applyFilterConditions(filteredItems, filterCondition);
-          filteredItems = common.filterDataItems(filteredItems, filterData);
-
-          const paginateItems = common.paginateData(filteredItems, pageNumber, limitNumber);
-
-          if (filteredItems.length === 0) {
-            _response_object = {
-              Error: 'No data found',
-            }
-            return response.status(404).json(_response_object);
-          }
-
-
-          // Send response
-          _response_object = {
-            message: 'Tags retrieved successfully.',
-            meta: {
-              page: pageNumber,
-              limit: limitNumber,
-              total: filteredItems.length,
-            },
-            items: paginateItems
-          };
-    
-          return response.ok(_response_object);
-        });
-    } else {
-      const _response_object = {
-        errors: errors,
-        count: errors.length
-      };
-      return response.badRequest(_response_object);
+    // Check for invalid keys
+    const invalidParams = _.difference(Object.keys(requestQuery), validFields);
+    if (invalidParams.length > 0) {
+      // Throw an error for invalid parameters
+      throw ({
+        status: errorMessages.badRequest,
+        message:`Invalid parameters passed - ${invalidParams.join(', ')}`
+      });
     }
-  });
+
+    // Exclude fields from the results
+    const excludeFields = ['created_at', 'updated_at'];
+
+    // Input validation schema
+    const inputAttributes = [
+      { name: 'page', number: true, min: 1 },
+      { name: 'limit', number: true, min: 1 },
+    ];
+
+    // Define the function to build the criteria based on the filtered data
+    async function buildCriteria(filteredData) {
+      let criteria = {};
+
+      // Dynamically build criteria based on the provided filters (e.g., category, status)
+      return criteria;
+    }
+
+    // Validate inputs
+    await validateModel.validate(Interests, inputAttributes, filteredQueryData, async (valid, errors) => {
+      if (!valid) {
+        // Handle validation errors
+        return response.badRequest({
+          errors,
+          count: errors.length,
+        });
+      }
+
+      const page = parseInt(filteredQueryData.page) || 1;
+      const limit = parseInt(filteredQueryData.limit) || 10;
+      const skip = (page - 1) * limit;
+
+      try {
+        // Build the dynamic criteria based on the filtered data
+        let criteria = await buildCriteria(filteredQueryData);
+
+        // Fetch the paginated list and count based on the criteria
+        const [items, totalItems] = await Promise.all([
+          Tags.find()
+            .where(criteria)
+            .skip(skip)
+            .limit(limit)
+            .omit(excludeFields),
+          Tags.count().where(criteria),
+        ]);
+
+        // Send paginated response
+        await UseDataService.sendResponseList({
+          items,
+          totalItems,
+          page,
+          limit,
+          response,
+          inputAttributes,
+          filePath:  SwaggerGenService.getRelativePath(__filename),
+          message: 'Tags list',
+        });
+
+      } catch (e) {
+        // Handle errors while fetching data
+        return response.serverError({
+          ...UseDataService.errorMessages.fetchTags,
+          error: e.message,
+        });
+      }
+    });
+
+  } catch (error) {
+    // Catch any unexpected errors and send the response
+    throw error;
+  }
 };

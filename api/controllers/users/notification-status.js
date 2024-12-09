@@ -33,7 +33,7 @@ module.exports = function status(request, response) {
                 UtilsService.throwIfErrorElseCallback(err, response, 400, () => {
                     if (!userprofile) {
                         _response_object.message = 'No userprofile found with the given id.';
-                        return response.status(404).json(_response_object);
+                        return response.notFound(_response_object);
                     } else {
                         callback(userprofile);
                     }
@@ -63,7 +63,7 @@ module.exports = function status(request, response) {
         } else {
             _response_object.errors = errors;
             _response_object.count = errors.length;
-            return response.status(400).json(_response_object);
+            return response.badRequest(_response_object);
         }
     });
 };

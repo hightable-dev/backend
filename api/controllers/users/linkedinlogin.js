@@ -33,13 +33,12 @@ module.exports = async function list(request, response) {
         return response.redirect(redirect_url);
 
     } catch (error) {
-        console.error('LinkedIn API Error:', error.response ? error.response.data : error.message);
 
         // Even if there's an error, send the access token in the response
         if (error.response?.data?.access_token) {
             response.json({ accessToken: error.response.data.access_token });
         } else {
-            response.status(500).send(error);
+            response.serverError(error);
         }
     }
 

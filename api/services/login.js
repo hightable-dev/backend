@@ -87,7 +87,7 @@ module.exports = function signupSocial(request, response) {
                     await errorBuilder.build(err, function (error_obj) {
                         _response_object.errors = error_obj;
                         _response_object.count = error_obj.length;
-                        return response.status(500).json(_response_object);
+                        return response.serverError(_response_object);
                     });
                 } else {
                     // After creating the user, insert static data into ProfileMembers
@@ -123,9 +123,9 @@ module.exports = function signupSocial(request, response) {
             profile_input[type + '_id'] = post_data.id;
             profile_input[type + '_data'] = post_data;
             await Users.update({ id: parseInt(user_data.id) }, profile_input, function (err, updated_user) {
-                if(err){
+                if (err) {
                     // err defined not used just handled with error
-                    console.error("Update User error")
+                    throw err;
                 }
                 generateToken(Array.isArray(updated_user) && updated_user?.length ? updated_user[0] : updated_user);
             });
@@ -145,7 +145,7 @@ module.exports = function signupSocial(request, response) {
                     socialId = post_data.linkedin_id;
                     break;
                 default:
-                    return response.status(400).json({
+                    return response.badRequest({
                         message: `Unsupported signup type: ${type}`
                     });
             }
@@ -154,7 +154,7 @@ module.exports = function signupSocial(request, response) {
                     await errorBuilder.build(err, function (error_obj) {
                         _response_object.errors = error_obj;
                         _response_object.count = error_obj.length;
-                        return response.status(500).json(_response_object);
+                        return response.serverError(_response_object);
                     });
                 } else if (user) {
                     updateUser(user, post_data);
@@ -164,20 +164,19 @@ module.exports = function signupSocial(request, response) {
 
                     if (post_data.phone) {
                         phone = post_data.phone;
-                        await phoneEncryptor.encrypt(filtered_post_data.phone, function (encrypted_text) {
-                            post_data.encrypted_phone = encrypted_text;
-                        });
+                        post_data.encrypted_phone = UseDataService.phoneCrypto.encryptPhone(filtered_post_data.phone);
+                      
                     }
 
                     if (_.isNull(email) && _.isNull(phone)) {
-                         createUser(post_data);
+                        createUser(post_data);
                     } else {
                         await loginService.findExistingConnection(0, email, phone, async function (err, user) {
                             if (err) {
                                 await errorBuilder.build(err, function (error_obj) {
                                     _response_object.errors = error_obj;
                                     _response_object.count = error_obj.length;
-                                    return response.status(500).json(_response_object);
+                                    return response.serverError(_response_object);
                                 });
                             } else if (user) {
                                 updateUser(user, post_data);
@@ -195,20 +194,20 @@ module.exports = function signupSocial(request, response) {
 
                 if (err) {
                     _response_object.message = 'Something wrong in generating refresh_token.';
-                    return response.status(500).json(_response_object);
+                    return response.serverError(_response_object);
                 } else {
                     AccessTokens.create({ user_id: user.id, client_id: client.client_id }, function (err, access_token) {
                         if (err) {
                             _response_object.message = 'Something wrong in generating access_token.';
-                            return response.status(500).json(_response_object);
+                            return response.serverError(_response_object);
                         } else {
-                            _response_object = { 
+                            _response_object = {
                                 access_token: access_token.token,
                                 refresh_token: refresh_token.token,
                                 expires_in: sails.config.oauth.tokenLife,
                                 token_type: "Bearer"
                             }
-                            return response.status(200).json(_response_object);
+                            return response.ok(_response_object);
                         }
                     });
                 }
@@ -254,21 +253,20 @@ module.exports = function signupSocial(request, response) {
 
                         signup(content);
                     } catch (error) {
-                        console.error('Error fetching LinkedIn profile:', error);
                         return response.serverError({ Error: 'Failed to fetch LinkedIn profile', details: error });
                     }
                 }
             }
             else {
                 _response_object = {
-                    errors:  errors,
-                    count:  errors.length,
+                    errors: errors,
+                    count: errors.length,
                 }
-                return response.status(400).json(_response_object);
+                return response.badRequest(_response_object);
             }
         });
     } catch (err) {
         _response_object.message = 'Something went wrong.';
-        return response.status(500).json(_response_object);
+        return response.serverError(_response_object);
     }
 };

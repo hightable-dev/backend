@@ -112,7 +112,6 @@ module.exports = function list(request, response) {
               
                 item.phone = item?.phone ? await UseDataService.phoneCrypto.decryptPhone(item?.phone) : null;
               }
-  console.log({item})
               item.table_details = item.table_id;
               item.creator_details = item.creator_id;
               delete item.table_id;
@@ -121,19 +120,12 @@ module.exports = function list(request, response) {
               return item; // Return the transformed item
             })
           );
-
-          
-
-          // await processBookingCounts(items);
-          // await Promise.all(items.map(decryptPhoneNumber));
-
           sendResponse(items, totalItems);
         } catch (error) {
-          console.error("Error retrieving service requests:", error);
-          return response.serverError("Server Error");
+          return response.serverError({message : "Error fetching booking list", error});
         }
       } else {
-        return response.status(400).json({
+        return response.badRequest({
           errors: errors,
           count: errors.length,
         });

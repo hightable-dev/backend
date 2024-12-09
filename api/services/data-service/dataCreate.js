@@ -1,16 +1,5 @@
-/**
- * Common service for creating entries in Tables
- * @param {Object} request
- * @param {Object} response
- * @param {Object} data
- */
-
-/* global _, Tables, moment, errorBuilder, validateModel */
-
 module.exports = async function create(request, response, data) {
-  const { modelName, inputAttributes, filteredPostData, path } = data;
-
-  console.log({ data, inputAttributes, filteredPostData, path });
+  const { modelName, inputAttributes, postData,payloadData, path } = data;
 
   let _response_object = {};
 
@@ -27,10 +16,6 @@ module.exports = async function create(request, response, data) {
     response.ok(_response_object);
 
     // Update Table count after table creation
-    await UseDataService.countTablesHosted(ProfileMemberId(request));
-
-    // Generate Swagger documentation after response
-    /*
        process.nextTick(() => {
         const relativePath = path;
         const capitalizeFirstLetter = (str) => str && str.charAt(0).toUpperCase() + str.slice(1);
@@ -43,46 +28,58 @@ module.exports = async function create(request, response, data) {
           response: _response_object,
         });
       });
-       */
+       
 
-    return;
+    return details; // Return the created data
   };
 
   const createData = async (post_data) => {
-    await modelName.create(post_data, async function (err, newData) {
-      if (newData) {
-        sendResponse("Data created successfully.", newData);
-      } else {
-        await errorBuilder.build(err, function (error_obj) {
-          _response_object.errors = error_obj;
-          _response_object.count = error_obj.length;
+    return new Promise((resolve, reject) => {
+      modelName.create(post_data, async function (err, newData) {
+        if (newData) {
+          resolve(await sendResponse("Data created successfully.", newData));
+        } else {
+            reject(new Error("Data creation failed."));
 
-          // Ensure no duplicate responses
-          if (!response.headersSent) {
-            return response.status(500).json(_response_object);
-          }
-        });
-      }
+          // await errorBuilder.build(err, function (error_obj) {
+          //   _response_object.errors = error_obj;
+          //   _response_object.count = error_obj.length;
+
+          //   // Ensure no duplicate responses
+          //   if (!response.headersSent) {
+          //     response.status(500).json(_response_object);
+          //   }
+          // });
+        }
+      });
     });
   };
 
   // Validate model and proceed with creation
-  validateModel.validate(
-    modelName,
-    inputAttributes,
-    filteredPostData,
-    async function (valid, errors) {
-      if (valid) {
-        createData(filteredPostData);
-      } else {
-        _response_object.errors = errors;
-        _response_object.count = errors.length;
+  return new Promise((resolve, reject) => {
+    validateModel.validate(
+      modelName,
+      payloadData,
+      postData,
+      async function (valid, errors) {
+        if (valid) {
+          try {
+            const result = await createData(postData);
+            resolve(result); // Return created data
+          } catch (err) {
+            reject(err);
+          }
+        } else {
+          _response_object.errors = errors;
+          _response_object.count = errors.length;
 
-        // Ensure no duplicate responses
-        if (!response.headersSent) {
-          return response.status(400).json(_response_object);
+          // Ensure no duplicate responses
+          if (!response.headersSent) {
+            response.status(400).json(_response_object);
+          }
+          reject(new Error("Validation failed."));
         }
       }
-    }
-  );
+    );
+  });
 };

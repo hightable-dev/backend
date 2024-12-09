@@ -14,13 +14,9 @@ module.exports = function login(request, response) {
     ];
     const phoneNumber = filtered_post_data.phone;
     const createUsers = async (input_data) => {
-        let encrypted_phone = filtered_post_data.phone;
-        if (!_.isNaN(Number(encrypted_phone))) {
-            await phoneEncryptor.encrypt(encrypted_phone, function (encrypted_text) {
-                encrypted_phone = encrypted_text;
-            });
-        }
-
+        // let encrypted_phone = filtered_post_data.phone;
+        let encrypted_phone = UseDataService.phoneCrypto.encryptPhone(filtered_post_data.phone);
+         
         input_data.username = [encrypted_phone];
         input_data.phone = encrypted_phone;
         input_data.interests = filtered_post_data.interests;
@@ -62,22 +58,19 @@ module.exports = function login(request, response) {
 
                     _response_object = responseBody;
 
-                    response.status(200).json(_response_object);
+                    response.ok(_response_object);
                      await UseDataService.profilePercentile(profileMember);
 
                     return;
 
                 } else {
-                    console.error('Error creating profile member');
-                    return response.status(500).json({ error: 'Profile member creation failed' });
+                    return response.serverError({ error: 'Profile member creation failed' });
                 }
             } else {
-                console.error('Error creating user');
-                return response.status(500).json({ error: 'User creation failed' });
+                return response.serverError({ error: 'User creation failed' });
             }
         } catch (error) {
-            console.error('Error:', error);
-            return response.status(500).json({ error: 'Internal server error' });
+            return response.serverError({ error: 'Internal server error' });
         }
     };
 
@@ -104,7 +97,7 @@ module.exports = function login(request, response) {
 
         if (typeof phone !== 'string') {
             _response_object.otp_details = " phone must be a string";
-            return response.status(400).json(_response_object);
+            return response.badRequest(_response_object);
         }
 
         try {
@@ -126,11 +119,11 @@ module.exports = function login(request, response) {
 
                 if (data.status === "success") {
                     _response_object.otp_details = data;
-                    return response.status(200).json(_response_object);
+                    return response.ok(_response_object);
 
                 } else {
                     _response_object.otp_details= data;
-                    return response.status(400).json(_response_object);
+                    return response.badRequest(_response_object);
 
                 }
             }
@@ -138,7 +131,7 @@ module.exports = function login(request, response) {
             const data = await new Promise((resolve, reject) => {
                 if (typeof otp_verify !== 'string') {
                     _response_object.otp_details = " phone must be a string";
-                    return response.status(400).json(_response_object);
+                    return response.badRequest(_response_object);
                 }
                 loginService.verifyOTP(phone, otp_verify, (err, data) => {
                     if (err) {
@@ -154,12 +147,11 @@ module.exports = function login(request, response) {
             }
             else {
                 _response_object.otp_details = data;
-                return response.status(400).json(_response_object);
+                return response.badRequest(_response_object);
             }
             // }
         } catch (error) {
-            console.error('Error:', error);
-            return response.status(500).json(_response_object);
+            return response.serverError(_response_object);
         }
     };
 
@@ -167,14 +159,14 @@ module.exports = function login(request, response) {
         if (valid) {
             await loginService.findUser(filtered_post_data.phone, 'phone', function (err, user) {
                 if(err){
-                    console.error("some err:",err)
+                    sails.log("error:",err)
                 }
                 const { is_signup } = filtered_post_data;
                 if (is_signup) {
                     if (user) {
                         _response_object.errors = "Account already found";
                         _response_object.is_user_exist = true;
-                        return response.status(400).json(_response_object);
+                        return response.badRequest(_response_object);
                     }
                     else {
                         verifyOTPAndCreateUser(phoneNumber, filtered_post_data.otp_verify, filtered_post_data);
@@ -188,7 +180,7 @@ module.exports = function login(request, response) {
                     } else {
                         _response_object.errors = "No account found";
                         _response_object.is_user_exist = false;
-                        return response.status(400).json(_response_object);
+                        return response.badRequest(_response_object);
 
                     }
                 }
@@ -196,7 +188,7 @@ module.exports = function login(request, response) {
         } else {
             _response_object.errors = errors;
             _response_object.count = errors.length;
-            return response.status(400).json(_response_object);
+            return response.badRequest(_response_object);
         }
     });
 }

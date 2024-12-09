@@ -12,7 +12,6 @@ module.exports = {
    * @returns {Promise<Object>} The response from the OneSignal API
    */
   emailNotification: async function (payload) {
-    console.log('Payload received:', payload);
     const { custom_data, include_email_tokens, type } = payload;
     const url = 'https://onesignal.com/api/v1/notifications';
 
@@ -86,12 +85,9 @@ module.exports = {
     };
 
     try {
-      // console.log('Sending payload to OneSignal:', JSON.stringify(body, null, 2));
       const response = await axios.post(url, body, { headers });
-      console.log('Response from OneSignal:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error response from OneSignal:', error.response?.data || error.message);
       throw new Error(
         `Error sending notification via OneSignal: ${error.response?.data?.errors || error.message
         }`

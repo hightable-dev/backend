@@ -28,7 +28,7 @@ module.exports = function update(request, response) {
                     // Check if the user exists
                     const user = await ProfileMembers.findOne({ id });
                     if (!user) {
-                        return response.status(400).json({ message: 'User not found' });
+                        return response.badRequest({ message: 'User not found' });
                     }
 
                     // Toggle status between 0 and active
@@ -41,15 +41,13 @@ module.exports = function update(request, response) {
                     // Build and send response
                     return response.ok({ message: `User ${msg} `, is_active: isActive });
                 } catch (error) {
-                    console.error('Error updating user:', error);
                     return response.serverError(error);
                 }
             } else {
-                return response.status(400).json({ errors, count: errors.length });
+                return response.badRequest({ errors, count: errors.length });
             }
         });
     } catch (error) {
-        console.error('Error updating user:', error);
         return response.serverError(error);
     }
 };

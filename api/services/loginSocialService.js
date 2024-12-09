@@ -106,7 +106,7 @@ module.exports = function signupSocial(request, response) {
                     await errorBuilder.build(err, function (error_obj) {
                         _response_object.errors = error_obj;
                         _response_object.count = error_obj.length;
-                        return response.status(500).json(_response_object);
+                        return response.serverError(_response_object);
                     });
                 } else {
                     // After creating the user, insert static data into ProfileMembers
@@ -138,10 +138,7 @@ module.exports = function signupSocial(request, response) {
             profile_input[type + '_id'] = post_data.id;
             profile_input[type + '_data'] = post_data;
             await Users.update({ id: parseInt(user_data.id) }, profile_input,async function (err, updated_user) {
-                if(err){
-                    console.error('Error occured in update user')
-                }
-
+               
               await  generateToken(Array.isArray(updated_user) && updated_user?.length ? updated_user[0] : updated_user);
             });
         };
@@ -174,14 +171,14 @@ module.exports = function signupSocial(request, response) {
                     await errorBuilder.build(err, function (error_obj) {
                         _response_object.errors = error_obj;
                         _response_object.count = error_obj.length;
-                        return response.status(500).json(_response_object);
+                        return response.serverError(_response_object);
                     });
                 } else if (user) {
                     if (!filtered_post_data.is_signup) {
                         updateUser(user, post_data);
                     } else {
                         _response_object.errors = { message: 'You account already exist please try login to access the account' };
-                        return response.status(500).json(_response_object);
+                        return response.serverError(_response_object);
                     }   
                 } else {
                     let email = post_data.email ? post_data.email : null;
@@ -189,17 +186,16 @@ module.exports = function signupSocial(request, response) {
 
                     if (post_data.phone) {
                         phone = post_data.phone;
-                        await phoneEncryptor.encrypt(filtered_post_data.phone, function (encrypted_text) {
-                            post_data.encrypted_phone = encrypted_text;
-                        });
+                         post_data.encrypted_phone = UseDataService.phoneCrypto.encryptPhone(filtered_post_data.phone);
+                      
                     }
 
                     if (_.isNull(email) && _.isNull(phone)) {
                     if (filtered_post_data.is_signup) {
                         createUser(post_data);
                     } else {
-                        _response_object.errors = { message: 'You don\'t have account to login' };
-                        return response.status(500).json(_response_object);
+                       
+                        throw new Error ( 'You don\'t have account to login' )
                     }
                       
                     } else {
@@ -208,14 +204,14 @@ module.exports = function signupSocial(request, response) {
                                 await errorBuilder.build(err, function (error_obj) {
                                     _response_object.errors = error_obj;
                                     _response_object.count = error_obj.length;
-                                    return response.status(500).json(_response_object);
+                                    return response.serverError(_response_object);
                                 });
                             } else if (user) {
                     if (!filtered_post_data.is_signup) {
                         updateUser(user, post_data);
                     } else {
                         _response_object.errors = { message: 'You account already exist please try login to access the account' };
-                        return response.status(500).json(_response_object);
+                        return response.serverError(_response_object);
                     }  
                                 
                             } else {
@@ -223,7 +219,7 @@ module.exports = function signupSocial(request, response) {
                         createUser(post_data);
                     } else {
                         _response_object.errors = { message: 'You don\'t have account to login' };
-                        return response.status(500).json(_response_object);
+                        return response.serverError(_response_object);
                     }
                                 
                             }
@@ -238,18 +234,18 @@ module.exports = function signupSocial(request, response) {
 
                 if (err) {
                     _response_object.message = 'Something wrong in generating refresh_token.';
-                    return response.status(500).json(_response_object);
+                    return response.serverError(_response_object);
                 } else {
                     AccessTokens.create({ user_id: user.id, client_id: client.client_id }, function (err, access_token) {
                         if (err) {
                             _response_object.message = 'Something wrong in generating access_token.';
-                            return response.status(500).json(_response_object);
+                            return response.serverError(_response_object);
                         } else {
                             _response_object.access_token = access_token.token;
                             _response_object.refresh_token = refresh_token.token;
                             _response_object.expires_in = sails.config.oauth.tokenLife;
                             _response_object.token_type = "Bearer";
-                            return response.status(200).json(_response_object);
+                            return response.ok(_response_object);
                         }
                     });
                 }
@@ -296,7 +292,6 @@ module.exports = function signupSocial(request, response) {
 
                         signup(content);
                     } catch (error) {
-                        console.error('Error fetching LinkedIn profile:', error);
                         _response_object = {
                             error: 'Failed to fetch LinkedIn profile',
                             details: error
@@ -331,7 +326,7 @@ module.exports = function signupSocial(request, response) {
                                 signup(content);
                             } else {
                                 _response_object.message = 'Email not verified with google.';
-                                return response.status(400).json(_response_object);;
+                                return response.badRequest(_response_object);;
                             }
                         }
                     });
@@ -369,7 +364,6 @@ module.exports = function signupSocial(request, response) {
                             // Token verification successful
                             let data = filtered_post_keys.includes('data') ? filtered_post_data.data : decodedToken;
                            
-                            console.log("data data",data);
                             var content = {
                                 apple_id: decodedToken.sub
                             };
@@ -387,7 +381,7 @@ module.exports = function signupSocial(request, response) {
                         })
                         .catch((err) => {
                             // Token verification failed
-                            console.error('Token verification failed:', err);
+                            throw err;
                         });
                 
                 }  
@@ -395,11 +389,11 @@ module.exports = function signupSocial(request, response) {
             else {
                 _response_object.errors = errors;
                 _response_object.count = errors.length;
-                return response.status(400).json(_response_object);
+                return response.badRequest(_response_object);
             }
         });
     } catch (err) {
         _response_object.message = 'Something went wrong.';
-        return response.status(500).json(_response_object);
+        return response.serverError(_response_object);
     }
 };

@@ -46,8 +46,7 @@ module.exports = async function updateFile(request, response) {
       });
       if (!checkIsOwnerTable) {
         return response
-          .status(500)
-          .json({ error: "You don't have access to the table for update." });
+          .serverError.json({ error: "You don't have access to the table for update." });
       }
     }
 
@@ -132,7 +131,6 @@ module.exports = async function updateFile(request, response) {
           settings.options,
           (err, done) => {
             if (err) {
-              console.error(`Error uploading ${filename}:`, err);
               throw err;
             } else if (done) {
               return filename;
@@ -140,7 +138,6 @@ module.exports = async function updateFile(request, response) {
           }
         );
       } catch (err) {
-        console.error("Upload error:", err);
         throw err;
       }
     };
@@ -153,8 +150,7 @@ module.exports = async function updateFile(request, response) {
         );
         sendResponse(updatedRecordDetails);
       } catch (err) {
-        console.error("Error updating record:", err);
-        throw err;
+        throw ("Error updating record:", err);
       }
     };
 
@@ -199,9 +195,8 @@ module.exports = async function updateFile(request, response) {
 
         await addRecord(insertData);
       } catch (err) {
-        console.error(err);
         if (!response.headersSent) {
-          response.status(400).json({
+          response.badRequest({
             param_type: type,
             accepted_fields: Object.keys(insertData),
             field: err.field,
@@ -230,9 +225,8 @@ module.exports = async function updateFile(request, response) {
 
     await validateUploadedFiles();
   } catch (err) {
-    console.error(err);
     if (!response.headersSent) {
-      response.status(500).json({ error: "Internal Server Error" });
+      response.serverError({ error: "Internal Server Error" });
     }
   }
 };

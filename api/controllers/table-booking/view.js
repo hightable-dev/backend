@@ -44,11 +44,10 @@ module.exports = function list(request, response) {
                 // Send the fetched item in response
                 sendResponse(item);
             } catch (error) {
-                console.error("Error fetching data:", error);
-                return response.serverError({ message: "Internal Server Error" });
+                return response.serverError({ message: "Error view table booking", error });
             }
         } else {
-            return response.status(400).json({
+            return response.badRequest({
                 errors,
                 count: errors.length,
             });

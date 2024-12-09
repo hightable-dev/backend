@@ -18,12 +18,11 @@ module.exports = {
             const postresponse = await axios.request(config);
             return res.send(postresponse.data);
         } catch (error) {
-            console.error('Error:', error.message);
             // Handle errors
             if (error.message.includes('SSL routines:final_renegotiate:unsafe legacy renegotiation disabled')) {
-                return res.status(500).json({ error: 'SSL renegotiation error. Please try again later.' });
+                return res.serverError({ error: 'SSL renegotiation error. Please try again later.' });
             } else {
-                return res.status(500).json({ error: 'Internal Server Error' });
+                return res.serverError({ error: 'Internal Server Error' });
             }
         }
     },
@@ -44,12 +43,11 @@ module.exports = {
             const verifyResponse = await axios.request(config);
             return res.send(verifyResponse);
         } catch (error) {
-            console.error('Error:', error);
             // Handle errors
             if (error.message.includes('SSL routines:final_renegotiate:unsafe legacy renegotiation disabled')) {
-                return res.status(500).json({ error: 'SSL renegotiation error. Please try again later.' });
+                return res.serverError({ error: 'SSL renegotiation error. Please try again later.' });
             } else {
-                return res.status(500).json({ error: 'Internal Server Error' });
+                return res.serverError({ error: 'Internal Server Error' });
             }
         }
     }

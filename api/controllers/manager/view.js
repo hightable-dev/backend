@@ -1,48 +1,79 @@
-/**
- * @author mohan <mohan@studioq.co.in>
- */
+const _ = require('lodash');
 
-/* global _, ProfileManagers /sails */
+module.exports = function list(request, response) {
+  const request_query = request.allParams();
+  const filtered_query_data = _.pick(request_query, ['id']);
+  const { id } = filtered_query_data;
+  const input_attributes = [
+    { name: 'id', number: true, min: 1 },
+  ];
 
-module.exports = async function findOne(request, response) {
-  try {
-    var _response_object = {};
-
-    // Extract ID from request parameters
-    const { id: managerId } = request.query;
-    const filterData = ['payment_details', 'facebook_data', 'created_at', 'updated_at']; // Specify fields to filter
-
-    // Find user by ID
-    // const specificUsers = await Users.find({ id }).limit(1); // Use .find().limit(1) instead of findOne()
-    const specificUsers = await ProfileManagers.find({ id: managerId }).limit(1); // Use .find().limit(1) instead of findOne()
-    // const totalTablesCount = await Tables.count({ admin_id:ProfileManagerId(request)});
-    const totalTablesCount = await Tables.count({ where: { admin_id: managerId } });
-
-    // Check if user exists
-    if (!specificUsers || specificUsers.length === 0) {
-      return response.status(404).json({ error: 'User not found' }); // Customize error message here
-    }
-    let filteredItems = specificUsers;
-    filteredItems = common.filterDataItems(filteredItems, filterData);
-
-
-
-    const user = specificUsers[0]; // Retrieve the first user from the result
-    user.tableCreatedCount = totalTablesCount;
-
-    if (user.photo) {
-      user.photo = sails.config.custom.s3_bucket_options.profile_photo + user.photo;
-    }
-
-    // Send response
-    _response_object = {
+  let responseObject = {};
+  const sendResponse = (item) => {
+    responseObject = {
+      meta: {
+        ...sails.config.custom.s3_bucket_options,
+      },
       message: 'User retrieved successfully.',
-      data: user, // Use the retrieved user
-    }
+      data: item, // return single item
+    };
 
-    return response.ok(_response_object);
-  } catch (error) {
-    console.error("Error occurred while fetching user:", error);
-    return response.status(500).json({ error: "Error occurred while fetching user" });
+    response.ok(responseObject)
+
+    return;
+  };
+
+  // Function to build the query criteria for fetching the table
+  function buildCriteria() {
+    return {
+      id,
+    };
   }
-}
+
+  // Validate input attributes and proceed if valid
+  validateModel.validate(ProfileManagers, input_attributes, filtered_query_data, async function (valid, errors) {
+    if (valid) {
+      try {
+        const criteria = buildCriteria();
+        // Fetch table data and populate related entities
+        let item = await ProfileManagers.findOne(criteria)
+        // .populate('interests')
+        if (item?.photo) {
+          item.photo = item?.photo ? sails.config.custom.s3_bucket_options.profile_photo + item?.photo : null;
+        }
+
+        if (item?.phone) {
+          item.phone = item?.phone ? UseDataService.phoneCrypto.decryptPhone(item.phone) : null;
+        }
+        if (item?.interests) {
+          item.interests = await UseDataService.retrieveInterestsName(item?.interests);
+        }
+
+        if (!item) {
+          return response.notFound({ message: 'Table not found' });
+        }
+    /* 
+      follower data only added for members not other roles
+     */
+        if (UserType(request) === roles.member) {
+          item.is_follower = await UseDataService.followerData({
+            userId: ProfileMemberId(request),
+            followerId: parseInt(id)
+          })
+        }
+
+        sendResponse(item);
+
+      } catch (error) {
+        return response.serverError('Server Error');
+      }
+    } else {
+      return response.badRequest({
+        errors: errors,
+        count: errors.length,
+      });
+    }
+  });
+};
+
+// "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/members-photo-1036.png",

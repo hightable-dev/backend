@@ -19,7 +19,7 @@ module.exports = async function update(request, response) {
             message: 'Invalid or missing id. The id must be a valid number.'
         }];
         responseObject.count = 1;
-        return response.status(400).json(responseObject);
+        return response.badRequest(responseObject);
     }
     const isCheckdata = await UseDataService.checkBookingTableCreatedByCurrentUser(
         {
@@ -30,7 +30,7 @@ module.exports = async function update(request, response) {
 
     if (!isCheckdata) {
         responseObject.error = "You cannot Accept or Reject booking. Tale not created by current user"
-        return response.status(400).json(responseObject);
+        return response.badRequest(responseObject);
     }
 
     // Check if status is valid
@@ -51,7 +51,7 @@ module.exports = async function update(request, response) {
             message: 'Invalid status. Valid status codes are ' + validStatusCodes.join(', ') + '.'
         }];
         responseObject.count = 1;
-        return response.status(400).json(responseObject);
+        return response.badRequest(responseObject);
     }
 
     async function acceptBooking(id, acceptBooking) {
@@ -60,7 +60,7 @@ module.exports = async function update(request, response) {
                 await errorBuilder.build(err, function (error_obj) {
                     responseObject.errors = error_obj;
                     responseObject.count = error_obj.length;
-                    return response.status(500).json(responseObject);
+                    return response.serverError(responseObject);
                 });
             } else {
                 if (acceptedData) {
@@ -140,14 +140,14 @@ module.exports = async function update(request, response) {
                 UtilsService.throwIfErrorElseCallback(err, response, 400, () => {
                     if (!user) {
                         responseObject.message = 'No data found with the given id.';
-                        return response.status(404).json(responseObject);
+                        return response.notFound(responseObject);
                     } else if (user.status !== bookingConfirmationPendingByCreator) {
                         if (user.status === orederExpired) {
                             responseObject.message = 'Order expired due to late, book again.';
                         } else {
                             responseObject.message = 'Booking status already accepted.';
                         }
-                        return response.status(400).json(responseObject);
+                        return response.badRequest(responseObject);
                     } else {
                         callback(user);
                     }

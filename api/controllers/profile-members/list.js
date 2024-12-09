@@ -112,11 +112,10 @@ module.exports =  function list(request, response) {
           
           sendResponse(items, totalItems);
         } catch (error) {
-          console.error("Error retrieving service requests:", error);
-          return response.serverError("Server Error");
+          return response.serverError({error});
         }
       } else {
-        return response.status(400).json({
+        return response.badRequest({
           errors: errors,
           count: errors.length,
         });

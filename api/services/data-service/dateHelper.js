@@ -13,7 +13,6 @@ const momentTz = require('moment-timezone');
  * @example
  * // Convert date from 'DD/MM/YYYY' to 'YYYY-MM-DD'
  * const formattedDate = formatDate('30/12/2024', 'DD/MM/YYYY', 'YYYY-MM-DD');
- * console.log(formattedDate); // Output: '2024-12-30'
  */
 module.exports = (date, inputFormat, outputFormat = 'YYYY-MM-DD HH:mm:ss') => {
   // Common function for formatting dates in IST and 24-hour format

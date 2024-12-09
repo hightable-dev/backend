@@ -19,7 +19,6 @@ module.exports = {
           reject({ message: facebook_response.error.message, statusCode: 401 });
         } else {
           // Resolve the promise with the Facebook user data
-          console.log({token,facebook_response})
           const content = {
             facebook_id: facebook_response.id,
             first_name: facebook_response.first_name,

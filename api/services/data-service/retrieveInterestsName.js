@@ -18,7 +18,6 @@ module.exports = async function (idsArray) {
 
         // Extract the names from the found records
         const interestNames = foundRecords.map(record => record.name);
-console.log('interestNames',interestNames)
         // Return the array of names
         return interestNames;
     } catch (error) {

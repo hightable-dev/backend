@@ -1,7 +1,6 @@
 module.exports = async function (data) {
   const { table_id, booking_id, user_id, creator_id, type_glossary, error_details, booking_details, status_code, type } = data;
   const { razorpayErr } = UseDataService;
-  console.log('errordetailscreate', { data })
   // Define required fields and their corresponding variable names
   const requiredFields = {
     table_id: 'table_id',
@@ -35,8 +34,6 @@ module.exports = async function (data) {
       statusCode = error_details?.statusCode === 401 ? 1 : 0;
     }
 
-console.log("::::::::",{error_details},'statuscode:::',error_details?.statusCode, 'description:::', error_details.error.description)
-    console.log({ error_details, description })
     await ErrorDetail.create({
       table_id,
       type: statusCode ? razorpayErr : type,

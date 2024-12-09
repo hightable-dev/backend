@@ -20,7 +20,7 @@ async function processSwaggerGeneration(data) {
       response: {...responseObject}
     });
   } catch (error) {
-    console.error("Error in generating Swagger JSON file:", error);
+    throw error ;
   }
 }
 

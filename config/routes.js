@@ -19,24 +19,17 @@ const swaggerDocs = require('../swagger/docs/index.js');
 (loginSocialService = require('../api/services/loginSocialService.js'));
 (oauth2_server = require('./oauth2.js').server);
 module.exports.routes = {
-  // Route to initiate LinkedIn OAuth login
-  'GET /auth/linkedin': 'LinkedInController.linkedin',
 
-  // Callback route that LinkedIn redirects to after successful login
-  'GET /auth/linkedin/callback': 'LinkedInController.linkedinCallback',
 
-  // Route to fetch LinkedIn profile data (could be a POST request depending on your setup)
-  'POST /auth/linkedin/profile': 'LinkedInController.fetchLinkedInProfile',
   'GET /fb-connect': 'FbController.fbConnect',
-  'GET /linkedin-connect': 'LinkedInController.linkedin',
 
   /*====================== Login & Users Ends Here ======================*/
   '/': function (request, response) {
-    response.status(200).json({ message: 'Welcome to Test API.' });
+    response.ok({ message: 'Welcome to Test API.' });
   },
 
   '/logged-successful': function (request, response) {
-    response.status(200).json({ message: 'logged-successful' });
+    response.ok({ message: 'logged-successful' });
   },
 
   /*=====================    Manager    ===================*/
@@ -48,15 +41,13 @@ module.exports.routes = {
   'GET /manager/list': { action: 'manager/list', swagger: swaggerDocs?.managerlistSwagger },
 
   /*=================   Tags   =================*/
-  'GET /tags/list': { action: 'tags/list' },
+  'GET /tags/list': { action: 'tags/list' , swagger: swaggerDocs?.tagslistSwagger },
 
   /*=================   Intrest   =================*/
   'POST /interests/create': { action: 'interests/create' },
   'POST /interests/image-upload': { action: 'interests/image-upload' },
   'GET /interests/list': { action: 'interests/list', swagger: swaggerDocs?.interestslistSwagger },
-  'GET /interests/category-available': { action: 'interests/category-available' },
-  'GET /interests/users-interests-list': { action: 'interests/users-interests-list' },
-
+ 
   /*=====================    Standard Table   ===================*/
   'POST /standard-table/set-price': { action: 'standard-table/set-price' },
   'GET /standard-table/view-price': { action: 'standard-table/view-price' },
@@ -87,7 +78,6 @@ module.exports.routes = {
 
   /*=====================    Booking table table    ===================*/
   'GET /table-booking/list': { action: 'table-booking/list' },
-  'GET /table-booking/booked-list-all': { action: 'table-booking/booked-list-all' },
   'GET /table-booking/booked-my-tables-user-list': { action: 'table-booking/booked-my-tables-user-list' },
   'GET /table-booking/accept-booking': { action: 'table-booking/accept-booking' },
   'GET /table-booking/booked-all-my-list': { action: 'table-booking/booked-all-my-list' },
@@ -101,7 +91,7 @@ module.exports.routes = {
   'POST /reviews/give-feedback': { action: 'reviews/give-feedback', swagger: swaggerDocs?.reviewsgivefeedbackSwagger },
 
   /*=====================    Wishlist / Bookmarks   =====================*/
-  'POST /bookmark/create': { action: 'bookmark/create' },
+  'POST /bookmark/create': { action: 'bookmark/create' , swagger: swaggerDocs?.bookmarkcreateSwagger },
   'GET /bookmark/list': { action: 'bookmark/list', swagger: swaggerDocs?.bookmarklistSwagger },
 
   /*===================== Follower  =====================*/
@@ -119,7 +109,6 @@ module.exports.routes = {
 
   'POST /users/notification': { action: 'users/notification' },
   'POST /users/notification-status': { action: 'users/notification-status' },
-  'PUT /users/update': { action: 'users/update' },
 
   /*=====================Reports =====================*/
   'POST /report/create-host': { action: 'report/create-host' },
@@ -137,8 +126,7 @@ module.exports.routes = {
   'POST /test-email-service': async function (req, res) {
     try {
       const result = await emailNotification(req.body); // Pass request data if needed
-      console.log("routeResul", { result })
-      return res.status(200).json({ message: result });
+      return res.ok({ message: result });
     } catch (err) {
       return res.serverError(err);
     }
@@ -206,55 +194,3 @@ module.exports.routes = {
     `);
   }
 }
-
-/****** Removed Apis ******
- 
-  'GET /users/linkedinlogin': { action: 'users/linkedinlogin' },
- 
-  'GET /table-booking/list-admin': { action: 'table-booking/list-admin' },
-  'GET /profile-members/view-admin': { action: 'profile-members/view-admin' },
- 
-  'POST /razorpay/create-account': { action: 'razorpay/create-account' },
-
-  'GET /payout-host/list': { action: 'payout-host/list' },
-  'GET /payout-host/view': { action: 'payout-host/view' },
-
-  'GET /users/view': { action: 'users/view', },
-  'GET /users/user-view': { action: 'users/user-view', },
-  'GET /users/list': { action: 'users/list', },
-  'PUT /users/update': { action: 'users/update' },
-  'POST /users/create': { action: 'users/create' },
-  'POST /users/photo-upload': { action: 'users/photo-upload' },
-  'GET /linkedin/profile': 'LinkedInController.fetchLinkedInProfile',
-  'POST /linkedin/profile': 'LinkedInController.fetchLinkedInProfile',
-  'get /login/linkedin': 'AuthController.linkedin',
-  'get /login/linkedin/callback': 'AuthController.linkedinCallback',
-  'GET /table-booking/pay-order/:id': { action: 'table-booking/pay-order' },
-
-  'post /payments/create-order': { action: 'payments/create-order' },
-  'post /payments/capture-payment': { action: 'payments/capture-payment' },
-  'GET /payments/orders': { action: 'payments/all-orders' },
-
-  'POST /razorpay/capture-transfer': { action: 'razorpay/capture-transfer' },
-  'POST /payout-host/payment-to-host': { action: 'payout-host/payment-to-host' },
-  'PUT /table-booking/refund': { action: 'table-booking/refund' },
- 
-  'GET /tables/my-tables-booked': { action: 'tables/my-tables-booked' }, // lists specific table booking
-  'GET /tables/approved-list': { action: 'tables/approved-list' },
-  'GET /tables/pending-list': { action: 'tables/pending-list' },
-
-  'POST /tables/photo-upload': { action: 'tables/photo-upload' },
-  'POST /tables/create-by-admin': { action: 'tables/create-by-admin' },
-  'PUT /tables/approve-table': { action: 'tables/approve-table' }, //approve-table changed to table-status
-  'GET /tables/list-by-members-cateogry': { action: 'tables/list-by-members-cateogry' },
-
-  'GET /tables/list-admin': { action: 'tables/list-admin' },
-
-  testPayment: function (req, res) {
-    return res.sendFile('testpyament.html', { root: './assets' });
-  }
-  'GET /table-booking/pay-order/:id': { action: 'table-booking/pay-order' },
-  'post /table-booking/payout-host': { action: 'table-booking/payout-host' },
-
-*/
-

@@ -17,7 +17,7 @@ module.exports = async function update(request, response) {
 
         // Initialize validateModel function
         const validateModel = new Promise((resolve, reject) => {
-            validateModel.validate(null, input_attributes, { id, name },  function (valid, errors) {
+            validateModel.validate(null, input_attributes, { id, name }, function (valid, errors) {
                 if (valid) {
                     resolve();
                 } else {
@@ -34,7 +34,6 @@ module.exports = async function update(request, response) {
         _response_object.message = 'Interest name has been updated successfully.';
         response.ok(_response_object);
     } catch (error) {
-        console.error("Error occurred while updating interests name:", error);
-        response.status(500).json({ error: "Error occurred while updating interests name" });
+        response.serverError({ error: "Error occurred while updating interests name" });
     }
 };

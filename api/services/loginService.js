@@ -26,14 +26,8 @@ exports.findUser = async function (username, login_type, callback) {
     let encrypted_phone
 
     if (login_type === 'phone') {
-      if (!_.isNaN(Number(username))) {
+      encrypted_phone = UseDataService.phoneCrypto.encryptPhone(username)
 
-        await phoneEncryptor.encrypt(username, function (encrypted_text) {
-          encrypted_phone = encrypted_text;
-        });
-      } else {
-        encrypted_phone = username
-      }
     }
     const query = `
       SELECT
@@ -68,10 +62,10 @@ exports.findUser = async function (username, login_type, callback) {
 
         return callback(err, user['rows'][0]);
       } else {
-        error_obj= {
-          status : 404,
-          message : 'No user found.',
-          is_user_exist : false
+        error_obj = {
+          status: 404,
+          message: 'No user found.',
+          is_user_exist: false
         }
         return callback(error_obj);
       }
@@ -94,7 +88,7 @@ exports.findExistingConnection = async function (source_type, email, phone, call
       whereClause.email = email;
     }
     if (phone) {
-      whereClause.phone = await phoneEncryptor.encrypt(phone);
+      whereClause.phone = await UseDataService.phoneCrypto.encryptPhone(phone);
     }
     const user = await Users.findOne({
       email
@@ -145,7 +139,7 @@ exports.findUserByToken = function (access_token, callback) {
     query += " WHERE " + AccessTokens.tableAlias + "." + AccessTokens.schema.token.columnName + "='" + access_token + "'";
     //Executing query
     var token_model = sails.sendNativeQuery(query);
-    token_model.exec( function (err, user) {
+    token_model.exec(function (err, user) {
       if (err) {
         if (err.message) {
           error_obj.message = err.message;
@@ -157,10 +151,10 @@ exports.findUserByToken = function (access_token, callback) {
         return callback(err, user['rows'][0]);
       } else {
         error_obj = {
-          message : 'No user found with given token.',
-          is_user_exist : false
+          message: 'No user found with given token.',
+          is_user_exist: false
         }
-        return callback(error_obj); 
+        return callback(error_obj);
       }
     });
   } catch (err) {
@@ -175,12 +169,12 @@ exports.findUserByToken = function (access_token, callback) {
 
 
 exports.sendOTP = async function (phone, callback) {
-  const demoUser = "9999912345" ;
-  const demoUser1 = "9876543211" ;
-  const demoUser2 = "9876543212" ;
-  const demoUser3 = "9876543213" ;
+  const demoUser = "9999912345";
+  const demoUser1 = "9876543211";
+  const demoUser2 = "9876543212";
+  const demoUser3 = "9876543213";
   // Check if the phone number is not equal to demoUser or demoUser2
-  if (phone !== demoUser  && phone !== demoUser1 && phone !== demoUser2 && phone !== demoUser3) {
+  if (phone !== demoUser && phone !== demoUser1 && phone !== demoUser2 && phone !== demoUser3) {
     try {
       const config = {
         method: 'post',
@@ -208,7 +202,6 @@ exports.sendOTP = async function (phone, callback) {
         callback(null, jsonObject);
       }
     } catch (error) {
-      console.error('Error sending OTP:', error);
       // Pass error to the callback function
       if (typeof callback === 'function') {
         callback(error);
@@ -229,13 +222,13 @@ exports.sendOTP = async function (phone, callback) {
 
 
 exports.verifyOTP = async function (phone, otp, callback) {
-  const demoUser = "9999912345" ;
+  const demoUser = "9999912345";
   const demoUser1 = "9876543211";
   const demoUser2 = "9876543212";
   const demoUser3 = "9876543213";
   const demoUserOtp = "7799";
 
-  if ((phone === demoUser ||phone === demoUser1 || phone === demoUser2 || phone === demoUser3) && otp === demoUserOtp) {
+  if ((phone === demoUser || phone === demoUser1 || phone === demoUser2 || phone === demoUser3) && otp === demoUserOtp) {
     jsonObject = {
       status: 'success',
       phone_no: phone,
@@ -268,10 +261,10 @@ exports.verifyOTP = async function (phone, otp, callback) {
       // Handle the response
       // Pass data to the callback function
       callback(null, postresponsejsonObject);
-    } catch (error) {
-      console.error('Error sending OTP:', error);
-      // Pass error to the callback function
-      callback(error);
+    } catch (e) {
+      // Pass e to the callback function
+      throw (e);
+      // callback(error);
     }
   }
 }
