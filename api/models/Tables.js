@@ -54,31 +54,4 @@ module.exports = {
     },
 
   },
-
-  handleBooking: async function (tableId, payPending, orederExpired) {
-    const data = await Tables.findOne({
-      where: { id: tableId }
-    });
-    if (data.booked === data.max_seats) {
-
-      const expiredBookings = await TableBooking.find({
-        where: { table_id: tableId, status: payPending }
-      });
-
-      for (const booking of expiredBookings) {
-        await TableBooking.updateOne({ id: booking.id }).set({ status: orederExpired });
-      }
-      return false;
-    } else {
-      return true;
-    }
-  },
-
-
-  checkPreviousBookings: async function (tableId, userId, status) {
-    const data =  await TableBooking.findOne({ table_id: tableId, user_id: userId, status: status });
-    return data ;
-
-  },
-
 };

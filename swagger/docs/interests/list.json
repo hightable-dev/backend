@@ -22,7 +22,7 @@
     },
     "responses": {
       "200": {
-        "description": "No Items",
+        "description": "Interests list",
         "content": {
           "application/json": {
             "schema": {
@@ -31,7 +31,7 @@
                 "message": {
                   "description": "Success message.",
                   "type": "string",
-                  "example": "No Items"
+                  "example": "Interests list"
                 },
                 "meta": {
                   "type": "object",
@@ -44,12 +44,89 @@
                     "page": {
                       "description": "Page of the meta data.",
                       "type": "number",
-                      "example": 5
+                      "example": 1
                     },
                     "limit": {
                       "description": "Limit of the meta data.",
                       "type": "number",
                       "example": 10
+                    },
+                    "base_url": {
+                      "description": "Base_url of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                        "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                      }
+                    },
+                    "table_photo": {
+                      "description": "Table_photo of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                      }
+                    },
+                    "table_video": {
+                      "description": "Table_video of the meta data.",
+                      "type": "object",
+                      "example": {
+                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                      }
+                    },
+                    "profile_photo": {
+                      "description": "Profile_photo of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                    },
+                    "category_photo": {
+                      "description": "Category_photo of the meta data.",
+                      "type": "string",
+                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                    }
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "Id of the item.",
+                        "type": "string",
+                        "example": "1"
+                      },
+                      "name": {
+                        "description": "Name of the item.",
+                        "type": "string",
+                        "example": "Travel"
+                      },
+                      "image": {
+                        "description": "Image of the item.",
+                        "type": "string",
+                        "example": ""
+                      },
+                      "width": {
+                        "description": "Width of the item.",
+                        "type": "number",
+                        "example": 50
+                      },
+                      "height": {
+                        "description": "Height of the item.",
+                        "type": "number",
+                        "example": 50
+                      },
+                      "status": {
+                        "description": "Status of the item.",
+                        "type": "number",
+                        "example": 1
+                      },
+                      "orderby": {
+                        "description": "Orderby of the item.",
+                        "type": "number",
+                        "example": 1
+                      }
                     }
                   }
                 }

@@ -159,7 +159,7 @@ module.exports = function login(request, response) {
         if (valid) {
             await loginService.findUser(filtered_post_data.phone, 'phone', function (err, user) {
                 if(err){
-                    sails.log("error:",err)
+                   throw err ;
                 }
                 const { is_signup } = filtered_post_data;
                 if (is_signup) {

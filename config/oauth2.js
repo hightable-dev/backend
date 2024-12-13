@@ -95,13 +95,13 @@ server.exchange(oauth2orize.exchange.password(async function (client, username, 
     // if (request_data.login_type === 'otp' && !request_data.otp_session_id) {
     //     return done({ message: 'otp_session_id is required.' }, false, { message: 'otp_session_id is required.' });
     // }
-    await loginService.findUser(username, 'phone', async function (err, user) {
+    await loginService.findUser(username, request_data.login_type, async function (err, user) {
         if (!user) {
             return done({ message: 'Invalid username or password combination. User not registered.' }, false, { message: 'Invalid username or password combination 102.' });
         } else if (user.status !== 1) {
             return done({ message: 'Your account has been deactived. Please contact admin for further details.' }, false, { message: 'Child account are not allowed to login.' });
         } else {
-            if (request_data.login_type === 'otp') {
+            if (request_data.login_type === 'phone') {
                 try {
                     // Call the verifyOTP function with the correct parameters
                     const data = await new Promise((resolve, reject) => {
@@ -123,7 +123,7 @@ server.exchange(oauth2orize.exchange.password(async function (client, username, 
                     }
                 } catch (error) {
                     // Handle any errors
-                    sails.log('Error verifying OTP and logging in:', error);
+                    throw error;
                 }
             }
             

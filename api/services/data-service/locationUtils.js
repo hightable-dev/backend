@@ -125,7 +125,7 @@ module.exports = {
         return { state: '', city: '', pincode: '' }; // Return default values or handle error as per your application logic
       }
     } catch (error) {
-      sails.log('Error fetching location details:', error);
+      throw error;
      
     }
   },

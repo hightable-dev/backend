@@ -41,70 +41,71 @@ module.exports = async function capturePayment(req, res) {
             });
 
             const tableData = await Tables.findOne({ id: parseInt(getBookedTable?.table_id) });
-            const bookingEmailConole = await UseDataService.emailNotification(
-                {
-                    "type": "bookingEmailTemplate",
-                    "include_email_tokens": [getBookedTable?.user_info?.email],
-                    "custom_data": {
-                        "user_name": getBookedTable?.user_info?.first_name,
-                        "table_title": getBookedTable?.table_info?.title,
-                        "pay_id": paymentDetails?.id,
-                        "amount": getBookedTable?.amount
+            try {
+                await UseDataService.emailNotification(
+                    {
+                        "type": "bookingEmailTemplate",
+                        "include_email_tokens": [getBookedTable?.user_details?.email],
+                        "custom_data": {
+                            "user_name": getBookedTable?.user_details?.first_name,
+                            "table_title": getBookedTable?.table_details?.title,
+                            "pay_id": paymentDetails?.id,
+                            "amount": getBookedTable?.amount
+                        }
                     }
-                }
-            );
-            
-            await UseDataService.sendNotification({
-                notification: {
-                    senderId: profileId,
-                    type: 'bookingConfirm',
-                    message: `Congratulations! You got a new booking! for the table '${tableData?.title}'.`,
-                    receiverId: getBookedTable.creator_id,
-                    followUser: null,
-                    tableId: getBookedTable.table_id,
-                    payOrderId: '',
-                    isPaid: true,
-                    templateId: 'bookingConfirm',
-                    roomName: 'AcceptBooking_',
-                    creatorId: getBookedTable.creator_id,
-                    status: approved, // approved
-                },
-                pushMessage: {
-                    title: tableData?.title,
-                    // message: `Congratulations! Booking confirmed '${tableData?.title}'.`,
-                }
-            });
+                );
 
+            } catch(err) {
+                // throw ('Error Sending Email Notifcation');
+                throw err;
+            }
+            try {
+                await UseDataService.sendNotification({
+                    notification: {
+                        senderId: profileId,
+                        type: 'bookingConfirm',
+                        message: `Congratulations! You got a new booking! for the table '${tableData?.title}'.`,
+                        receiverId: getBookedTable.creator_id,
+                        followUser: null,
+                        tableId: getBookedTable.table_id,
+                        payOrderId: '',
+                        isPaid: true,
+                        templateId: 'bookingConfirm',
+                        roomName: 'AcceptBooking_',
+                        creatorId: getBookedTable.creator_id,
+                        status: approved, // approved
+                    },
+                    pushMessage: {
+                        title: tableData?.title,
+                        // message: `Congratulations! Booking confirmed '${tableData?.title}'.`,
+                    }
+                });
 
+            } catch (err) {
+                // throw ('Error Sending Notifcation for booking');
+                throw err;
+            }
 
 
             const TableName = await Tables.findOne({ id: parseInt(updatedBooking?.table_id) })
-            await Notifications.updateOne({ pay_order_id: order_id, status: approved }).set({
-                is_paid: 1,
-                message: `Your payment for the ${TableName?.title} is completed.`
-            });
+            try {
+                await Notifications.updateOne({ pay_order_id: order_id, status: approved }).set({
+                    is_paid: 1,
+                    message: `Your payment for the ${TableName?.title} is completed.`
+                });
+            } catch (e) {
+                throw e ;
+                // throw new Error('Error updating notifcation')
+            }
+
 
             /******* Update booked table count after payment success *******/
             await UseDataService.countTablesBooked(ProfileMemberId(req))
-
             return res.json({ message: 'Payment captured and booking updated successfully', booking: updatedBooking });
-
         } else {
-
-            return res.serverError({ error: 'No matching record found for table_booking_id:', table_id });
-
+            throw ({status: 400, message: 'No matching record found for table_booking_id ' });
         }
-
-
-
-        // if (!updatedBooking) {
-        //     return res.serverError({ error: 'No matching record found for table_booking_id:', table_id });
-
-        // } else {
-        // }
-    } catch (err) {
-
-        // Return an error response
-        return res.serverError({ error: 'Could not capture payment or update booking' });
+    } catch (e) {
+        throw (e);
     }
 };

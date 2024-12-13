@@ -18,7 +18,6 @@ module.exports = {
             const postresponse = await axios.request(config);
             return res.send(postresponse.data);
         } catch (error) {
-            // Handle errors
             if (error.message.includes('SSL routines:final_renegotiate:unsafe legacy renegotiation disabled')) {
                 return res.serverError({ error: 'SSL renegotiation error. Please try again later.' });
             } else {

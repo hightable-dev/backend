@@ -28,7 +28,7 @@ const { default: axios } = require("axios");
 const onesignal_app_auth_key = process.env.onesignal_api_key;
 const onesignal_app_id = process.env.onesignal_app_id;
 
-async function sendPush(data, callback) {
+async function sendPush(data) {
   try {
     const datas = await axios.post(
       "https://onesignal.com/api/v1/notifications",
@@ -48,10 +48,9 @@ async function sendPush(data, callback) {
         },
       }
     );
-
-    callback(datas, null);
+    return datas;
   } catch (error) {
-    callback(null, error);
+    throw error;
   }
 }
 
@@ -75,8 +74,6 @@ module.exports = async function sendPushNotification(data) {
         status: data?.notification?.status,
       });
     }
-    let roomName = data?.roomName + data?.creatorId;
-    socketService.notification(roomName, data);
 
     // Prepare the push notification data
     let push_data = {
@@ -96,13 +93,7 @@ module.exports = async function sendPushNotification(data) {
       },
     };
     // Send the push notification
-    await sendPush(push_data, function (response, error) {
-      if (error) {
-        sails.log.error("Push notification error:", error);
-      } else {
-        // sails.log('Push notification sent successfully:', response);
-      }
-    });
+    await sendPush(push_data);
 
     return notification;
   } catch (error) {
@@ -110,3 +101,5 @@ module.exports = async function sendPushNotification(data) {
     throw error;
   }
 };
+
+

@@ -79,7 +79,6 @@ module.exports.routes = {
   /*=====================    Booking table table    ===================*/
   'GET /table-booking/list': { action: 'table-booking/list' },
   'GET /table-booking/booked-my-tables-user-list': { action: 'table-booking/booked-my-tables-user-list' },
-  'GET /table-booking/accept-booking': { action: 'table-booking/accept-booking' },
   'GET /table-booking/booked-all-my-list': { action: 'table-booking/booked-all-my-list' },
   'GET /table-booking/booked-my-tables': { action: 'table-booking/booked-my-tables' },
   'POST /table-booking/book-table': { action: 'table-booking/book-table', },
@@ -119,7 +118,6 @@ module.exports.routes = {
     return response.sendFile('testpayment.html', { root: './assets' });
   },
   'GET /table-booking/view': { action: 'table-booking/view' },
-  'POST /testpayment/capture': { action: 'table-booking/test-capture-payment' },
 
   /**************************** Linkedin ***************************/
   'GET /status-codes': { action: 'allStausCodes/index' },

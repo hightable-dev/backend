@@ -135,8 +135,8 @@
                         "type": "boolean",
                         "example": false
                       },
-                      "table_info": {
-                        "description": "Table_info of the item.",
+                      "table_details": {
+                        "description": "table_details of the item.",
                         "type": "object",
                         "example": {
                           "id": "1",
@@ -144,8 +144,8 @@
                           "event_date": "2024-12-07 08:00"
                         }
                       },
-                      "creator_info": {
-                        "description": "Creator_info of the item.",
+                      "creator_details": {
+                        "description": "creator_details of the item.",
                         "type": "object",
                         "example": {
                           "id": 1290,
@@ -154,8 +154,8 @@
                           "last_name": ""
                         }
                       },
-                      "user_info": {
-                        "description": "User_info of the item.",
+                      "user_details": {
+                        "description": "user_details of the item.",
                         "type": "object",
                         "example": {
                           "id": 1293,

@@ -39,12 +39,12 @@
                     "count": {
                       "description": "Count of the meta data.",
                       "type": "number",
-                      "example": 2
+                      "example": 3
                     },
                     "total": {
                       "description": "Total of the meta data.",
                       "type": "number",
-                      "example": 2
+                      "example": 3
                     },
                     "page": {
                       "description": "Page of the meta data.",
@@ -100,22 +100,22 @@
                       "created_at": {
                         "description": "Created_at of the item.",
                         "type": "object",
-                        "example": "2024-12-07T06:23:41.021Z"
+                        "example": "2024-12-13T09:18:06.278Z"
                       },
                       "updated_at": {
                         "description": "Updated_at of the item.",
                         "type": "object",
-                        "example": "2024-12-08T05:30:00.590Z"
+                        "example": "2024-12-13T09:23:00.476Z"
                       },
                       "id": {
                         "description": "Id of the item.",
                         "type": "string",
-                        "example": "2"
+                        "example": "936"
                       },
                       "full_name": {
                         "description": "Full_name of the item.",
                         "type": "string",
-                        "example": "Backend User "
+                        "example": "Test account  "
                       },
                       "type": {
                         "description": "Type of the item.",
@@ -124,8 +124,8 @@
                       },
                       "media": {
                         "description": "Media of the item.",
-                        "type": "object",
-                        "example": null
+                        "type": "string",
+                        "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/image-936_1.webp"
                       },
                       "video": {
                         "description": "Video of the item.",
@@ -135,7 +135,7 @@
                       "description": {
                         "description": "Description of the item.",
                         "type": "string",
-                        "example": "Understand how blockchain can impact large enterprises."
+                        "example": "Test"
                       },
                       "phone": {
                         "description": "Phone of the item.",
@@ -145,7 +145,7 @@
                       "min_seats": {
                         "description": "Min_seats of the item.",
                         "type": "number",
-                        "example": 5
+                        "example": 4
                       },
                       "max_seats": {
                         "description": "Max_seats of the item.",
@@ -155,12 +155,12 @@
                       "booked_seats": {
                         "description": "Booked_seats of the item.",
                         "type": "number",
-                        "example": 0
+                        "example": 1
                       },
                       "booked": {
                         "description": "Booked of the item.",
                         "type": "number",
-                        "example": 0
+                        "example": 1
                       },
                       "bookmarks": {
                         "description": "Bookmarks of the item.",
@@ -175,32 +175,32 @@
                       "title": {
                         "description": "Title of the item.",
                         "type": "string",
-                        "example": "Testing-002"
+                        "example": "Test table 10"
                       },
                       "price": {
                         "description": "Price of the item.",
                         "type": "number",
-                        "example": 5
+                        "example": 568
                       },
                       "tags": {
                         "description": "Tags of the item.",
                         "type": "string",
-                        "example": "Experts"
+                        "example": "Corporate"
                       },
                       "address": {
                         "description": "Address of the item.",
                         "type": "string",
-                        "example": "Brahma Brews, 24th Main Road, Achappa Layout, Ramaiah Garden, JP Nagar 7th Phase, J. P. Nagar, Bengaluru, Karnataka, India"
+                        "example": "Pudukkottai, Tamil Nadu, India"
                       },
                       "city": {
                         "description": "City of the item.",
                         "type": "string",
-                        "example": "Bengaluru"
+                        "example": "Pudukkottai"
                       },
                       "event_date": {
                         "description": "Event_date of the item.",
                         "type": "string",
-                        "example": "08-12-2024 13:00"
+                        "example": "13-12-2024 16:53"
                       },
                       "reviews": {
                         "description": "Reviews of the item.",
@@ -210,7 +210,7 @@
                       "user_type": {
                         "description": "User_type of the item.",
                         "type": "number",
-                        "example": 2
+                        "example": 12313
                       },
                       "status": {
                         "description": "Status of the item.",
@@ -230,17 +230,17 @@
                       "state": {
                         "description": "State of the item.",
                         "type": "string",
-                        "example": "Karnataka"
+                        "example": "Tamil Nadu"
                       },
                       "district": {
                         "description": "District of the item.",
                         "type": "string",
-                        "example": "Bengaluru Urban"
+                        "example": "Pudukkottai"
                       },
                       "pincode": {
                         "description": "Pincode of the item.",
                         "type": "string",
-                        "example": "560078"
+                        "example": "622003"
                       },
                       "order_by": {
                         "description": "Order_by of the item.",
@@ -250,29 +250,26 @@
                       "table_expense": {
                         "description": "Table_expense of the item.",
                         "type": "number",
-                        "example": 1
+                        "example": 0
                       },
                       "location_details": {
                         "description": "Location_details of the item.",
                         "type": "object",
                         "example": {
                           "country": "India",
-                          "locality": "Bengaluru",
+                          "locality": "Pudukkottai",
                           "political": "India",
-                          "postal_code": "560078",
-                          "sublocality_level_1": "7",
-                          "sublocality_level_2": "JP Nagar 7th Phase",
-                          "sublocality_level_3": "Silver Oak Layout",
-                          "administrative_area_level_2": "Bangalore Division",
-                          "administrative_area_level_3": "Bengaluru Urban"
+                          "postal_code": "622003",
+                          "sublocality_level_1": "Kalayanpuram",
+                          "administrative_area_level_3": "Pudukkottai"
                         }
                       },
                       "location": {
                         "description": "Location of the item.",
                         "type": "object",
                         "example": {
-                          "lat": 12.8933351,
-                          "lng": 77.5864716
+                          "lat": 10.3832867,
+                          "lng": 78.800129
                         }
                       },
                       "inclusion": {
@@ -288,22 +285,32 @@
                       "format_geo_address": {
                         "description": "Format_geo_address of the item.",
                         "type": "string",
-                        "example": "Achappa Layout, Silver Oak Layout, JP Nagar th Phase, Bengaluru, Karnataka, India"
+                        "example": "RM+, Kalayanpuram, Pudukkottai, Tamil Nadu, India"
                       },
                       "category": {
                         "description": "Category of the item.",
                         "type": "object",
-                        "example": null
+                        "example": {
+                          "created_at": "2024-09-18T09:41:18.047Z",
+                          "updated_at": "2024-09-18T09:41:18.047Z",
+                          "id": "6",
+                          "name": "In the shoes of",
+                          "image": "",
+                          "width": 50,
+                          "height": 50,
+                          "status": 1,
+                          "orderby": 6
+                        }
                       },
                       "created_by": {
                         "description": "Created_by of the item.",
                         "type": "number",
-                        "example": 1290
+                        "example": 1303
                       },
                       "user_profile": {
                         "description": "User_profile of the item.",
                         "type": "number",
-                        "example": 1290
+                        "example": 1303
                       }
                     }
                   }

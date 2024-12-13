@@ -72,7 +72,7 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
                         senderId: data.created_by,
                         type: 'EventAutoCancel',
                         message: ` We regret to inform you that the table '${data.title}' has been cancelled as the minimum number of guests was not met.`,
-                        receiverId: data.created_byd,
+                        receiverId: data.created_by,
                         followUser: null,
                         tableId: data.id,
                         payOrderId: '',

@@ -23,11 +23,13 @@ let error_obj = new Error();
 exports.findUser = async function (username, login_type, callback) {
   try {
 
-    let encrypted_phone
+    let user_name;
 
     if (login_type === 'phone') {
-      encrypted_phone = UseDataService.phoneCrypto.encryptPhone(username)
+      user_name = UseDataService.phoneCrypto.encryptPhone(username)
 
+    } else {
+      user_name  = username
     }
     const query = `
       SELECT
@@ -45,7 +47,7 @@ exports.findUser = async function (username, login_type, callback) {
       WHERE $1 = ANY(username::text[])
     `;
 
-    let queryData = [encrypted_phone];
+    let queryData = [user_name];
 
     // Executing query
     var user_model = sails.sendNativeQuery(query.toString(), queryData);

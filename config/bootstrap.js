@@ -9,6 +9,21 @@
  * https://sailsjs.com/config/bootstrap
  */
 
+// Global handler for unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+    if (sails.config.environment === 'production') {
+        // Log the error in production without throwing it
+        sails.log.error('Unhandled Promise Rejection in Production:', reason);
+        // Optionally, you could exit the process if this is a critical failure
+        // process.exit(1);
+    } else {
+        // Development: print a more verbose error for debugging
+        sails.log.warn('Unhandled Promise Rejection in Development:', reason);
+        // Do not throw the error to avoid crashing the application
+    }
+});
+
+
 module.exports.bootstrap = async function() {
 
   // Import dependencies

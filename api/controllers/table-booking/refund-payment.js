@@ -5,7 +5,6 @@ const idempotencyKeyMap = new Map();
 
 module.exports = async function refundPayment(req, res) {
   // const profileId = req.user.profile_members;
-  // const { payPending, orederExpired, refundRequest, refundSuccess, paymentSuccess } = paymentStatusCode;
   const { refundRequest, refundSuccess } = UseDataService;
 
   try {
@@ -28,7 +27,6 @@ module.exports = async function refundPayment(req, res) {
       // Check if the idempotency key for this payment ID exists
       if (idempotencyKeyMap.has(payId)) {
         // If idempotency key exists, skip this paymentId
-        sails.log(`Refund request is already in progress for payment ID: ${payId}`);
         continue;
       }
 
