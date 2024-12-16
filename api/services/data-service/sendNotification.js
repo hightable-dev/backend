@@ -101,5 +101,3 @@ module.exports = async function sendPushNotification(data) {
     throw error;
   }
 };
-
-

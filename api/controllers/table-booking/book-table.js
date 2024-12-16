@@ -98,8 +98,8 @@ module.exports = async function (request, response) {
           if (!id) return null;
           const data = await ProfileMembers.findOne({ id }).select(['email', 'first_name', 'last_name', 'photo', 'phone']);
           if (!data) return null;
-          const { email, first_name, last_name, photo } = data;
-          return { id, email, first_name, last_name, photo };
+          const { email, first_name, last_name, photo, phone } = data;
+          return { id, email, first_name, last_name, photo, phone };
         }
 
         if (created_by) {
@@ -109,6 +109,7 @@ module.exports = async function (request, response) {
         if (profileId) {
           filteredPostData.user_details = await fetchProfileInfo(profileId);
         }
+
 
       } catch {
         throw ('Error Fetch profiles');

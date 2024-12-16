@@ -29,7 +29,7 @@ module.exports.bootstrap = async function() {
   // Import dependencies
   var path = require('path');
 
-  const cronJobs = require('../api/services/data-service/croneJobs');
+  // const cronJobs = require('../api/services/data-service/croneJobs');
   const jobCompletedEvent = require('../api/services/data-service/completedEventCroneJobs');
 
   // This bootstrap version indicates what version of fake data we're dealing with here.

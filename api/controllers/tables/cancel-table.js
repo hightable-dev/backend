@@ -87,7 +87,6 @@ module.exports = async function update(request, response) {
     );
   }
 
-
   async function sendResponse(details, bookedList) {
     Object.assign(_response_object, {
       message: "Deleted successfully.",
@@ -95,7 +94,7 @@ module.exports = async function update(request, response) {
     });
 
     response.ok(_response_object);
-
+  
     if (bookedList?.length > 0) {
       const notificationPromises = bookedList.map(async item => {
         const msg = await UseDataService.messages({ tableId: details.id, userId: item.user_id });
