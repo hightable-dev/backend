@@ -15,8 +15,6 @@ module.exports = async function (tableId) {
         status: { 'in': [bookmarkTable] } // Ensure 'inactive' is a string
       });
 
-      console.log({ totalTablesCount })
-
       // Update the table_count field in ProfileMembers
       await Tables.updateOne({
         id: tableId,

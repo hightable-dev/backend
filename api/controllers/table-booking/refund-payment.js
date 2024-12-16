@@ -1,23 +1,25 @@
-const RazorpayService = require('../../services/RazorpayService');
+const RazorpayService = require("../../services/RazorpayService");
 
 // Map to store idempotency keys
 const idempotencyKeyMap = new Map();
 
 module.exports = async function refundPayment(req, res) {
   // const profileId = req.user.profile_members;
-  // const { payPending, orederExpired, refundRequest, refundSuccess, paymentSuccess } = paymentStatusCode;
   const { refundRequest, refundSuccess } = UseDataService;
 
   try {
     // const { paymentId } = req.body;
     const { bookingTableId } = req.body;
-    const bookings = await TableBooking.find({ table_id: bookingTableId, status: refundRequest });
+    const bookings = await TableBooking.find({
+      table_id: bookingTableId,
+      status: refundRequest,
+    });
     const tableDetails = await Tables.find({ id: bookingTableId });
     // const memberDetails = await ProfileMembers.find({ id: 360 });
-    const paymentId = bookings.map(booking => booking.payment_id);
+    const paymentId = bookings.map((booking) => booking.payment_id);
     // Check if the paymentId is an array
     if (!Array.isArray(paymentId)) {
-      return res.badRequest({ error: 'paymentId must be an array' });
+      return res.badRequest({ error: "paymentId must be an array" });
     }
 
     // Initialize an array to store refund responses for each payment
@@ -28,7 +30,6 @@ module.exports = async function refundPayment(req, res) {
       // Check if the idempotency key for this payment ID exists
       if (idempotencyKeyMap.has(payId)) {
         // If idempotency key exists, skip this paymentId
-        sails.log(`Refund request is already in progress for payment ID: ${payId}`);
         continue;
       }
 
@@ -38,61 +39,75 @@ module.exports = async function refundPayment(req, res) {
 
       try {
         // Retrieve the payment details from Razorpay
-        const paymentDetails = await RazorpayService.instance.payments.fetch(payId);
+        const paymentDetails = await RazorpayService.instance.payments.fetch(
+          payId
+        );
         const actualAmountPaid = paymentDetails.amount;
 
         // Initiate the refund with the actual amount paid
-        const refundResponse = await RazorpayService.instance.payments.refund(payId, {
-          amount: actualAmountPaid, // Refund the actual amount paid
-          speed: 'normal',
-          notes: {
-            title: tableDetails.title,
-            description: 'Event was cancelled.'
-          },
-          receipt: RazorpayService.generateUniqueReceiptNumber(payId), // Use the unique receipt number
-          idempotency_key: idempotencyKey // Use the idempotency key to prevent duplicate requests
-        });
+        const refundResponse = await RazorpayService.instance.payments.refund(
+          payId,
+          {
+            amount: actualAmountPaid, // Refund the actual amount paid
+            speed: "normal",
+            notes: {
+              title: tableDetails.title,
+              description: "Event was cancelled.",
+            },
+            receipt: RazorpayService.generateUniqueReceiptNumber(payId), // Use the unique receipt number
+            idempotency_key: idempotencyKey, // Use the idempotency key to prevent duplicate requests
+          }
+        );
 
         // Remove the idempotency key from the map after successful refund
         idempotencyKeyMap.delete(payId);
-        await TableBooking.updateOne({ payment_id: payId }, { refund_details: refundResponse, status: refundSuccess });
+        await TableBooking.updateOne(
+          { payment_id: payId },
+          { refund_details: refundResponse, status: refundSuccess }
+        );
         // Push the refund response to the array
         refundResponses.push(refundResponse);
 
+        const bookedUserIds = [];
+
         for (const data of bookings) {
-          
-          const msg = await UseDataService.messages({tableId : bookingTableId, userId : data.user_id });
+          bookedUserIds.push(data.user_id);
 
-          await UseDataService.sendNotification({
-            notification: {
-              senderId: ProfileMemberId(req),
-              type: 'Refund',
-              message: msg?.RefundSuccessMsg,
-              receiverId: data.user_id,
-              followUser: null,
-              tableId: bookingTableId,
-              payOrderId: '',
-              isPaid: true,
-              templateId: 'refundSuccess',
-              roomName: 'Refund_',
-              creatorId: data.user_id,
-              status: 1, // approved
-            },
-
-            pushMessage: {
-              title: 'High Table',
-              // message: msg?.RefundSuccessMsg,
-              tableId : bookingTableId,
-            }
+          // Fetch the message once per booking
+          const msg = await UseDataService.messages({
+            tableId: bookingTableId,
+            userId: data.user_id,
           });
+          // Notify each user
         }
+          for (const userId of bookedUserIds) {
+            await UseDataService.sendNotification({
+              notification: {
+                senderId: ProfileMemberId(req),
+                type: "Refund",
+                message: msg?.RefundSuccessMsg,
+                receiverId: userId,
+                followUser: null,
+                tableId: bookingTableId,
+                payOrderId: "",
+                isPaid: true,
+                templateId: "refundSuccess",
+                roomName: "Refund_",
+                creatorId: userId,
+                status: 1, // approved
+              },
 
+              pushMessage: {
+                title: "High Table",
+                tableId: bookingTableId,
+              },
+            });
+          }
       } catch (error) {
         // Handle errors
         // Remove the idempotency key from the map in case of error
         idempotencyKeyMap.delete(payId);
         return res.badRequest(error);
-
       }
     }
 

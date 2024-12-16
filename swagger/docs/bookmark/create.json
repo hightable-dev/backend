@@ -40,20 +40,25 @@
                       "type": "object",
                       "example": null
                     },
+                    "creator_id": {
+                      "description": "Creator_id of the details.",
+                      "type": "object",
+                      "example": null
+                    },
                     "created_at": {
                       "description": "Created_at of the details.",
                       "type": "object",
-                      "example": "2024-12-09T10:24:10.211Z"
+                      "example": "2024-12-12T12:56:56.452Z"
                     },
                     "updated_at": {
                       "description": "Updated_at of the details.",
                       "type": "object",
-                      "example": "2024-12-09T10:24:10.211Z"
+                      "example": "2024-12-12T12:56:56.452Z"
                     },
                     "id": {
                       "description": "Id of the details.",
                       "type": "string",
-                      "example": "276"
+                      "example": "295"
                     },
                     "status": {
                       "description": "Status of the details.",
@@ -63,17 +68,17 @@
                     "table_id": {
                       "description": "Table_id of the details.",
                       "type": "string",
-                      "example": "11"
+                      "example": "924"
                     },
                     "creator_profile_id": {
                       "description": "Creator_profile_id of the details.",
                       "type": "number",
-                      "example": 1293
+                      "example": 1302
                     },
                     "user_id": {
                       "description": "User_id of the details.",
                       "type": "number",
-                      "example": 1293
+                      "example": 1303
                     }
                   }
                 }

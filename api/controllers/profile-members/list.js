@@ -52,8 +52,6 @@ module.exports =  function list(request, response) {
     if (status) {
       criteria.status = status;
     }
-// const formattedDate = UseDataService.dateHelper(new Date)
-    // criteria.event_date = { '>=': formattedDate };
     /***
      * Ex Current date is 16 Aug 2024 12:50 Pm
      * Event Dates Followed by
@@ -62,8 +60,6 @@ module.exports =  function list(request, response) {
      * 16-08-2024 14:03 listed
      * 31-08-2024 14:03 listed
      */
-
-    // if (category) criteria.category = category;
 
     if (search) {
       const searchValue = search.trim();

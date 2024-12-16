@@ -22,7 +22,7 @@
     },
     "responses": {
       "200": {
-        "description": "Tables list",
+        "description": "No Items",
         "content": {
           "application/json": {
             "schema": {
@@ -31,7 +31,7 @@
                 "message": {
                   "description": "Success message.",
                   "type": "string",
-                  "example": "Tables list"
+                  "example": "No Items"
                 },
                 "meta": {
                   "type": "object",
@@ -49,41 +49,7 @@
                     "limit": {
                       "description": "Limit of the meta data.",
                       "type": "number",
-                      "example": 10
-                    },
-                    "base_url": {
-                      "description": "Base_url of the meta data.",
-                      "type": "object",
-                      "example": {
-                        "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
-                        "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
-                      }
-                    },
-                    "table_photo": {
-                      "description": "Table_photo of the meta data.",
-                      "type": "object",
-                      "example": {
-                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
-                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
-                      }
-                    },
-                    "table_video": {
-                      "description": "Table_video of the meta data.",
-                      "type": "object",
-                      "example": {
-                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
-                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
-                      }
-                    },
-                    "profile_photo": {
-                      "description": "Profile_photo of the meta data.",
-                      "type": "string",
-                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
-                    },
-                    "category_photo": {
-                      "description": "Category_photo of the meta data.",
-                      "type": "string",
-                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                      "example": 5
                     }
                   }
                 }

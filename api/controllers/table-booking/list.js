@@ -119,8 +119,6 @@ module.exports = function list(request, response) {
         // Fetch all items matching criteria
         let items = await TableBooking.find({ where: criteria })
           .sort('created_at DESC')
-          .populate('user_id')  // Populate user_id
-          .populate('table_id')
 
         // Transform each item
         await Promise.all(
@@ -135,8 +133,7 @@ module.exports = function list(request, response) {
             }
 
             if (UserType(request) === roles.admin) {
-              item.table_details = item.table_id;
-              item.user_details = item.user_id;
+               item.user_details = _.pick(item.user_id, ['first_name', 'last_name']);
               delete item.table_id;
               delete item.user_id;
               if (item.user_details?.photo) {
@@ -158,7 +155,7 @@ module.exports = function list(request, response) {
               }
 
               if (item.user_id?.phone) {
-                  item.user_id.phone = UseDataService.phoneCrypto.decryptPhone(phone);
+                  item.user_id.phone = UseDataService.phoneCrypto.decryptPhone(item.user_id?.phone);
               }
             }
             return item; // Return the transformed item

@@ -85,9 +85,6 @@
       "name": "booked-my-tables-user-list"
     },
     {
-      "name": "accept-booking"
-    },
-    {
       "name": "booked-all-my-list"
     },
     {
@@ -116,9 +113,6 @@
     },
     {
       "name": "create-table"
-    },
-    {
-      "name": "test-capture-payment"
     }
   ],
   "components": {
@@ -1618,9 +1612,9 @@
           "event_done_flag": {
             "type": "boolean"
           },
-          "table_info": {},
-          "creator_info": {},
-          "user_info": {},
+          "table_details": {},
+          "creator_details": {},
+          "user_details": {},
           "table_id": {
             "description": "JSON dictionary representing the **tables** instance or FK when creating / updating / not populated",
             "oneOf": [
@@ -2733,7 +2727,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "No Items",
+            "description": "Interests list",
             "content": {
               "application/json": {
                 "schema": {
@@ -2742,7 +2736,7 @@
                     "message": {
                       "description": "Success message.",
                       "type": "string",
-                      "example": "No Items"
+                      "example": "Interests list"
                     },
                     "meta": {
                       "type": "object",
@@ -2755,12 +2749,89 @@
                         "page": {
                           "description": "Page of the meta data.",
                           "type": "number",
-                          "example": 5
+                          "example": 1
                         },
                         "limit": {
                           "description": "Limit of the meta data.",
                           "type": "number",
                           "example": 10
+                        },
+                        "base_url": {
+                          "description": "Base_url of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
+                            "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
+                          }
+                        },
+                        "table_photo": {
+                          "description": "Table_photo of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
+                          }
+                        },
+                        "table_video": {
+                          "description": "Table_video of the meta data.",
+                          "type": "object",
+                          "example": {
+                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
+                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
+                          }
+                        },
+                        "profile_photo": {
+                          "description": "Profile_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
+                        },
+                        "category_photo": {
+                          "description": "Category_photo of the meta data.",
+                          "type": "string",
+                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "description": "Id of the item.",
+                            "type": "string",
+                            "example": "1"
+                          },
+                          "name": {
+                            "description": "Name of the item.",
+                            "type": "string",
+                            "example": "Travel"
+                          },
+                          "image": {
+                            "description": "Image of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "width": {
+                            "description": "Width of the item.",
+                            "type": "number",
+                            "example": 50
+                          },
+                          "height": {
+                            "description": "Height of the item.",
+                            "type": "number",
+                            "example": 50
+                          },
+                          "status": {
+                            "description": "Status of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "orderby": {
+                            "description": "Orderby of the item.",
+                            "type": "number",
+                            "example": 1
+                          }
                         }
                       }
                     }
@@ -2922,7 +2993,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Tables list",
+            "description": "No Items",
             "content": {
               "application/json": {
                 "schema": {
@@ -2931,7 +3002,7 @@
                     "message": {
                       "description": "Success message.",
                       "type": "string",
-                      "example": "Tables list"
+                      "example": "No Items"
                     },
                     "meta": {
                       "type": "object",
@@ -2949,41 +3020,7 @@
                         "limit": {
                           "description": "Limit of the meta data.",
                           "type": "number",
-                          "example": 10
-                        },
-                        "base_url": {
-                          "description": "Base_url of the meta data.",
-                          "type": "object",
-                          "example": {
-                            "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
-                            "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
-                          }
-                        },
-                        "table_photo": {
-                          "description": "Table_photo of the meta data.",
-                          "type": "object",
-                          "example": {
-                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
-                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
-                          }
-                        },
-                        "table_video": {
-                          "description": "Table_video of the meta data.",
-                          "type": "object",
-                          "example": {
-                            "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
-                            "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
-                          }
-                        },
-                        "profile_photo": {
-                          "description": "Profile_photo of the meta data.",
-                          "type": "string",
-                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
-                        },
-                        "category_photo": {
-                          "description": "Category_photo of the meta data.",
-                          "type": "string",
-                          "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                          "example": 5
                         }
                       }
                     }
@@ -3122,12 +3159,12 @@
                         "count": {
                           "description": "Count of the meta data.",
                           "type": "number",
-                          "example": 2
+                          "example": 1
                         },
                         "total": {
                           "description": "Total of the meta data.",
                           "type": "number",
-                          "example": 2
+                          "example": 1
                         },
                         "page": {
                           "description": "Page of the meta data.",
@@ -3183,22 +3220,22 @@
                           "created_at": {
                             "description": "Created_at of the item.",
                             "type": "object",
-                            "example": "2024-12-07T06:23:41.021Z"
+                            "example": "2024-12-13T15:22:41.482Z"
                           },
                           "updated_at": {
                             "description": "Updated_at of the item.",
                             "type": "object",
-                            "example": "2024-12-08T05:30:00.590Z"
+                            "example": "2024-12-13T15:24:52.908Z"
                           },
                           "id": {
                             "description": "Id of the item.",
                             "type": "string",
-                            "example": "2"
+                            "example": "948"
                           },
                           "full_name": {
                             "description": "Full_name of the item.",
                             "type": "string",
-                            "example": "Backend User "
+                            "example": "Test four "
                           },
                           "type": {
                             "description": "Type of the item.",
@@ -3207,8 +3244,8 @@
                           },
                           "media": {
                             "description": "Media of the item.",
-                            "type": "object",
-                            "example": null
+                            "type": "string",
+                            "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/image-948_1.webp"
                           },
                           "video": {
                             "description": "Video of the item.",
@@ -3218,7 +3255,7 @@
                           "description": {
                             "description": "Description of the item.",
                             "type": "string",
-                            "example": "Understand how blockchain can impact large enterprises."
+                            "example": "sdfsdf"
                           },
                           "phone": {
                             "description": "Phone of the item.",
@@ -3228,7 +3265,7 @@
                           "min_seats": {
                             "description": "Min_seats of the item.",
                             "type": "number",
-                            "example": 5
+                            "example": 4
                           },
                           "max_seats": {
                             "description": "Max_seats of the item.",
@@ -3238,12 +3275,12 @@
                           "booked_seats": {
                             "description": "Booked_seats of the item.",
                             "type": "number",
-                            "example": 0
+                            "example": 2
                           },
                           "booked": {
                             "description": "Booked of the item.",
                             "type": "number",
-                            "example": 0
+                            "example": 2
                           },
                           "bookmarks": {
                             "description": "Bookmarks of the item.",
@@ -3258,32 +3295,32 @@
                           "title": {
                             "description": "Title of the item.",
                             "type": "string",
-                            "example": "Testing-002"
+                            "example": "dfssdfsdf"
                           },
                           "price": {
                             "description": "Price of the item.",
                             "type": "number",
-                            "example": 5
+                            "example": 555
                           },
                           "tags": {
                             "description": "Tags of the item.",
                             "type": "string",
-                            "example": "Experts"
+                            "example": "Corporate"
                           },
                           "address": {
                             "description": "Address of the item.",
                             "type": "string",
-                            "example": "Brahma Brews, 24th Main Road, Achappa Layout, Ramaiah Garden, JP Nagar 7th Phase, J. P. Nagar, Bengaluru, Karnataka, India"
+                            "example": "Puducherry, India"
                           },
                           "city": {
                             "description": "City of the item.",
                             "type": "string",
-                            "example": "Bengaluru"
+                            "example": ""
                           },
                           "event_date": {
                             "description": "Event_date of the item.",
                             "type": "string",
-                            "example": "08-12-2024 13:00"
+                            "example": "26-12-2024 18:52"
                           },
                           "reviews": {
                             "description": "Reviews of the item.",
@@ -3293,12 +3330,12 @@
                           "user_type": {
                             "description": "User_type of the item.",
                             "type": "number",
-                            "example": 2
+                            "example": 12313
                           },
                           "status": {
                             "description": "Status of the item.",
                             "type": "number",
-                            "example": 34
+                            "example": 6
                           },
                           "admin_id": {
                             "description": "Admin_id of the item.",
@@ -3313,17 +3350,17 @@
                           "state": {
                             "description": "State of the item.",
                             "type": "string",
-                            "example": "Karnataka"
+                            "example": "Puducherry"
                           },
                           "district": {
                             "description": "District of the item.",
                             "type": "string",
-                            "example": "Bengaluru Urban"
+                            "example": "Puducherry"
                           },
                           "pincode": {
                             "description": "Pincode of the item.",
                             "type": "string",
-                            "example": "560078"
+                            "example": "605009"
                           },
                           "order_by": {
                             "description": "Order_by of the item.",
@@ -3333,29 +3370,26 @@
                           "table_expense": {
                             "description": "Table_expense of the item.",
                             "type": "number",
-                            "example": 1
+                            "example": 0
                           },
                           "location_details": {
                             "description": "Location_details of the item.",
                             "type": "object",
                             "example": {
                               "country": "India",
-                              "locality": "Bengaluru",
+                              "locality": "Puducherry",
                               "political": "India",
-                              "postal_code": "560078",
-                              "sublocality_level_1": "7",
-                              "sublocality_level_2": "JP Nagar 7th Phase",
-                              "sublocality_level_3": "Silver Oak Layout",
-                              "administrative_area_level_2": "Bangalore Division",
-                              "administrative_area_level_3": "Bengaluru Urban"
+                              "postal_code": "605009",
+                              "sublocality_level_1": "Aruthra Nagar",
+                              "administrative_area_level_3": "Puducherry"
                             }
                           },
                           "location": {
                             "description": "Location of the item.",
                             "type": "object",
                             "example": {
-                              "lat": 12.8933351,
-                              "lng": 77.5864716
+                              "lat": 11.9415915,
+                              "lng": 79.8083133
                             }
                           },
                           "inclusion": {
@@ -3371,22 +3405,32 @@
                           "format_geo_address": {
                             "description": "Format_geo_address of the item.",
                             "type": "string",
-                            "example": "Achappa Layout, Silver Oak Layout, JP Nagar th Phase, Bengaluru, Karnataka, India"
+                            "example": ""
                           },
                           "category": {
                             "description": "Category of the item.",
                             "type": "object",
-                            "example": null
+                            "example": {
+                              "created_at": "2024-09-18T09:41:23.033Z",
+                              "updated_at": "2024-09-18T09:41:23.033Z",
+                              "id": "7",
+                              "name": "Others",
+                              "image": "",
+                              "width": 50,
+                              "height": 50,
+                              "status": 1,
+                              "orderby": 7
+                            }
                           },
                           "created_by": {
                             "description": "Created_by of the item.",
                             "type": "number",
-                            "example": 1290
+                            "example": 1386
                           },
                           "user_profile": {
                             "description": "User_profile of the item.",
                             "type": "number",
-                            "example": 1290
+                            "example": 1386
                           }
                         }
                       }
@@ -3867,7 +3911,7 @@
                         "total": {
                           "description": "Total of the meta data.",
                           "type": "number",
-                          "example": 0
+                          "example": 1
                         },
                         "page": {
                           "description": "Page of the meta data.",
@@ -3912,6 +3956,288 @@
                           "description": "Category_photo of the meta data.",
                           "type": "string",
                           "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
+                        }
+                      }
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "created_at": {
+                            "description": "Created_at of the item.",
+                            "type": "object",
+                            "example": "2024-12-11T23:00:41.242Z"
+                          },
+                          "updated_at": {
+                            "description": "Updated_at of the item.",
+                            "type": "object",
+                            "example": "2024-12-12T12:19:39.443Z"
+                          },
+                          "id": {
+                            "description": "Id of the item.",
+                            "type": "string",
+                            "example": "920"
+                          },
+                          "full_name": {
+                            "description": "Full_name of the item.",
+                            "type": "string",
+                            "example": "New Backend user-3 "
+                          },
+                          "type": {
+                            "description": "Type of the item.",
+                            "type": "number",
+                            "example": 2
+                          },
+                          "media": {
+                            "description": "Media of the item.",
+                            "type": "string",
+                            "example": "image-920_1.webp"
+                          },
+                          "video": {
+                            "description": "Video of the item.",
+                            "type": "object",
+                            "example": null
+                          },
+                          "description": {
+                            "description": "Description of the item.",
+                            "type": "string",
+                            "example": "Testing "
+                          },
+                          "phone": {
+                            "description": "Phone of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "min_seats": {
+                            "description": "Min_seats of the item.",
+                            "type": "number",
+                            "example": 4
+                          },
+                          "max_seats": {
+                            "description": "Max_seats of the item.",
+                            "type": "number",
+                            "example": 4
+                          },
+                          "booked_seats": {
+                            "description": "Booked_seats of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "booked": {
+                            "description": "Booked of the item.",
+                            "type": "number",
+                            "example": 1
+                          },
+                          "bookmarks": {
+                            "description": "Bookmarks of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "followers": {
+                            "description": "Followers of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "title": {
+                            "description": "Title of the item.",
+                            "type": "string",
+                            "example": "Music world"
+                          },
+                          "price": {
+                            "description": "Price of the item.",
+                            "type": "number",
+                            "example": 545
+                          },
+                          "tags": {
+                            "description": "Tags of the item.",
+                            "type": "string",
+                            "example": "Business"
+                          },
+                          "address": {
+                            "description": "Address of the item.",
+                            "type": "string",
+                            "example": "Puducherry, India"
+                          },
+                          "city": {
+                            "description": "City of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "event_date": {
+                            "description": "Event_date of the item.",
+                            "type": "string",
+                            "example": "13-12-2024 11:00"
+                          },
+                          "reviews": {
+                            "description": "Reviews of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "user_type": {
+                            "description": "User_type of the item.",
+                            "type": "number",
+                            "example": 12313
+                          },
+                          "status": {
+                            "description": "Status of the item.",
+                            "type": "number",
+                            "example": 3
+                          },
+                          "admin_id": {
+                            "description": "Admin_id of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "event_done_flag": {
+                            "description": "Event_done_flag of the item.",
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "state": {
+                            "description": "State of the item.",
+                            "type": "string",
+                            "example": "Puducherry"
+                          },
+                          "district": {
+                            "description": "District of the item.",
+                            "type": "string",
+                            "example": "Puducherry"
+                          },
+                          "pincode": {
+                            "description": "Pincode of the item.",
+                            "type": "string",
+                            "example": "605009"
+                          },
+                          "order_by": {
+                            "description": "Order_by of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "table_expense": {
+                            "description": "Table_expense of the item.",
+                            "type": "number",
+                            "example": 0
+                          },
+                          "location_details": {
+                            "description": "Location_details of the item.",
+                            "type": "object",
+                            "example": {
+                              "country": "India",
+                              "locality": "Puducherry",
+                              "political": "India",
+                              "postal_code": "605009",
+                              "sublocality_level_1": "Aruthra Nagar",
+                              "administrative_area_level_3": "Puducherry"
+                            }
+                          },
+                          "location": {
+                            "description": "Location of the item.",
+                            "type": "object",
+                            "example": {
+                              "lat": 11.9415915,
+                              "lng": 79.8083133
+                            }
+                          },
+                          "inclusion": {
+                            "description": "Inclusion of the item.",
+                            "type": "string",
+                            "example": "Test"
+                          },
+                          "exclusions": {
+                            "description": "Exclusions of the item.",
+                            "type": "string",
+                            "example": "Test"
+                          },
+                          "format_geo_address": {
+                            "description": "Format_geo_address of the item.",
+                            "type": "string",
+                            "example": ""
+                          },
+                          "category": {
+                            "description": "Category of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-09-18T09:41:00.648Z",
+                              "updated_at": "2024-09-18T09:41:00.648Z",
+                              "id": "2",
+                              "name": "Relationships",
+                              "image": "",
+                              "width": 50,
+                              "height": 50,
+                              "status": 1,
+                              "orderby": 2
+                            }
+                          },
+                          "created_by": {
+                            "description": "Created_by of the item.",
+                            "type": "number",
+                            "example": 1302
+                          },
+                          "user_profile": {
+                            "description": "User_profile of the item.",
+                            "type": "object",
+                            "example": {
+                              "created_at": "2024-12-10T07:27:51.750Z",
+                              "updated_at": "2024-12-12T10:12:07.387Z",
+                              "id": 1302,
+                              "email": "sabari@gmail.com",
+                              "first_name": "Test account 2",
+                              "last_name": "",
+                              "description": "",
+                              "photo": "members-photo-1302.png",
+                              "phone": "24fd932002e89909c0ef8213ad679b70",
+                              "street": "",
+                              "address": "",
+                              "city": "",
+                              "state": "",
+                              "postal_code": "",
+                              "status": 1,
+                              "status_glossary": "",
+                              "about_me": "",
+                              "one_signal_push_tokens": null,
+                              "tokens": null,
+                              "last_active": null,
+                              "last_checkin_via": "",
+                              "facebook_id": null,
+                              "facebook_data": null,
+                              "linkedin_id": null,
+                              "linkedin_data": null,
+                              "interests": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7
+                              ],
+                              "followers": 0,
+                              "google_id": null,
+                              "google_data": null,
+                              "otp_session_id": null,
+                              "reviews": 4,
+                              "reviews_count": 1,
+                              "linked_account_id": "",
+                              "linked_product_id": "",
+                              "pronoun": "",
+                              "instagram_data": null,
+                              "instagram_link": "",
+                              "linkedin_link": "https://www.linkedin.com/in/Test",
+                              "x_link": "",
+                              "x_data": null,
+                              "table_count": 3,
+                              "booked": 3,
+                              "age": 0,
+                              "gender": "",
+                              "account_details": null,
+                              "profile_completion_status": [
+                                70
+                              ],
+                              "uu_id": "pPNnYAhXGD",
+                              "account": 1655
+                            }
+                          }
                         }
                       }
                     }
@@ -4114,22 +4440,22 @@
                         "created_at": {
                           "description": "Created_at of the details.",
                           "type": "object",
-                          "example": "2024-12-09T14:15:18.578Z"
+                          "example": "2024-12-13T15:22:41.482Z"
                         },
                         "updated_at": {
                           "description": "Updated_at of the details.",
                           "type": "object",
-                          "example": "2024-12-09T14:15:18.578Z"
+                          "example": "2024-12-13T15:22:41.482Z"
                         },
                         "id": {
                           "description": "Id of the details.",
                           "type": "string",
-                          "example": "903"
+                          "example": "948"
                         },
                         "full_name": {
                           "description": "Full_name of the details.",
                           "type": "string",
-                          "example": "Backend User "
+                          "example": "Test four "
                         },
                         "type": {
                           "description": "Type of the details.",
@@ -4149,7 +4475,7 @@
                         "description": {
                           "description": "Description of the details.",
                           "type": "string",
-                          "example": "Understand how blockchain can impact large enterprises."
+                          "example": "sdfsdf"
                         },
                         "phone": {
                           "description": "Phone of the details.",
@@ -4159,7 +4485,7 @@
                         "min_seats": {
                           "description": "Min_seats of the details.",
                           "type": "number",
-                          "example": 5
+                          "example": 4
                         },
                         "max_seats": {
                           "description": "Max_seats of the details.",
@@ -4189,32 +4515,32 @@
                         "title": {
                           "description": "Title of the details.",
                           "type": "string",
-                          "example": "Testing Date-002"
+                          "example": "dfssdfsdf"
                         },
                         "price": {
                           "description": "Price of the details.",
                           "type": "number",
-                          "example": 5
+                          "example": 555
                         },
                         "tags": {
                           "description": "Tags of the details.",
                           "type": "string",
-                          "example": "Experts"
+                          "example": "Corporate"
                         },
                         "address": {
                           "description": "Address of the details.",
                           "type": "string",
-                          "example": "Brahma Brews, 24th Main Road, Achappa Layout, Ramaiah Garden, JP Nagar 7th Phase, J. P. Nagar, Bengaluru, Karnataka, India"
+                          "example": "Puducherry, India"
                         },
                         "city": {
                           "description": "City of the details.",
                           "type": "string",
-                          "example": "JP Nagar 7th Phase"
+                          "example": ""
                         },
                         "event_date": {
                           "description": "Event_date of the details.",
                           "type": "string",
-                          "example": "2024-12-10 13:00"
+                          "example": "2024-12-26 18:52"
                         },
                         "reviews": {
                           "description": "Reviews of the details.",
@@ -4244,17 +4570,17 @@
                         "state": {
                           "description": "State of the details.",
                           "type": "string",
-                          "example": "Bengaluru Urban"
+                          "example": "Puducherry"
                         },
                         "district": {
                           "description": "District of the details.",
                           "type": "string",
-                          "example": "Bengaluru"
+                          "example": "Puducherry"
                         },
                         "pincode": {
                           "description": "Pincode of the details.",
                           "type": "string",
-                          "example": "560078"
+                          "example": "605009"
                         },
                         "order_by": {
                           "description": "Order_by of the details.",
@@ -4264,29 +4590,26 @@
                         "table_expense": {
                           "description": "Table_expense of the details.",
                           "type": "number",
-                          "example": 1
+                          "example": 0
                         },
                         "location_details": {
                           "description": "Location_details of the details.",
                           "type": "object",
                           "example": {
                             "country": "India",
-                            "locality": "Bengaluru",
+                            "locality": "Puducherry",
                             "political": "India",
-                            "postal_code": "560078",
-                            "sublocality_level_1": "7",
-                            "sublocality_level_2": "JP Nagar 7th Phase",
-                            "sublocality_level_3": "Silver Oak Layout",
-                            "administrative_area_level_2": "Bangalore Division",
-                            "administrative_area_level_3": "Bengaluru Urban"
+                            "postal_code": "605009",
+                            "sublocality_level_1": "Aruthra Nagar",
+                            "administrative_area_level_3": "Puducherry"
                           }
                         },
                         "location": {
                           "description": "Location of the details.",
                           "type": "object",
                           "example": {
-                            "lat": 12.8933351,
-                            "lng": 77.5864716
+                            "lat": 11.9415915,
+                            "lng": 79.8083133
                           }
                         },
                         "inclusion": {
@@ -4307,17 +4630,17 @@
                         "category": {
                           "description": "Category of the details.",
                           "type": "string",
-                          "example": "53"
+                          "example": "7"
                         },
                         "created_by": {
                           "description": "Created_by of the details.",
                           "type": "number",
-                          "example": 1290
+                          "example": 1386
                         },
                         "user_profile": {
                           "description": "User_profile of the details.",
                           "type": "number",
-                          "example": 1290
+                          "example": 1386
                         }
                       }
                     }
@@ -5716,26 +6039,6 @@
         }
       }
     },
-    "/table-booking/accept-booking": {
-      "get": {
-        "summary": "/table-booking/accept-booking",
-        "tags": [
-          "accept-booking"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
     "/table-booking/booked-all-my-list": {
       "get": {
         "summary": "/table-booking/booked-all-my-list",
@@ -5997,20 +6300,25 @@
                           "type": "object",
                           "example": null
                         },
+                        "creator_id": {
+                          "description": "Creator_id of the details.",
+                          "type": "object",
+                          "example": null
+                        },
                         "created_at": {
                           "description": "Created_at of the details.",
                           "type": "object",
-                          "example": "2024-12-09T10:24:10.211Z"
+                          "example": "2024-12-12T12:56:56.452Z"
                         },
                         "updated_at": {
                           "description": "Updated_at of the details.",
                           "type": "object",
-                          "example": "2024-12-09T10:24:10.211Z"
+                          "example": "2024-12-12T12:56:56.452Z"
                         },
                         "id": {
                           "description": "Id of the details.",
                           "type": "string",
-                          "example": "276"
+                          "example": "295"
                         },
                         "status": {
                           "description": "Status of the details.",
@@ -6020,17 +6328,17 @@
                         "table_id": {
                           "description": "Table_id of the details.",
                           "type": "string",
-                          "example": "11"
+                          "example": "924"
                         },
                         "creator_profile_id": {
                           "description": "Creator_profile_id of the details.",
                           "type": "number",
-                          "example": 1293
+                          "example": 1302
                         },
                         "user_id": {
                           "description": "User_id of the details.",
                           "type": "number",
-                          "example": 1293
+                          "example": 1303
                         }
                       }
                     }
@@ -6560,26 +6868,6 @@
         "summary": "/table-booking/view",
         "tags": [
           "view"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The requested resource"
-          },
-          "404": {
-            "description": "Resource not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/testpayment/capture": {
-      "post": {
-        "summary": "/testpayment/capture",
-        "tags": [
-          "test-capture-payment"
         ],
         "parameters": [],
         "responses": {

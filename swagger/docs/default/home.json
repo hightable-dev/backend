@@ -22,7 +22,7 @@
     },
     "responses": {
       "200": {
-        "description": "Booked users list",
+        "description": "No Items",
         "content": {
           "application/json": {
             "schema": {
@@ -31,7 +31,7 @@
                 "message": {
                   "description": "Success message.",
                   "type": "string",
-                  "example": "Booked users list"
+                  "example": "No Items"
                 },
                 "meta": {
                   "type": "object",
@@ -39,7 +39,7 @@
                     "total": {
                       "description": "Total of the meta data.",
                       "type": "number",
-                      "example": 1
+                      "example": 0
                     },
                     "page": {
                       "description": "Page of the meta data.",
@@ -49,123 +49,7 @@
                     "limit": {
                       "description": "Limit of the meta data.",
                       "type": "number",
-                      "example": 10
-                    },
-                    "base_url": {
-                      "description": "Base_url of the meta data.",
-                      "type": "object",
-                      "example": {
-                        "table_photo": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/",
-                        "table_video": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/"
-                      }
-                    },
-                    "table_photo": {
-                      "description": "Table_photo of the meta data.",
-                      "type": "object",
-                      "example": {
-                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/hd/",
-                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/tables/standardResolution/"
-                      }
-                    },
-                    "table_video": {
-                      "description": "Table_video of the meta data.",
-                      "type": "object",
-                      "example": {
-                        "hd": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/hd/",
-                        "standardResolution": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/video/tables/standardResolution/"
-                      }
-                    },
-                    "profile_photo": {
-                      "description": "Profile_photo of the meta data.",
-                      "type": "string",
-                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/photo/members/"
-                    },
-                    "category_photo": {
-                      "description": "Category_photo of the meta data.",
-                      "type": "string",
-                      "example": "https://s3.ap-south-1.amazonaws.com/high-table-2024/public/image/interests/"
-                    }
-                  }
-                },
-                "items": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "description": "Id of the item.",
-                        "type": "string",
-                        "example": "1268"
-                      },
-                      "amount": {
-                        "description": "Amount of the item.",
-                        "type": "number",
-                        "example": 500
-                      },
-                      "status": {
-                        "description": "Status of the item.",
-                        "type": "number",
-                        "example": 9
-                      },
-                      "event_done_flag": {
-                        "description": "Event_done_flag of the item.",
-                        "type": "boolean",
-                        "example": false
-                      },
-                      "table_info": {
-                        "description": "Table_info of the item.",
-                        "type": "object",
-                        "example": {
-                          "id": "885",
-                          "title": "Test",
-                          "event_date": "2024-12-26 06:30:00"
-                        }
-                      },
-                      "creator_info": {
-                        "description": "Creator_info of the item.",
-                        "type": "object",
-                        "example": {
-                          "id": 1290,
-                          "email": "",
-                          "first_name": "Backend User",
-                          "last_name": ""
-                        }
-                      },
-                      "user_info": {
-                        "description": "User_info of the item.",
-                        "type": "object",
-                        "example": {
-                          "id": 1296,
-                          "email": "",
-                          "first_name": "Krishnakumar ",
-                          "last_name": ""
-                        }
-                      },
-                      "remarks": {
-                        "description": "Remarks of the item.",
-                        "type": "object",
-                        "example": null
-                      },
-                      "status_glossary": {
-                        "description": "Status_glossary of the item.",
-                        "type": "string",
-                        "example": "paymentSuccess"
-                      },
-                      "table_id": {
-                        "description": "Table_id of the item.",
-                        "type": "string",
-                        "example": "885"
-                      },
-                      "creator_id": {
-                        "description": "Creator_id of the item.",
-                        "type": "number",
-                        "example": 1290
-                      },
-                      "user_id": {
-                        "description": "User_id of the item.",
-                        "type": "number",
-                        "example": 1296
-                      }
+                      "example": 5
                     }
                   }
                 }

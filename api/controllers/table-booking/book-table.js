@@ -1,197 +1,155 @@
-/* global _, ProfileManagers /sails */
-const moment = require('moment');
-require('dotenv').config();
+module.exports = async function (request, response) {
+  const postRequestData = request.body;
+  const profileId = ProfileMemberId(request); // Ensure this is implemented correctly
+  const { table_id: tableId } = postRequestData;
 
-module.exports = async function createOrder(req, res) {
-  const { payPending, orederExpired, paymentSuccess, bookingConfirmationPendingByCreator, createOrderErr,expiryDate  } = UseDataService;
+  const {
+    errorMessages,
+    listingTableStatusNotEqual,
+    payPending,
+    paymentSuccess,
+    createOrderErr,
+  } = UseDataService;
 
-  const { id } = req.body;
-  let responseObject = {};
+  const inputAttributes = [
+    { name: 'table_id', required: true },
+  ];
 
-  const data = ['order_id', 'table_id', 'user_id', 'seats', 'creator_id', 'status_glossary'];
-  const profileId = req.user.profile_members;
-  const postRequestData = req.body;
-  const seats = 1;
-  let filteredPostData = _.pick(postRequestData, data);
-
-  let input_attributes = [
+  const payloadAttributes = [
+    ...inputAttributes,
     { name: 'order_id', required: true },
     { name: 'table_id', required: true },
     { name: 'user_id', required: true },
     { name: 'seats', required: true },
     { name: 'creator_id', required: true },
+    { name: 'table_details', required: true },
+    { name: 'user_details', required: true },
+    { name: 'creator_details', required: true },
     { name: 'status_glossary' },
   ];
 
-  const sendResponse = (details) => {
-    responseObject = {
-      message: 'Table booked .',
-      details: _.cloneDeep(details)
-    };
-    return res.ok(responseObject);
-  };
+  let filteredPostData = {};
 
-  const handleTableBooking = async () => {
-    const isCheckdata = await UseDataService.checkTableCreatedByCurrentUser(
-      {
-        tableId: id,
-        userId: ProfileMemberId(req)
-      }
-    )
-    const isBookingAvailable = await Tables.handleBooking(id, payPending, orederExpired);
-    const isAlreadyBookedAndPending = await Tables.checkPreviousBookings(id, profileId, payPending);
-    const isAlreadyBookedAndSuccess = await Tables.checkPreviousBookings(id, profileId, paymentSuccess);
+  async function insertFilteredPostData() {
+    const keysToPick = payloadAttributes.map((attr) => attr.name);
+    filteredPostData = _.pick(postRequestData, keysToPick);
 
-    const isBooked = await Tables.checkPreviousBookings(id, profileId, bookingConfirmationPendingByCreator);
-    if (isCheckdata) {
-      return { error: 'You cannot book for your table.', statusCode: 400 };
-    } else if (!isBookingAvailable) {
-      return { error: 'Booking closed. There are no seats available.', statusCode: 400 };
-    } else if (isBooked) {
-      return { error: 'Previous booking not accepted by creator.', statusCode: 400 };
-    } else if (isAlreadyBookedAndPending) {
-      await TableBooking.findOne({
-        table_id: id,
-        user_id: ProfileMemberId(req),
-        status: payPending,
-      });
-
-      return { error: 'Table already booked. Payemnt is pending.', statusCode: 400 };
-    } else if (isAlreadyBookedAndSuccess) {
-      return { error: 'Table already booked. You cannot book again.', statusCode: 400 };
-    }
-
-    return null; // No error
-  };
-
-  const insertData = async () => {
     try {
-      // const table = await Tables.findOne({ id });
-      const table = await Tables.findOne({
-        id: id,
-        status: { '!=': UseDataService.listingTableStatusNotEqual }
-      });
+      const booking = await TableBooking.findOne({ table_id: tableId, user_id: profileId })
+        .select(['id', 'table_id', 'status']);
 
-      if (!table) {
-        return { error: 'Table not found', statusCode: 404 };
+      const tableDetails = await Tables.findOne({ id: tableId, status: { '!=': listingTableStatusNotEqual } })
+        .select(['id', 'title', 'price', 'status', 'event_date', 'max_seats', 'booked', 'created_by']);
+
+
+
+      if (!tableDetails) {
+        throw errorMessages.tableNotFound;
+      } else if (tableDetails.booked >= tableDetails.max_seats) {
+        throw errorMessages.bookingClosed;
+      } else if (parseInt(tableDetails.created_by) === parseInt(profileId)) {
+        throw errorMessages.ownTableBooking;
       }
 
-      const { price, title, created_by } = table;
-      const bookingError = await handleTableBooking();
+      if (booking) {
+        const { status } = booking;
 
-      if (bookingError) {
-        return bookingError;
+        switch (status) {
+          case paymentSuccess:
+            throw errorMessages.bookedByUser;
+
+          case payPending:
+            throw errorMessages.payPendingByUser;
+
+          default:
+            const { id, title } = tableDetails;
+            filteredPostData.table_details = {
+              id,
+              title
+            }
+            break;
+        }
       }
-
-      const amount = price * seats;
-      // const amount = price * seats * 100;
+      // Create Razorpay order
+      const { price, title, created_by } = tableDetails;
       let order;
       try {
-        // order = await RazorpayService.createRazorpayOrder(amount, title);
-        order = await RazorpayService.createRazorpayOrder({ amount, title, tableId: id, userId: profileId });
-      } catch (error) {
+
+        order = await RazorpayService.createRazorpayOrder({ amount: price, title, tableId, userId: profileId });
+
+      } catch (e) {
         await UseDataService.errorDataCreate({
-          table_id: id,
+          table_id: tableId,
           type: createOrderErr,
           type_glossary: 'createOrderErr',
-          booking_id: null,  // Correctly referencing bookingData.id
+          booking_id: null,
           booking_details: {},
           user_id: profileId,
           creator_id: created_by,
-          error_details: error // Ensure to store error details as a string
+          error_details: e,
+          description: e?.error?.description
         });
-
-        return { statusCode: 500, message: 'Failed to create payment order', error };
+        throw { status: e.statusCode, message: `Razorpy ${e.error?.description}` }
       }
-      /**
-       * Set order Expire Date
-       * ExpireDate set to 4 hrs
-       */
-      
-      // const expiryDate = moment().add(expiryMins, 'minutes').toDate(); // Assuming expiry is 5 minutes
 
+
+      try {
+        async function fetchProfileInfo(id) {
+          if (!id) return null;
+          const data = await ProfileMembers.findOne({ id }).select(['email', 'first_name', 'last_name', 'photo', 'phone']);
+          if (!data) return null;
+          const { email, first_name, last_name, photo, phone } = data;
+          return { id, email, first_name, last_name, photo, phone };
+        }
+
+        if (created_by) {
+          filteredPostData.creator_details = await fetchProfileInfo(created_by);
+        }
+
+        if (profileId) {
+          filteredPostData.user_details = await fetchProfileInfo(profileId);
+        }
+
+
+      } catch {
+        throw ('Error Fetch profiles');
+
+      }
+
+
+      filteredPostData.table_details = { id: tableId, title };
+      // Populate filteredPostData
       filteredPostData = {
+        ...filteredPostData,
+        seats: 1,
         order_id: order.id,
-        table_id: id,
+        table_id: tableId,
         user_id: profileId,
-        seats,
-        amount,
+        amount: price,
         creator_id: created_by,
         status: payPending,
-        title
+        title,
       };
 
-      return { success: true };
-
+      return filteredPostData;
     } catch (error) {
-      return { error: error, statusCode: 500 };
+      throw error;
     }
-  };
+  }
 
-  const createBooking = async (postData) => {
-    const { order_id, table_id, user_id, amount, status, creator_id, status_glossary } = postData;
-    ({ postData })
-    
+  try {
+    const filteredPostData = await insertFilteredPostData();
 
-    const ids = [];
-    if (user_id) ids.push(user_id);
-    if (creator_id) ids.push(creator_id);
+    const newData = await UseDataService.dataCreate(request, response, {
+      modelName: TableBooking,
+      inputAttributes: inputAttributes,
+      payloadData: payloadAttributes,
+      postData: filteredPostData,
 
-    if (ids.length > 0) {
-      const profiles = await ProfileMembers.find({
-        id: { in: ids }
-      }).select(['email', 'first_name', 'last_name']);
-
-      if (user_id) user_info = profiles.find(profile => profile.id === user_id);
-      if (creator_id) creator_info = profiles.find(profile => profile.id === creator_id);
-    }
-    
-    const table_info = await Tables.findOne({ id: table_id }).select(['title', 'event_date'])
-
-    try {
-      const newBooking = await TableBooking.create({
-        order_id,
-        table_id,
-        user_id,
-        seats,
-        amount,
-        status,
-        creator_id,
-        creator_info,
-        user_info,
-        table_info,
-        status_glossary
-      })
-
-      sendResponse(newBooking);
-    } catch (error) {
-      throw (error);
-    }
-  };
-
-  const dataInserted = await insertData(null);
-  if (dataInserted.success) {
-    validateModel.validate(Tables, input_attributes, filteredPostData, async (valid, errors) => {
-      if (valid) {
-        try {
-          const isBooked = await Tables.checkPreviousBookings(id, profileId, bookingConfirmationPendingByCreator);
-          if (!isBooked) {
-            filteredPostData.status_glossary = "bookingPayPending";
-            await createBooking(filteredPostData);
-          }
-          await UseDataService.countBookedSeats(id, payPending, paymentSuccess);
-        } catch (error) {
-          throw (error);
-        }
-      } else {
-        responseObject = {
-          errors: errors,
-          count: errors.length
-        };
-        return res.badRequest(responseObject);
-      }
     });
-  } else {
-    return res.status(dataInserted.statusCode).json({ error: dataInserted.error });
+
+    return newData;
+  } catch (error) {
+    throw error
   }
 };

@@ -96,7 +96,9 @@ module.exports = function list(request, response) {
             }
             item.media = item.media ? item.media[0] : null;
             item.table_details = item.table_id;
+             item.creator_details = item.creator_id;
             delete item.table_id;
+            delete item.creator_id;
             return item;
           })
         );

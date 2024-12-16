@@ -14,6 +14,7 @@ module.exports = async function update(request, response) {
         const { id, type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions, location_details } = request.body;
 
         const updateData = { type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions, location_details };
+        
         let _response_object = {};
 
         // Validate input attributes
@@ -89,14 +90,12 @@ module.exports = async function update(request, response) {
             }
         }
 
-
         const sendResponse = (message, details) => {
             _response_object.message = message;
             _response_object.details = details; // Include details in the response
 
             response.ok(_response_object);
             return;
-
         }
         // Initialize validateModel function
         validateModel.validate(Tables, input_attributes, request.body, async function (valid, errors) {
@@ -163,7 +162,3 @@ module.exports = async function update(request, response) {
         response.serverError({ error: "Error occurred while updating Tables data" });
     }
 };
-
-
-
-

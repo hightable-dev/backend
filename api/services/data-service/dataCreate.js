@@ -16,6 +16,7 @@ module.exports = async function create(request, response, data) {
     response.ok(_response_object);
 
     // Update Table count after table creation
+    if(path){
        process.nextTick(() => {
         const relativePath = path;
         const capitalizeFirstLetter = (str) => str && str.charAt(0).toUpperCase() + str.slice(1);
@@ -28,7 +29,7 @@ module.exports = async function create(request, response, data) {
           response: _response_object,
         });
       });
-       
+    }
 
     return details; // Return the created data
   };
@@ -39,7 +40,7 @@ module.exports = async function create(request, response, data) {
         if (newData) {
           resolve(await sendResponse("Data created successfully.", newData));
         } else {
-            reject(new Error("Data creation failed."));
+            throw err;
 
           // await errorBuilder.build(err, function (error_obj) {
           //   _response_object.errors = error_obj;
@@ -65,9 +66,9 @@ module.exports = async function create(request, response, data) {
         if (valid) {
           try {
             const result = await createData(postData);
-            resolve(result); // Return created data
+            return result; // Return created data
           } catch (err) {
-            reject(err);
+            throw err ;
           }
         } else {
           _response_object.errors = errors;

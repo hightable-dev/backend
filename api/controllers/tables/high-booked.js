@@ -96,7 +96,7 @@ module.exports = function list(request, response) {
         }));
         sendResponse(items, totalItems);
       } catch (error) {
-        return response.serverError({message:'Server Error',error});
+       throw error;
       }
     } else {
       return response.badRequest({

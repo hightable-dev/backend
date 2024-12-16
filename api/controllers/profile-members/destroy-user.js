@@ -117,6 +117,6 @@ module.exports = async function userDestroy(request, response) {
     return response.ok(_response_object);
 
   } catch (error) {
-    return response.serverError({ error: "Error occurred while destroying users and profile members." });
+    throw error;
   }
 };

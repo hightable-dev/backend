@@ -1,5 +1,6 @@
 const bookingDataForCreator = require("./data-service/bookingDataForCreator.js");
 const bookingDataForUser = require("./data-service/bookingDataForUser.js");
+const bookingService = require("./data-service/bookingService.js");
 const cancelBookingIfTableCancelByHost = require("./data-service/cancelBookingIfTableCancelByHost.js");
 const checkBookingByCurrentUser = require("./data-service/checkBookingByCurrentUser.js");
 const checkBookingExistForTableAndCurrentUser = require("./data-service/checkBookingExistForTableAndCurrentUser.js");
@@ -12,6 +13,7 @@ const countTablesBooked = require("./data-service/countTablesBooked.js");
 const countTablesHosted = require("./data-service/countTablesHosted.js");
 const countTablesWishlist = require("./data-service/countTablesWishlist.js");
 const dataCreate = require("./data-service/dataCreate.js");
+const dataUpdate = require("./data-service/dataUpdate.js");
 const dateHelper = require("./data-service/dateHelper.js");
 const dateHelperUtc = require("./data-service/dateHelperUtc.js");
 const { emailNotification } = require("./data-service/emailService.js");
@@ -35,6 +37,7 @@ const tableListingCriteriaWithoutLocation = require("./data-service/tableListing
 const tableListingCriteriaWithoutLocationPublic = require("./data-service/tableListingCriteriaWithoutLocationPublic.js");
 const toggleWishListItem = require("./data-service/toggleWishListItem.js");
 const { processSwaggerGeneration } = require("./processSwaggerGenerate.js");
+
 // Payment status
 const {
   payPending,
@@ -224,6 +227,8 @@ module.exports = {
   tableCreateByAdmin,
   toggleWishListItem,
   countTablesWishlist,
+  dataUpdate,
+  bookingService,
 
   /**
  * Calculates the profile completion percentage based on user data.

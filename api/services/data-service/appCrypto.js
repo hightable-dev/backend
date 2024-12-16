@@ -8,7 +8,6 @@ module.exports = (() => {
     const algorithm = process.env.PHONE_CRYPTO_ALGORITHM;
     const cipher_key = process.env.PHONE_CRYPTO_CIPHER_KEY;
     const cipher_iv = process.env.PHONE_CRYPTO_CIPHER_IV;
-    console.log({algorithm})
 
     return {
         /**

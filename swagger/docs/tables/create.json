@@ -155,22 +155,22 @@
                     "created_at": {
                       "description": "Created_at of the details.",
                       "type": "object",
-                      "example": "2024-12-09T14:15:18.578Z"
+                      "example": "2024-12-13T15:22:41.482Z"
                     },
                     "updated_at": {
                       "description": "Updated_at of the details.",
                       "type": "object",
-                      "example": "2024-12-09T14:15:18.578Z"
+                      "example": "2024-12-13T15:22:41.482Z"
                     },
                     "id": {
                       "description": "Id of the details.",
                       "type": "string",
-                      "example": "903"
+                      "example": "948"
                     },
                     "full_name": {
                       "description": "Full_name of the details.",
                       "type": "string",
-                      "example": "Backend User "
+                      "example": "Test four "
                     },
                     "type": {
                       "description": "Type of the details.",
@@ -190,7 +190,7 @@
                     "description": {
                       "description": "Description of the details.",
                       "type": "string",
-                      "example": "Understand how blockchain can impact large enterprises."
+                      "example": "sdfsdf"
                     },
                     "phone": {
                       "description": "Phone of the details.",
@@ -200,7 +200,7 @@
                     "min_seats": {
                       "description": "Min_seats of the details.",
                       "type": "number",
-                      "example": 5
+                      "example": 4
                     },
                     "max_seats": {
                       "description": "Max_seats of the details.",
@@ -230,32 +230,32 @@
                     "title": {
                       "description": "Title of the details.",
                       "type": "string",
-                      "example": "Testing Date-002"
+                      "example": "dfssdfsdf"
                     },
                     "price": {
                       "description": "Price of the details.",
                       "type": "number",
-                      "example": 5
+                      "example": 555
                     },
                     "tags": {
                       "description": "Tags of the details.",
                       "type": "string",
-                      "example": "Experts"
+                      "example": "Corporate"
                     },
                     "address": {
                       "description": "Address of the details.",
                       "type": "string",
-                      "example": "Brahma Brews, 24th Main Road, Achappa Layout, Ramaiah Garden, JP Nagar 7th Phase, J. P. Nagar, Bengaluru, Karnataka, India"
+                      "example": "Puducherry, India"
                     },
                     "city": {
                       "description": "City of the details.",
                       "type": "string",
-                      "example": "JP Nagar 7th Phase"
+                      "example": ""
                     },
                     "event_date": {
                       "description": "Event_date of the details.",
                       "type": "string",
-                      "example": "2024-12-10 13:00"
+                      "example": "2024-12-26 18:52"
                     },
                     "reviews": {
                       "description": "Reviews of the details.",
@@ -285,17 +285,17 @@
                     "state": {
                       "description": "State of the details.",
                       "type": "string",
-                      "example": "Bengaluru Urban"
+                      "example": "Puducherry"
                     },
                     "district": {
                       "description": "District of the details.",
                       "type": "string",
-                      "example": "Bengaluru"
+                      "example": "Puducherry"
                     },
                     "pincode": {
                       "description": "Pincode of the details.",
                       "type": "string",
-                      "example": "560078"
+                      "example": "605009"
                     },
                     "order_by": {
                       "description": "Order_by of the details.",
@@ -305,29 +305,26 @@
                     "table_expense": {
                       "description": "Table_expense of the details.",
                       "type": "number",
-                      "example": 1
+                      "example": 0
                     },
                     "location_details": {
                       "description": "Location_details of the details.",
                       "type": "object",
                       "example": {
                         "country": "India",
-                        "locality": "Bengaluru",
+                        "locality": "Puducherry",
                         "political": "India",
-                        "postal_code": "560078",
-                        "sublocality_level_1": "7",
-                        "sublocality_level_2": "JP Nagar 7th Phase",
-                        "sublocality_level_3": "Silver Oak Layout",
-                        "administrative_area_level_2": "Bangalore Division",
-                        "administrative_area_level_3": "Bengaluru Urban"
+                        "postal_code": "605009",
+                        "sublocality_level_1": "Aruthra Nagar",
+                        "administrative_area_level_3": "Puducherry"
                       }
                     },
                     "location": {
                       "description": "Location of the details.",
                       "type": "object",
                       "example": {
-                        "lat": 12.8933351,
-                        "lng": 77.5864716
+                        "lat": 11.9415915,
+                        "lng": 79.8083133
                       }
                     },
                     "inclusion": {
@@ -348,17 +345,17 @@
                     "category": {
                       "description": "Category of the details.",
                       "type": "string",
-                      "example": "53"
+                      "example": "7"
                     },
                     "created_by": {
                       "description": "Created_by of the details.",
                       "type": "number",
-                      "example": 1290
+                      "example": 1386
                     },
                     "user_profile": {
                       "description": "User_profile of the details.",
                       "type": "number",
-                      "example": 1290
+                      "example": 1386
                     }
                   }
                 }

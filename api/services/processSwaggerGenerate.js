@@ -10,17 +10,20 @@ async function processSwaggerGeneration(data) {
   const { relativePath, inputAttributes, responseObject } = data;
 
   try {
-    await SwaggerGenService.generateJsonFile({
-      key: `/${relativePath}`,
-      Tags: capitalizeFirstLetter(relativePath.split('/')[0]),
-      Description: `Retrieve data of ${capitalizeFirstLetter(relativePath.split('/')[0])} - ${relativePath.split('/')[1]}`,
-      body: {},
-      params: { page: 1, limit: 10 },
-      required_data: {...inputAttributes},
-      response: {...responseObject}
-    });
+    if (relativePath) {
+      await SwaggerGenService.generateJsonFile({
+        key: `/${relativePath}`,
+        Tags: capitalizeFirstLetter(relativePath.split('/')[0]),
+        Description: `Retrieve data of ${capitalizeFirstLetter(relativePath.split('/')[0])} - ${relativePath.split('/')[1]}`,
+        body: {},
+        params: { page: 1, limit: 10 },
+        required_data: { ...inputAttributes },
+        response: { ...responseObject }
+      });
+    }
+
   } catch (error) {
-    throw error ;
+    throw error;
   }
 }
 

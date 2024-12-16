@@ -10,8 +10,6 @@
 module.exports = async function create(request, response, data) {
   const { modelName, inputAttributes, filteredPostData, path } = data;
 
-  console.log({ data, inputAttributes, filteredPostData, path });
-
   let _response_object = {};
 
   // Send Response function

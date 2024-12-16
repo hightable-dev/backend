@@ -4,70 +4,94 @@
  */
 
 /* global _, ProfileManagers, sails */
-const _ = require('lodash');
 
 module.exports = async function list(request, response) {
   try {
-    const { paymentSuccess } = UseDataService; // Assuming this is defined in UseDataService
-    const requestQuery = request.allParams();
-    const filteredQueryData = _.pick(requestQuery, ['page', 'limit']);
-    const excludeFields = ['created_at', 'updated_at', 'payment_details','refund_details','order_id','payment_id','seats']; // Fields to omit from results
+    const { phoneCrypto, paymentSuccess } = UseDataService; // Assuming this is defined in UseDataService
+    const requestQuery = request.query;
+    const filteredQueryData = _.pick(requestQuery, [
+      "page",
+      "limit",
+      "table_id",
+    ]);
+    const selectFields = [
+      "id",
+      "user_id",
+      "table_id",
+      "creator_id",
+      "user_details",
+    ];
 
     // Input validation schema
     const inputAttributes = [
-      { name: 'page', number: true, min: 1 },
-      { name: 'limit', number: true, min: 1 }
+      { name: "page", number: true, min: 1 },
+      { name: "limit", number: true, min: 1 },
     ];
 
     async function buildCriteria() {
-      let criteria = {}
-
-      criteria.creator_id= ProfileMemberId(request)
+      let criteria = {};
+      criteria.table_id = filteredQueryData.table_id;
+      criteria.creator_id = ProfileMemberId(request);
       criteria.status = paymentSuccess;
 
       return criteria;
     }
 
-
     // Validate inputs
-    validateModel.validate(TableBooking, inputAttributes, filteredQueryData, async (valid, errors) => {
-      if (valid) {
-        const page = parseInt(filteredQueryData.page) || 1;
-        const limit = parseInt(filteredQueryData.limit) || 10;
-        const skip = (page - 1) * limit;
+    validateModel.validate(
+      TableBooking,
+      inputAttributes,
+      filteredQueryData,
+      async (valid, errors) => {
+        if (valid) {
+          const page = parseInt(filteredQueryData.page) || 1;
+          const limit = parseInt(filteredQueryData.limit) || 5;
+          const skip = (page - 1) * limit;
 
-        let criteria = await buildCriteria();
-        // Fetch data with pagination
-        const [items, totalItems] = await Promise.all([
-          TableBooking.find({ where:criteria })
-            .skip(skip)
-            .limit(limit)
-            .omit(excludeFields),
-          TableBooking.count({ where:criteria })
-        ]);
+          let criteria = await buildCriteria();
+          // Fetch data with pagination
+          const [items, totalItems] = await Promise.all([
+            TableBooking.find({ where: criteria })
+              .skip(skip)
+              .limit(limit)
+              .select(selectFields),
+            // .omit(excludeFields),
+            TableBooking.count({ where: criteria }),
+          ]);
 
-        // Use the refactored sendResponseList function
-        await UseDataService.sendResponseList({
-          items,
-          totalItems,
-          page,
-          limit,
-          response,
-          inputAttributes,
-          filePath: __filename,
-          message:'Booked users list'
+          for (let item of items) {
+            if (item.user_details?.phone) {
+              // Assuming 'phone' is the encrypted phone number for each item
+              item.user_details.phone = UseDataService.phoneCrypto.decryptPhone(
+                item.user_details?.phone
+              );
+            }
+          }
 
-        });
-      } else {
-        // Handle validation errors
-        return response.badRequest({
-          errors,
-          count: errors.length
-        });
+          // Use the refactored sendResponseList function
+          await UseDataService.sendResponseList({
+            items,
+            totalItems,
+            page,
+            limit,
+            response,
+            inputAttributes,
+            // filePath: __filename,
+            message: "Booked users list",
+          });
+        } else {
+          // Handle validation errors
+          return response.badRequest({
+            errors,
+            count: errors.length,
+          });
+        }
       }
-    });
+    );
   } catch (error) {
-    sails.log.error('Error in list:', error);
-    return response.serverError({ error: "Error occurred while fetching interests" });
+    sails.log.error("Error in list:", error);
+    return response.serverError({
+      error: "Error occurred while fetching interests",
+    });
   }
 };

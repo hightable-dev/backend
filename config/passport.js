@@ -137,23 +137,3 @@ passport.use(new BearerStrategy(
         });
     }
 ));
-
-
-/* =============================================================== */ 
-const LINKEDIN_CLIENT_ID = process.env.LINKEDIN_CLIENT_SECRET;
-const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_ID;
-
-passport.use(new LinkedInStrategy({
-    clientID: LINKEDIN_CLIENT_ID,
-    clientSecret: LINKEDIN_CLIENT_SECRET,
-    callbackURL: "http://localhost:1337/login/linkedin/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-    // LinkedIn profile data is available here
-    return done(null, profile);
-  }
-));
-
-module.exports = {
-  passport: passport
-};

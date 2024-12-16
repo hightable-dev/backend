@@ -72,11 +72,11 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
             {
               // "type": "refundEmailTemplate",
               type: "refundEmailTemplate",
-              include_email_tokens: [bookingData?.user_info?.email],
+              include_email_tokens: [bookingData?.user_details?.email],
               custom_data: {
-                "user_name": bookingData?.user_info?.first_name,
+                "user_name": bookingData?.user_details?.first_name,
                 "pay_id": 'paymentDetails?.id',
-                table_title: bookingData?.table_info?.title,
+                table_title: bookingData?.table_details?.title,
                 reference_id: refundResponse?.id,
                 refund_id: refundResponse?.id,
                 amount: bookingData?.amount
@@ -112,11 +112,6 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
           });
         }
       } catch (error) {
-        // Handle errors
-        sails.log(
-          `Error occurred during refund for payment ID ${payId}:`,
-          error
-        );
         // Remove the idempotency key from the map in case of error
         idempotencyKeyMap.delete(payId);
 
@@ -137,12 +132,12 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
           });
         }
 
-        throw new Error(error);
+        throw error;
       }
     }
     return;
   } catch (error) {
-    sails.log("Error Initiate refund", error)
+    throw error;
     // throw new Error("Error fetching bookings: " + error.message);
   }
 };

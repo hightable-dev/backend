@@ -42,6 +42,6 @@ module.exports = async function findOne(request, response) {
 
     return response.ok(_response_object);
   } catch (error) {
-    throw new Error("Error occurred while fetching user");
+    throw error;
   }
 }

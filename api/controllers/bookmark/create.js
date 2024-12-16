@@ -8,55 +8,75 @@ module.exports = async function (request, response) {
 
     input_attributes = [
         { name: 'table_id', required: true },
-
     ];
+
     payload_attributes = [
         ...input_attributes,
         { name: 'user_id', required: true },
         { name: 'creator_profile_id', required: true },
-        { name: 'status', required: true }
-    ]
+        { name: 'status', required: true },
+    ];
+
+    if (!tableId) {
+        return response.status(400).json({ message: 'Table ID is required.' });
+    }
+
     if (tableId) {
-        /* Check table created by user */
+        /* Check if the table is created by the user */
         const isCheckdata = await UseDataService.checkTableCreatedByCurrentUser({
             tableId,
-            userId: ProfileMemberId(request)
+            userId: ProfileMemberId(request),
         });
 
         const checkWishListExist = await UseDataService.toggleWishListItem({
             tableId,
-            userId: ProfileMemberId(request)
+            userId: ProfileMemberId(request),
         });
 
         if (checkWishListExist) {
             if (checkWishListExist?.status === bookmarkTable) {
-                wishlistMessage = 'Bookmark removed.'
+                wishlistMessage = 'Bookmark removed.';
                 checkWishListExist.status = active;
             } else {
-                wishlistMessage = 'Bookmark Added.'
+                wishlistMessage = 'Bookmark Added.';
                 checkWishListExist.status = bookmarkTable;
             }
-            const toggleWihslist = await BookMarks.updateOne({ id: checkWishListExist.id }, checkWishListExist);
+
+            const toggleWishlist = await BookMarks.updateOne(
+                { id: checkWishListExist.id },
+                checkWishListExist
+            );
             await UseDataService.countTablesWishlist(tableId);
 
-            return response.status(200).json({ message: wishlistMessage, details: toggleWihslist });
-        };
-
+            return response
+                .status(200)
+                .json({ message: wishlistMessage, details: toggleWishlist });
+        }
 
         if (isCheckdata) {
             if (!response.headersSent) {
-               throw ({ status:500, message:'You cannot add to wishlist for your table.'});
-
+                return response
+                    .status(500)
+                    .json({ message: 'You cannot add to wishlist for your table.' });
             }
-        };
-    };
+        }
+    }
+
     // Filter data function
     async function insertFilteredPostData() {
         keysToPick = payload_attributes.map((attr) => attr.name);
         filtered_post_data = _.pick(post_request_data, keysToPick);
         filtered_post_data.status = bookmarkTable;
         filtered_post_data.user_id = ProfileMemberId(request);
-        filtered_post_data.creator_profile_id = ProfileMemberId(request);
+        try {
+            const tableDetails = await Tables.findOne({ id: tableId }).select(['created_by']);
+            filtered_post_data.creator_profile_id = tableDetails.created_by;
+
+        } catch {
+            throw ({ status: 400, message: 'No table found.' });
+        }
+
+
 
         return filtered_post_data;
     }
@@ -75,15 +95,12 @@ module.exports = async function (request, response) {
     } catch (error) {
         // Handle errors
         if (!response.headersSent) {
-           throw ( error);
+            return response
+                .status(error.status || 500)
+                .json({ message: error.message || 'Internal Server Error' });
         }
-
     } finally {
         // Log in finally block
         await UseDataService.countTablesWishlist(tableId);
-        if (newData) {
-            sails.log('await UseDataService.countTablesWishlist(tableId)', newData);
-
-        }
     }
 };
