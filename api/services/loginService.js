@@ -23,17 +23,17 @@ let error_obj = new Error();
 exports.findUser = async function (username, login_type, callback) {
   try {
 
-    let encrypted_phone
+    let user_name
 
     if (login_type === 'phone') {
       if (!_.isNaN(Number(username))) {
 
         await phoneEncryptor.encrypt(username, function (encrypted_text) {
-          encrypted_phone = encrypted_text;
+          user_name = encrypted_text;
         });
-      } else {
-        encrypted_phone = username
       }
+    } else {
+      user_name = username
     }
     const query = `
       SELECT
@@ -50,7 +50,7 @@ exports.findUser = async function (username, login_type, callback) {
       WHERE $1 = ANY(username::text[])
     `;
 
-    let queryData = [encrypted_phone];
+    let queryData = [user_name];
 
     // Executing query
     var user_model = sails.sendNativeQuery(query.toString(), queryData);
@@ -67,10 +67,10 @@ exports.findUser = async function (username, login_type, callback) {
 
         return callback(err, user['rows'][0]);
       } else {
-        error_obj= {
-          status : 404,
-          message : 'No user found.',
-          is_user_exist : false
+        error_obj = {
+          status: 404,
+          message: 'No user found.',
+          is_user_exist: false
         }
         return callback(error_obj);
       }
@@ -144,7 +144,7 @@ exports.findUserByToken = function (access_token, callback) {
     query += " WHERE " + AccessTokens.tableAlias + "." + AccessTokens.schema.token.columnName + "='" + access_token + "'";
     //Executing query
     var token_model = sails.sendNativeQuery(query);
-    token_model.exec( function (err, user) {
+    token_model.exec(function (err, user) {
       if (err) {
         if (err.message) {
           error_obj.message = err.message;
@@ -156,10 +156,10 @@ exports.findUserByToken = function (access_token, callback) {
         return callback(err, user['rows'][0]);
       } else {
         error_obj = {
-          message : 'No user found with given token.',
-          is_user_exist : false
+          message: 'No user found with given token.',
+          is_user_exist: false
         }
-        return callback(error_obj); 
+        return callback(error_obj);
       }
     });
   } catch (err) {
@@ -174,14 +174,14 @@ exports.findUserByToken = function (access_token, callback) {
 
 
 exports.sendOTP = async function (phone, callback) {
-  const demoUser = "9999912345" ;
-  const demoUser1 = "9876543211" ;
-  const demoUser2 = "9876543212" ;
-  const demoUser3 = "9876543213" ;
-  const demoUser4 = "9876543214" ;
-  const demoUser5 = "9876543215" ;
+  const demoUser = "9999912345";
+  const demoUser1 = "9876543211";
+  const demoUser2 = "9876543212";
+  const demoUser3 = "9876543213";
+  const demoUser4 = "9876543214";
+  const demoUser5 = "9876543215";
   // Check if the phone number is not equal to demoUser or demoUser2
-  if (phone !== demoUser  && phone !== demoUser1 && phone !== demoUser2 && phone !== demoUser3 && phone !== demoUser5 && phone !== demoUser5) {
+  if (phone !== demoUser && phone !== demoUser1 && phone !== demoUser2 && phone !== demoUser3 && phone !== demoUser5 && phone !== demoUser5) {
     try {
       const config = {
         method: 'post',
@@ -229,14 +229,14 @@ exports.sendOTP = async function (phone, callback) {
 
 
 exports.verifyOTP = async function (phone, otp, callback) {
-  const demoUser = "9999912345" ;
+  const demoUser = "9999912345";
   const demoUser1 = "9876543211";
   const demoUser2 = "9876543212";
   const demoUser3 = "9876543213";
-  const demoUser4 = "9876543214" ;
-  const demoUser5 = "9876543215" ;
+  const demoUser4 = "9876543214";
+  const demoUser5 = "9876543215";
   const demoUserOtp = "7799";
-  if ((phone === demoUser ||phone === demoUser1 || phone === demoUser2 || phone === demoUser3 || phone === demoUser4 || phone === demoUser5) && otp === demoUserOtp) {
+  if ((phone === demoUser || phone === demoUser1 || phone === demoUser2 || phone === demoUser3 || phone === demoUser4 || phone === demoUser5) && otp === demoUserOtp) {
     jsonObject = {
       status: 'success',
       phone_no: phone,
