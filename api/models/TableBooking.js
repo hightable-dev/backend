@@ -6,18 +6,16 @@ module.exports = {
   attributes: {
     order_id: { type: "string" },
     seats: { type: "number" },
-    // capture_id: { type: 'string' },
     payment_id: { type: "string" },
     amount: { type: "number" },
     status: { type: "number" },
     payment_details: { type: "json", columnType: "json" },
     refund_details: { type: "json" },
     event_done_flag: { type: "boolean" },
-    // creator_id: { type: "ref" },
-    
     table_details: {type : 'ref'},
     creator_details: {type : 'ref'},
     user_details: {type : 'ref'},
+    expiry_date: {type : 'ref'},
     table_id: {
       model: "tables",
       columnName: "table_id",

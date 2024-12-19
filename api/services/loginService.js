@@ -23,17 +23,17 @@ let error_obj = new Error();
 exports.findUser = async function (username, login_type, callback) {
   try {
 
-    let user_name
+    let encrypted_phone
 
     if (login_type === 'phone') {
       if (!_.isNaN(Number(username))) {
 
         await phoneEncryptor.encrypt(username, function (encrypted_text) {
-          user_name = encrypted_text;
+          encrypted_phone = encrypted_text;
         });
       }
     } else {
-      user_name = username
+      encrypted_phone = username
     }
     const query = `
       SELECT
@@ -50,7 +50,7 @@ exports.findUser = async function (username, login_type, callback) {
       WHERE $1 = ANY(username::text[])
     `;
 
-    let queryData = [user_name];
+    let queryData = [encrypted_phone];
 
     // Executing query
     var user_model = sails.sendNativeQuery(query.toString(), queryData);

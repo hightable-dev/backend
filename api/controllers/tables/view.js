@@ -166,7 +166,7 @@ module.exports = async function list(request, response) {
         // DataService.completedEvent()
 
       } catch (error) {
-        return response.serverError('Server Error');
+        throw error;
       }
     } else {
       return response.badRequest({

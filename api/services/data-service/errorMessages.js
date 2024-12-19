@@ -64,9 +64,13 @@ module.exports = {
   },
 
   /* Table Bookings */
+  bookingWait: {
+    'status': 410,
+    'message': 'Bookings are in the queue. Please try again later.'
+  },
   bookingClosed: {
     'status': 410,
-    'message': 'This booking is closed and cannot be accessed.'
+    'message': 'Booking closed for this table.'
   },
   ownTableBooking: {
     'status': 400,

@@ -54,7 +54,6 @@ module.exports = function update(request, response) {
 
                     // Update profile member record with new data
                     const updatedUser = await ProfileMembers.updateOne({ id: profileId }).set(updateData);
-                    console.log({updatedUser})
 
                     const getPercentileData = await UseDataService.profilePercentile(updatedUser);
 

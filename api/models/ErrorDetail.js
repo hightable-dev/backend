@@ -8,10 +8,10 @@ module.exports = {
     creator_id: { type: 'number' },
     type_glossary: { type: 'string' },
     description: { type: 'string' },
-    booking_id: { type: 'number', defaultsTo: 0  },
+    booking_id: { type: 'ref' },
     error_details: { type: 'ref' },
     booking_details: { type: 'ref' },  /* order_id or payment_id */
-    issued_at: { type: 'string' },
+    issued_at: { type: 'ref' },
     status: { type: 'number', defaultsTo: 1 }  // Add type and default value for status
   },
 };
