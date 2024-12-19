@@ -23,8 +23,12 @@ module.exports = (date, inputFormat = 'YYYY-MM-DD HH:mm', outputFormat = 'YYYY-M
 
   /* Convert the timestamp back to the original format for verification */
   const twoHours = 2 * 60 * 60 * 1000;
-  const milliSecondsTwoHoursBeforeEventDate = milliSecondsFormattedInputDate - twoHours
+  const orderExpiryDuation = 15 * 60 * 1000; // 15 minutes in milliseconds
+  
+  const orderExpiry = milliSecondsFormattedInputDate + orderExpiryDuation;
+  const verifyMillisecondsToDateOrderExpiry = moment(orderExpiry).format(outputFormat);
 
+  const milliSecondsTwoHoursBeforeEventDate = milliSecondsFormattedInputDate - twoHours
   const verifyMillisecondsToDateBeforeTwoHours = moment(milliSecondsTwoHoursBeforeEventDate).format(outputFormat);
 
   const verifyTimestampconvertNowDate = moment(timestampconvertNowDate).format(outputFormat);
@@ -33,30 +37,15 @@ module.exports = (date, inputFormat = 'YYYY-MM-DD HH:mm', outputFormat = 'YYYY-M
   const eventDateTimestampGreaterNow = verifyMilliSecondsToInputDate > verifyTimestampconvertNowDate;
   const eventDateTimestampLessThanNow = verifyMilliSecondsToInputDate < verifyTimestampconvertNowDate;
 
-/* ============= Checking dates input and output after converting =============== start === */
-  const checkingReultsDateObj = {
-    now,
-    convertNowDate,
-    timestampconvertNowDate,
-    convertConvertNowDate,
-    verifyTimestampconvertNowDate,
-    date,
-    convertInputDateToUtc,
-    verifyMillisecondsToDateBeforeTwoHours,
-    milliSecondsFormattedInputDate,
-    verifyMilliSecondsToInputDate,
-    eventDateTimestampEqualNow,
-    eventDateTimestampGreaterNow,
-    eventDateTimestampLessThanNow,
-  };
-// Prints the resuts
 
-/* ============= Checking dates input and output after converting =============== End === */
+  /* ============= Checking dates input and output after converting =============== End === */
 
 
   const returnDataObj = {
     date,
     convertInputDateToUtc,
+    orderExpiry,
+    verifyMillisecondsToDateOrderExpiry,
     milliSecondsFormattedInputDate,
     verifyMilliSecondsToInputDate,
     evnetDateBeforeTwoHours,

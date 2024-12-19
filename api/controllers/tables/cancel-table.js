@@ -94,42 +94,15 @@ module.exports = async function update(request, response) {
     });
 
     response.ok(_response_object);
-  
-    if (bookedList?.length > 0) {
-      const notificationPromises = bookedList.map(async item => {
-        const msg = await UseDataService.messages({ tableId: details.id, userId: item.user_id });
 
-        return UseDataService.sendNotification({
-          notification: {
-            senderId: data.userId,
-            type: "tableCancel",
-            message: msg.CancelTableMsg,
-            receiverId: item.user_id,
-            followUser: null,
-            tableId: details.id,
-            payOrderId: "",
-            isPaid: true,
-            templateId: "tableCancel",
-            roomName: "TableCancel_",
-            creatorId: data.userId,
-            status: 1, // approved
-          },
-          pushMessage: {
-            title: "High Table",
-            tableId: details.id,
-          },
-        });
-      });
-
-      // Wait for all notifications to be sent
-      await Promise.all(notificationPromises);
-    } else {
-      console.log('No bookings');
-    }
 
     await UseDataService.cancelBookingIfTableCancelByHost(details.id);
-
+    try{
     await requestRefund(bookedList);
+
+    }catch(e){
+      throw e;
+    }
 
     process.nextTick(() => {
       const relativePath = SwaggerGenService.getRelativePath(__filename);
@@ -162,13 +135,13 @@ module.exports = async function update(request, response) {
           const updatedBookings = await TableBooking.update({
             table_id: item.table_id,
             payment_id: item.payment_id,
-            status :paymentSuccess
+            status: paymentSuccess
           }).set({ status: refundRequest, status_glossary: "refundRequest" });
 
           await TableBooking.update({
             table_id: item.table_id,
             payment_id: item.payment_id,
-            status :payPending
+            status: payPending
           }).set({ status: cancelled, status_glossary: "refundRequest" });
 
 
@@ -181,12 +154,13 @@ module.exports = async function update(request, response) {
         }
       }
 
-      data.forEach(async itemData => {
+      // data.forEach(async itemData => {
         await UseDataService.initiateRefund({
           userId: ProfileMemberId(request),
-          tableId: parseInt(itemData.table_id),
+          // tableId: parseInt(itemData.table_id),tableId
+          tableId: parseInt(tableId),
         });
-      });
+      // });
 
       return result;
     }
@@ -211,6 +185,8 @@ module.exports = async function update(request, response) {
               userId: ProfileMemberId(request),
               status: [payPending, paymentSuccess, bookingConfirmationPendingByCreator]
             });
+
+
 
             await UseDataService.countTablesHosted(ProfileMemberId(request));
             sendResponse(updatedData[0], bookingList);

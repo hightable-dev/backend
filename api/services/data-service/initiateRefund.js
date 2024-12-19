@@ -5,7 +5,7 @@ const {
 } = paymentStatusCode;
 
 module.exports = async function (data) {
-const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ; 
+  const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService;
   /**
    * @Param table id required
    * @Param user id required
@@ -18,18 +18,19 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
     });
     const tableDetails = await Tables.find({ id: data.tableId });
 
-    const paymentId = bookings.map((booking) => booking?.payment_id);
-    // Check if the paymentId is an array
-    if (!Array.isArray(paymentId)) {
-      throw new Error({ error: "paymentId must be an array" });
+    const paymentIds = bookings.map((booking) => booking?.payment_id);
+    const userIds = bookings.map((booking) => booking?.user_id);
+    // Check if the paymentIds is an array
+    if (!Array.isArray(paymentIds)) {
+      throw new Error({ error: "paymentIds must be an array" });
     }
 
     const refundResponses = [];
 
-    for (const payId of paymentId) {
+    for (const payId of paymentIds) {
       // Check if the idempotency key for this payment ID exists
       if (idempotencyKeyMap.has(payId)) {
-        // If idempotency key exists, skip this paymentId
+        // If idempotency key exists, skip this paymentIds
         continue;
       }
 
@@ -43,6 +44,7 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
           payId
         );
         const actualAmountPaid = paymentDetails.amount;
+        const tableDetails = await Tables.findOne({ id: data.tableId });
 
         // Initiate the refund with the actual amount paid
         const refundResponse = await RazorpayService.instance.payments.refund(
@@ -68,11 +70,12 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
         );
         refundResponses.push(refundResponse);
         for (const bookingData of bookings) {
-          const refundEmailConole123 = await UseDataService.emailNotification(
+          await UseDataService.emailNotification(
             {
               // "type": "refundEmailTemplate",
               type: "refundEmailTemplate",
-              include_email_tokens: [bookingData?.user_details?.email],
+              // include_email_tokens: [bookingData?.user_details?.email],
+              include_email_tokens: ['mohan@studioq.co.in'],
               custom_data: {
                 "user_name": bookingData?.user_details?.first_name,
                 "pay_id": 'paymentDetails?.id',
@@ -83,58 +86,65 @@ const { razorpayErr, createOrderErr, paymentErr, refundErr } = UseDataService ;
               }
             }
           );
-
-          const tableDetails = await Tables.findOne({ id: data.tableId });
-
-          const msg = await UseDataService.messages({ tableId: data.tableId, userId: bookingData.user_id });
-
-          await UseDataService.sendNotification({
-            notification: {
-              senderId: data.userId,
-              type: "Refund",
-              message: msg?.RefundSuccessMsg,
-              receiverId: bookingData.user_id,
-              followUser: null,
-              tableId: data.tableId,
-              payOrderId: "",
-              isPaid: true,
-              templateId: "refund",
-              roomName: "Refund_",
-              creatorId: tableDetails?.created_by,
-              status: 1, // approved
-            },
-
-            pushMessage: {
-              title: "High Table",
-              // message:  msg?.RefundSuccessMsg,
-              payOrderId: '',
-            },
-          });
         }
+
+
+
       } catch (error) {
         // Remove the idempotency key from the map in case of error
         idempotencyKeyMap.delete(payId);
 
         // Ensure creator_id is passed and use the correct bookingData for user_id
-        const creator_id = data.userId;  // You may need to assign this value appropriately
+        // const creator_id = data.userId;  // You may need to assign this value appropriately
 
-        for (let bookingData of bookings) {
-          await UseDataService.errorDataCreate({
-            table_id: data.tableId,
-            booking_id: bookingData.id,  // Correctly referencing bookingData.id
-            booking_details: { payment_id: payId },
-            user_id: bookingData.user_id,
-            type: refundErr,
-            type_glossary: 'refundErr',
-            creator_id,
-            error_type: 123456,
-            error_details: error.message || error // Ensure to store error details as a string
-          });
-        }
+        // for (let bookingData of bookings) {
+        //   await UseDataService.errorDataCreate({
+        //     table_id: data.tableId,
+        //     booking_id: bookingData.id,  // Correctly referencing bookingData.id
+        //     booking_details: { payment_id: payId },
+        //     user_id: bookingData.user_id,
+        //     type: refundErr,
+        //     type_glossary: 'refundErr',
+        //     creator_id,
+        //     error_details: error.message || error // Ensure to store error details as a string
+        //   });
+        // }
 
         throw error;
       }
     }
+
+
+
+    userIds.forEach(async element => {
+      // for (let userId of userIds) {
+      const msg = await UseDataService.messages({ tableId: data.tableId, userId: element });
+
+      await UseDataService.sendNotification({
+        notification: {
+          senderId: data.userId,
+          type: "Refund",
+          message: msg?.RefundSuccessMsg,
+          receiverId: element,
+          followUser: null,
+          tableId: data.tableId,
+          payOrderId: "",
+          isPaid: true,
+          templateId: "refund",
+          roomName: "Refund_",
+          creatorId: tableDetails?.created_by,
+          status: 1, // approved
+        },
+
+        pushMessage: {
+          title: "High Table",
+          // message:  msg?.RefundSuccessMsg,
+          payOrderId: '',
+        },
+      });
+      // }
+
+    });
     return;
   } catch (error) {
     throw error;

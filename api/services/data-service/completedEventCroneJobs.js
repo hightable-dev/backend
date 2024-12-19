@@ -20,11 +20,23 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
 
-    const { payPending, paymentSuccess, eventStatusPending, approved, autoCancelledMinSeatsNotBooked, bookingClosed, refundRequest } = UseDataService;
+    
+    const { payPending, paymentSuccess, eventStatusPending, approved, autoCancelledMinSeatsNotBooked, bookingClosed, refundRequest, orederExpired } = UseDataService;
 
     try {
 
         const tableData = await Tables.find({ status: approved });
+        const tableBookingData = await TableBooking.find({ status: payPending })
+        tableBookingData?.forEach(async data => {
+            let checkTimeNow = new Date(data.expiry_date);
+            checkTimeNow = UseDataService.dateHelperUtc(checkTimeNow)
+
+            if(checkTimeNow.eventDateTimestampLessThanNow || checkTimeNow.eventDateTimestampEqualNow){
+                    await TableBooking.update({ status: payPending }).set({ status: orederExpired });
+            }
+
+        })
+
         tableData?.forEach(async data => {
             let checkTimeNow = new Date(data.event_date);
             checkTimeNow = UseDataService.dateHelperUtc(checkTimeNow)
@@ -38,8 +50,8 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
                 /* Intiating the refund for the booking success */
                 let refundRequestTables = await TableBooking.update({ table_id: data.id, status: paymentSuccess }).set({ status: refundRequest });
                 refundRequestTables?.forEach(async refundData => {
-                
-                /* Notification to user */
+
+                    /* Notification to user */
                     await UseDataService.sendNotification({
                         notification: {
                             senderId: refundData.creator_id,
@@ -65,7 +77,7 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
                         tableId: refundData.table_id,
                     });
                 })
-                
+
                 /* Notification to host */
                 await UseDataService.sendNotification({
                     notification: {
@@ -146,7 +158,7 @@ const jobCompletedEvent = cron.schedule('* * * * *', async () => {
         };
 
     } catch (error) {
-        throw err ;
+        throw err;
     };
 }, {
     scheduled: true,

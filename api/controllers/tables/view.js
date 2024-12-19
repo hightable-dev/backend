@@ -47,7 +47,7 @@ module.exports = async function list(request, response) {
           .populate('user_profile');
 
         if (!item) {
-          return response.notFound({ message: 'Table not found' });
+          return response.badRequest({ message: 'Table not found' });
         }
 
         if (item?.user_profile?.phone) {
@@ -166,7 +166,7 @@ module.exports = async function list(request, response) {
         // DataService.completedEvent()
 
       } catch (error) {
-        return response.serverError('Server Error');
+        throw error;
       }
     } else {
       return response.badRequest({

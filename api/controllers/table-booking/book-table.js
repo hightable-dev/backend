@@ -9,6 +9,7 @@ module.exports = async function (request, response) {
     payPending,
     paymentSuccess,
     createOrderErr,
+
   } = UseDataService;
 
   const inputAttributes = [
@@ -35,106 +36,101 @@ module.exports = async function (request, response) {
     filteredPostData = _.pick(postRequestData, keysToPick);
 
     try {
-      const booking = await TableBooking.findOne({ table_id: tableId, user_id: profileId })
-        .select(['id', 'table_id', 'status']);
-
-      const tableDetails = await Tables.findOne({ id: tableId, status: { '!=': listingTableStatusNotEqual } })
-        .select(['id', 'title', 'price', 'status', 'event_date', 'max_seats', 'booked', 'created_by']);
-
-
-
-      if (!tableDetails) {
-        throw errorMessages.tableNotFound;
-      } else if (tableDetails.booked >= tableDetails.max_seats) {
-        throw errorMessages.bookingClosed;
-      } else if (parseInt(tableDetails.created_by) === parseInt(profileId)) {
-        throw errorMessages.ownTableBooking;
-      }
+      const booking = await TableBooking.findOne({ table_id: tableId, user_id: profileId, status: { in: [payPending, paymentSuccess] } })
+        .select(['id', 'table_id', 'status', 'user_id']);
 
       if (booking) {
         const { status } = booking;
+        if (status === payPending) {
+          throw errorMessages.payPendingByUser;
+        } else if (status === paymentSuccess) {
+          throw errorMessages.bookedByUser;
+        }
+      } else {
+        const tableDetails = await Tables.findOne({ id: tableId, status: { '!=': listingTableStatusNotEqual } })
+          .select(['id', 'title', 'price', 'status', 'event_date', 'max_seats', 'booked', 'created_by']);
 
-        switch (status) {
-          case paymentSuccess:
-            throw errorMessages.bookedByUser;
-
-          case payPending:
+        const bookedAndWaitingCount = await TableBooking.count({ table_id: tableId, status: { in: [payPending, paymentSuccess] } });
+        if (!tableDetails) {
+          throw errorMessages.tableNotFound;
+        } else if (bookedAndWaitingCount >= tableDetails.max_seats && tableDetails.booked < tableDetails.max_seats) {
+          if (booking?.status === payPending) {
             throw errorMessages.payPendingByUser;
-
-          default:
-            const { id, title } = tableDetails;
-            filteredPostData.table_details = {
-              id,
-              title
-            }
-            break;
+          } else {
+            throw errorMessages.bookingWait;
+          }
+        } else if (tableDetails.booked >= tableDetails.max_seats) {
+          throw errorMessages.bookingClosed;
+        } else if (parseInt(tableDetails.created_by) === parseInt(profileId)) {
+          throw errorMessages.ownTableBooking;
         }
-      }
-      // Create Razorpay order
-      const { price, title, created_by } = tableDetails;
-      let order;
-      try {
 
-        order = await RazorpayService.createRazorpayOrder({ amount: price, title, tableId, userId: profileId });
+        // Create Razorpay order
+        const { price, title, created_by } = tableDetails;
+        let order;
+        try {
 
-      } catch (e) {
-        await UseDataService.errorDataCreate({
+          order = await RazorpayService.createRazorpayOrder({ amount: price, title, tableId, userId: profileId });
+
+        } catch (e) {
+          await UseDataService.errorDataCreate({
+            table_id: tableId,
+            type: createOrderErr,
+            type_glossary: 'createOrderErr',
+            booking_id: null,
+            booking_details: {},
+            user_id: profileId,
+            creator_id: created_by,
+            error_details: e,
+            description: e?.error?.description
+          });
+          throw { status: e.statusCode, message: `Razorpy ${e.error?.description}` }
+        }
+
+
+        try {
+          async function fetchProfileInfo(id) {
+            if (!id) return null;
+            const data = await ProfileMembers.findOne({ id }).select(['email', 'first_name', 'last_name', 'photo', 'phone']);
+            if (!data) return null;
+            const { email, first_name, last_name, photo, phone } = data;
+            return { id, email, first_name, last_name, photo, phone };
+          }
+
+          if (created_by) {
+            filteredPostData.creator_details = await fetchProfileInfo(created_by);
+          }
+
+          if (profileId) {
+            filteredPostData.user_details = await fetchProfileInfo(profileId);
+          }
+        } catch {
+          throw ('Error Fetch profiles');
+        }
+
+        filteredPostData.table_details = { id: tableId, title };
+        const expiry_date = UseDataService.dateHelperUtc(new Date()).verifyMillisecondsToDateOrderExpiry;
+
+        // Populate filteredPostData
+        filteredPostData = {
+          ...filteredPostData,
+          seats: 1,
+          order_id: order.id,
           table_id: tableId,
-          type: createOrderErr,
-          type_glossary: 'createOrderErr',
-          booking_id: null,
-          booking_details: {},
           user_id: profileId,
+          amount: price,
           creator_id: created_by,
-          error_details: e,
-          description: e?.error?.description
-        });
-        throw { status: e.statusCode, message: `Razorpy ${e.error?.description}` }
-      }
+          status: payPending,
+          title,
+          expiry_date
+        };
 
-
-      try {
-        async function fetchProfileInfo(id) {
-          if (!id) return null;
-          const data = await ProfileMembers.findOne({ id }).select(['email', 'first_name', 'last_name', 'photo', 'phone']);
-          if (!data) return null;
-          const { email, first_name, last_name, photo, phone } = data;
-          return { id, email, first_name, last_name, photo, phone };
-        }
-
-        if (created_by) {
-          filteredPostData.creator_details = await fetchProfileInfo(created_by);
-        }
-
-        if (profileId) {
-          filteredPostData.user_details = await fetchProfileInfo(profileId);
-        }
-
-
-      } catch {
-        throw ('Error Fetch profiles');
-
-      }
-
-
-      filteredPostData.table_details = { id: tableId, title };
-      // Populate filteredPostData
-      filteredPostData = {
-        ...filteredPostData,
-        seats: 1,
-        order_id: order.id,
-        table_id: tableId,
-        user_id: profileId,
-        amount: price,
-        creator_id: created_by,
-        status: payPending,
-        title,
+        return filteredPostData;
       };
-
-      return filteredPostData;
     } catch (error) {
       throw error;
     }
+
   }
 
   try {

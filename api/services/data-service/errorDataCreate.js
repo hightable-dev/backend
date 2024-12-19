@@ -49,6 +49,6 @@ module.exports = async function (data) {
     });
 
   } catch (error) {
-    throw new Error("Error creating error data: " + error);
+    throw error;
   }
 };
