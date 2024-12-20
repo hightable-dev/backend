@@ -90,7 +90,7 @@ module.exports = function updateStatus(request, response) {
                     }
 
                     response.ok(_response_object);
-                    
+
                     const msg = await UseDataService.messages({ tableId: id });
 
                     await UseDataService.sendNotification({

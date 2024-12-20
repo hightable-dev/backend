@@ -1,7 +1,7 @@
 module.exports = async function (request, response) {
   let keysToPick, filtered_post_data, input_attributes, payload_attributes;
   const post_request_data = request.body;
-    const {
+  const {
     standard,
     premium,
     pending,
@@ -87,14 +87,14 @@ module.exports = async function (request, response) {
       default:
         // return response.status(403).json({ error: "Invalid user role" });
         throw ({
-           ...UseDataService.errorMessages.invalidRole,
+          ...UseDataService.errorMessages.invalidRole,
         });
     }
 
     if (!profileMebmber) {
-        throw ({
-           ...UseDataService.errorMessages.invalidUser,
-        });
+      throw ({
+        ...UseDataService.errorMessages.invalidUser,
+      });
     } else {
       const full_name = `${profileMebmber.first_name} ${profileMebmber.last_name}`;
       filtered_post_data.full_name = full_name;
@@ -110,17 +110,28 @@ module.exports = async function (request, response) {
           });
         filtered_post_data.location_details = detailedLocation;
 
-        const { locality, postal_code, sublocality_level_2, administrative_area_level_3, formatted_address } = detailedLocation;
+        const { locality, postal_code, sublocality_level_2, sublocality_level_1, administrative_area_level_3, formatted_address, sublocality_level_3 } = detailedLocation;
 
         // Assign extracted location details to filtered_post_data
         filtered_post_data.state = administrative_area_level_3;
-        filtered_post_data.city = sublocality_level_2;
+
+        if (sublocality_level_1) {
+          filtered_post_data.city = sublocality_level_1;
+
+        } else if (sublocality_level_2) {
+          filtered_post_data.city = sublocality_level_2;
+
+        } else if (sublocality_level_3) {
+          filtered_post_data.city = sublocality_level_3;
+
+        }
+
         filtered_post_data.pincode = postal_code;
         filtered_post_data.format_geo_address = formatted_address;
         filtered_post_data.district = locality;
 
       } catch (error) {
-         throw new Error ("Error fetching location details:", error);
+        throw new Error("Error fetching location details:", error);
         // Handle error accordingly, e.g., set a flag or throw an error
       }
     }

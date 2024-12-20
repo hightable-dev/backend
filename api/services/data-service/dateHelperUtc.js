@@ -23,7 +23,7 @@ module.exports = (date, inputFormat = 'YYYY-MM-DD HH:mm', outputFormat = 'YYYY-M
 
   /* Convert the timestamp back to the original format for verification */
   const twoHours = 2 * 60 * 60 * 1000;
-  const orderExpiryDuation = 15 * 60 * 1000; // 15 minutes in milliseconds
+  const orderExpiryDuation = 5 * 60 * 1000; // 15 minutes in milliseconds
   
   const orderExpiry = milliSecondsFormattedInputDate + orderExpiryDuation;
   const verifyMillisecondsToDateOrderExpiry = moment(orderExpiry).format(outputFormat);
