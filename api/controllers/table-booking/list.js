@@ -62,24 +62,7 @@ module.exports = function list(request, response) {
       criteria.status = { in: [paymentSuccess] };
     }
 
-    /* working code   
-     if (search) {
-         const searchValue = search.trim();
-         const lookupFields = ['table_title','reservation_order_id','reservation_pay_id','booking_order_id','booking_pay_id'];
-         const searchVariations = [
-           searchValue.toLowerCase(),
-           _.capitalize(searchValue),
-           searchValue.toUpperCase(),
-         ];
    
-         const searchCriteria = lookupFields.map((field) => ({
-           or: searchVariations.map((variation) => ({ [field]: { contains: variation } })),
-         }));
-   
-         criteria.or = criteria.or || [];
-         criteria.or.push(...searchCriteria);
-       } */
-
     if (search) {
       const searchValue = search.trim();
       const lookupFields = ['order_id', 'payment_id'];
@@ -119,21 +102,25 @@ module.exports = function list(request, response) {
         // Fetch all items matching criteria
         let items = await TableBooking.find({ where: criteria })
           .sort('created_at DESC')
+          .populate('table_id')
+          .populate('user_id')
 
         // Transform each item
         await Promise.all(
           items.map(async item => {
-            if (item.table_id) {
-              // Fetch the category from the table_id if it's not already populated
-              const tableDetails = await Tables.findOne({ id: item.table_id.id })
-                .populate('category'); // Populate category here
-
-              // Assign populated category back to item
-              item.table_id.category = tableDetails.category;
-            }
+            // if (item.table_id) {
+            //   // Fetch the category from the table_id if it's not already populated
+            //   const tableDetails = await Tables.findOne({ id: item.table_id })
+            //     .populate('category'); // Populate category here
+            //   // Assign populated category back to item
+            //   // item.table_id.category = tableDetails.category;
+            // }
 
             if (UserType(request) === roles.admin) {
-               item.user_details = _.pick(item.user_id, ['first_name', 'last_name']);
+              //  item.user_details = _.pick(item.user_id, ['first_name', 'last_name']);
+               item.user_details = item.user_id;
+               item.table_details = item.table_id;
+
               delete item.table_id;
               delete item.user_id;
               if (item.user_details?.photo) {
@@ -141,7 +128,7 @@ module.exports = function list(request, response) {
               }
 
               if (item.user_details?.phone) {
-                  item.user_details.phone = UseDataService.phoneCrypto.decryptPhone(phone);
+                  item.user_details.phone = UseDataService.phoneCrypto.decryptPhone(item.user_details?.phone);
                }
             }
 
