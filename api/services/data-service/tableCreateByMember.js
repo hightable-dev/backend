@@ -8,7 +8,7 @@ module.exports = async function (request, filtered_post_data) {
   });
 
   filtered_post_data.created_by = profileMeberid;
-  filtered_post_data.user_type = 12313;
+  filtered_post_data.user_type = UserType(request);
   filtered_post_data.user_profile = profileMeberid;
 
   return profileMebmber;

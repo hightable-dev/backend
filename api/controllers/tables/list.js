@@ -58,7 +58,7 @@ module.exports = async function list(request, response) {
       }
 
       const page = parseInt(filteredQueryData.page) || 1;
-      const limit = parseInt(filteredQueryData.limit) || 5;
+      const limit = parseInt(filteredQueryData.limit) || 10;
       const skip = (page - 1) * limit;
 
       try {
@@ -86,6 +86,7 @@ module.exports = async function list(request, response) {
             .where(criteria)
             .skip(skip)
             .limit(limit)
+             .sort('event_date ASC')
             .omit(excludeFields)
             .populate('category')
             .populate('user_profile'),
