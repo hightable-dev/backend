@@ -14,7 +14,7 @@ module.exports = async function update(request, response) {
         const { id, type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions, location_details } = request.body;
 
         const updateData = { type, media, title, description, min_seats, max_seats, category, phone, price, tags, address, city, event_date, location, status, event_done_flag, table_expense, district, inclusion, exclusions, location_details };
-        
+
         let _response_object = {};
 
         // Validate input attributes
@@ -71,6 +71,8 @@ module.exports = async function update(request, response) {
                 });
                 updateData.location_details = detailedLocation;
 
+                const { locality, postal_code, sublocality_level_2, sublocality_level_1, sublocality_level_3, administrative_area_level_3, formatted_address } = detailedLocation;
+
                 // Extract location details using the second service
                 const { state, city, pincode, formattedAddress, district } = await UseDataService.locationUtils.extractLocationDetails({
                     x: updateData.location.lat,
@@ -79,13 +81,19 @@ module.exports = async function update(request, response) {
 
                 // Assign extracted location details to updateData
                 updateData.state = state;
-                updateData.city = city;
+                if (sublocality_level_1) {
+                    updateData.city = sublocality_level_1
+                } else if (sublocality_level_2) {
+                    updateData.city = sublocality_level_2
+                } else if (sublocality_level_3) {
+                    updateData.city = sublocality_level_3
+                }
                 updateData.pincode = pincode;
                 updateData.format_geo_address = formattedAddress;
                 updateData.district = district;
 
             } catch (error) {
-                throw error ;
+                throw error;
                 // Handle error accordingly, e.g., set a flag or throw an error
             }
         }

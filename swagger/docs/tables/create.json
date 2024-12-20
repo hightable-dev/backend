@@ -155,22 +155,22 @@
                     "created_at": {
                       "description": "Created_at of the details.",
                       "type": "object",
-                      "example": "2024-12-19T06:40:28.461Z"
+                      "example": "2024-12-20T10:54:20.413Z"
                     },
                     "updated_at": {
                       "description": "Updated_at of the details.",
                       "type": "object",
-                      "example": "2024-12-19T06:40:28.461Z"
+                      "example": "2024-12-20T10:54:20.413Z"
                     },
                     "id": {
                       "description": "Id of the details.",
                       "type": "string",
-                      "example": "961"
+                      "example": "978"
                     },
                     "full_name": {
                       "description": "Full_name of the details.",
                       "type": "string",
-                      "example": "Test five "
+                      "example": "Backend User "
                     },
                     "type": {
                       "description": "Type of the details.",
@@ -190,7 +190,7 @@
                     "description": {
                       "description": "Description of the details.",
                       "type": "string",
-                      "example": "Understand how blockchain can impact large enterprises."
+                      "example": "Test 1234."
                     },
                     "phone": {
                       "description": "Phone of the details.",
@@ -250,7 +250,7 @@
                     "city": {
                       "description": "City of the details.",
                       "type": "string",
-                      "example": "JP Nagar 7th Phase"
+                      "example": "Aruthra Nagar"
                     },
                     "event_date": {
                       "description": "Event_date of the details.",
@@ -265,7 +265,7 @@
                     "user_type": {
                       "description": "User_type of the details.",
                       "type": "number",
-                      "example": 12313
+                      "example": 2
                     },
                     "status": {
                       "description": "Status of the details.",
@@ -285,17 +285,17 @@
                     "state": {
                       "description": "State of the details.",
                       "type": "string",
-                      "example": "Bengaluru Urban"
+                      "example": "Puducherry"
                     },
                     "district": {
                       "description": "District of the details.",
                       "type": "string",
-                      "example": "Bengaluru"
+                      "example": "Puducherry"
                     },
                     "pincode": {
                       "description": "Pincode of the details.",
                       "type": "string",
-                      "example": "560078"
+                      "example": "605009"
                     },
                     "order_by": {
                       "description": "Order_by of the details.",
@@ -312,22 +312,19 @@
                       "type": "object",
                       "example": {
                         "country": "India",
-                        "locality": "Bengaluru",
+                        "locality": "Puducherry",
                         "political": "India",
-                        "postal_code": "560078",
-                        "sublocality_level_1": "7",
-                        "sublocality_level_2": "JP Nagar 7th Phase",
-                        "sublocality_level_3": "Silver Oak Layout",
-                        "administrative_area_level_2": "Bangalore Division",
-                        "administrative_area_level_3": "Bengaluru Urban"
+                        "postal_code": "605009",
+                        "sublocality_level_1": "Aruthra Nagar",
+                        "administrative_area_level_3": "Puducherry"
                       }
                     },
                     "location": {
                       "description": "Location of the details.",
                       "type": "object",
                       "example": {
-                        "lat": 12.8933351,
-                        "lng": 77.5864716
+                        "lat": 11.9415915,
+                        "lng": 79.8083133
                       }
                     },
                     "inclusion": {
@@ -353,12 +350,12 @@
                     "created_by": {
                       "description": "Created_by of the details.",
                       "type": "number",
-                      "example": 1387
+                      "example": 1394
                     },
                     "user_profile": {
                       "description": "User_profile of the details.",
                       "type": "number",
-                      "example": 1387
+                      "example": 1394
                     }
                   }
                 }
